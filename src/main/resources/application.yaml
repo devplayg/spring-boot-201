@@ -1,0 +1,52 @@
+# Common configuration
+spring:
+    profiles:
+        active: dev
+    messages:
+        basename: i18n/messages
+appconf:
+    homeuri: /member
+
+server:
+    error:
+        path: /error
+
+
+
+
+---
+# Development mode
+spring:
+    profiles: dev
+server:
+    port: 80
+
+logging:
+    file: logs/web-dev.log
+    level:
+        root: info
+        com.devplayg: info
+        org:
+            mybatis: info
+            hibernate:
+                SQL: info
+                type.descriptor.sql.BasicBinder: info
+
+---
+# Production mode
+spring:
+    profiles: prod
+server:
+    port: 8080
+
+logging:
+    file: logs/web-dev.log
+    level:
+        root: info
+        com.devplayg: info
+        org:
+            mybatis: info
+            hibernate:
+                SQL: info
+                type.descriptor.sql.BasicBinder: info
+
