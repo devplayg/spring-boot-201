@@ -4,6 +4,23 @@ spring:
         active: dev
     messages:
         basename: i18n/messages
+    jpa:
+        show-sql: false
+        hibernate:
+            ddl-auto: validate
+        open-in-view: false
+    datasource: # DB 설정
+        url: jdbc:mysql://127.0.0.1:3306/sb201?useUnicode=yes&characterEncoding=UTF-8
+        driver-class-name: com.mysql.cj.jdbc.Driver
+        username: root
+        password: Uniiot12!@
+        tomcat:
+            max-active: 50
+            max-idle: 20
+            min-idle: 15
+        hikari:
+            auto-commit: false
+        sql-script-encoding: UTF-8
 
 server:
     address: 127.0.0.1
@@ -22,7 +39,9 @@ logging:
 
 
 ---
+#
 # Development mode
+#
 spring:
     profiles: dev
 server:
@@ -31,7 +50,9 @@ logging:
     file: logs/web-dev.log
 
 ---
+#
 # Production mode
+#
 spring:
     profiles: prod
 server:
