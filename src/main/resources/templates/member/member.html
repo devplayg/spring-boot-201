@@ -1,0 +1,42 @@
+<html lang="ko"
+      xmlns:layout="http://www.ultraq.net.nz/thymeleaf/layout"
+      xmlns:th="http://www.thymeleaf.org"
+      layout:decorate="~{base}">
+<head>
+    <title></title>
+    <link rel="stylesheet" th:href="@{/modules/member/member.css}">
+</head>
+
+<div layout:fragment="content">
+    <div id="toolbar-member">
+
+    </div>
+    <table id="table-member" class="table table-bordered table-hover"
+           data-toolbar="#toolbar-member"
+           data-toggle="bootstrap-table"
+           data-show-refresh="true"
+           data-show-columns="true"
+           data-pagination="true"
+           data-side-pagination="server"
+           data-page-size="10"
+    >
+        <thead>
+        <tr>
+            <th data-field="member_id" data-sortable="true">ID</th>
+            <th data-field="username" data-sortable="true">Username</th>
+            <th data-field="email" data-sortable="true">Email</th>
+            <th data-field="roleList" data-sortable="true">Roles</th>
+            <th data-field="created" data-sortable="true">Created</th>
+        </tr>
+        </thead>
+    </table>
+</div>
+
+<th:block layout:fragment="script">
+    <script th:src="@{/modules/member/member.js}"></script>
+    <script th:inline="javascript">
+        /*<![CDATA[*/
+        var filter = {};
+        /*]]>*/
+    </script>
+</th:block>
