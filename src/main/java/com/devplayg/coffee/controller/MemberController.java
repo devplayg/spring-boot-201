@@ -6,9 +6,7 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.stereotype.Controller;
-import org.springframework.web.bind.annotation.GetMapping;
-import org.springframework.web.bind.annotation.RequestMapping;
-import org.springframework.web.bind.annotation.RestController;
+import org.springframework.web.bind.annotation.*;
 
 import java.util.List;
 
@@ -19,11 +17,15 @@ import java.util.List;
  *
  * GET      /members/       display
  * GET      /members        list
- * GET      /members/3      get
  * POST     /members        insert
- * PATCH    /members/3      patch
- * DELETE   /members/3      delete
+ * GET      /members/{id}   get
+ * PATCH    /members/{id}   patch
+ * DELETE   /members/{id}   delete
+ *
  */
+
+
+
 
 
 public class MemberController {
@@ -32,13 +34,29 @@ public class MemberController {
 
     @GetMapping("/")
     public String display() {
-        return "member/member1";
+        return "member/member";
     }
 
-    @GetMapping("list")
+    @GetMapping
     public ResponseEntity<?> list() {
         List<Member> list = memberRepository.findAll();
         ResponseEntity.ok(list);
         return new ResponseEntity<>(list, HttpStatus.OK);
+    }
+
+    @PostMapping
+    public void insert() {
+    }
+
+    @GetMapping("{id}")
+    public void get() {
+    }
+
+    @PatchMapping("{id}")
+    public void patch() {
+    }
+
+    @DeleteMapping("{id}")
+    public void delete() {
     }
 }

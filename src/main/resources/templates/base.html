@@ -13,8 +13,11 @@
 </head>
 <body class="container-fluid">
 <div>
-    Logged in app: <b th:inline="text" class="user"> [[${#httpServletRequest.remoteUser}]] </b>
+    <b th:inline="text" class="user"> [[${#httpServletRequest.remoteUser}]] </b>
     <a href="/logout" th:href="@{/logout}">Logout</a>
+    <a href="?locale=ko-KR">한국어</a> |
+    <a href="?locale=en-US">English</a> |
+    <a href="?locale=vi-VN">Tiếng việt</a>
     <hr>
 </div>
 
@@ -26,6 +29,7 @@
 <script th:src="@{/plugins/bootstrap/js/bootstrap.min.js}"></script>
 <script th:src="@{/plugins/bootstrap-table/bootstrap-table.min.js}"></script>
 <script th:src="@{/plugins/bootstrap-select/js/bootstrap-select.min.js}"></script>
+<script th:src="@{/plugins/jquery-validation/jquery.validate.min.js}"></script>
 <!--/* Custom Javascript */-->
 <script layout:fragment="script"></script>
 </body>
