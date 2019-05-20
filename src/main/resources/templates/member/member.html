@@ -25,10 +25,11 @@
         <tr>
             <th data-field="id" data-sortable="true">ID</th>
             <th data-field="username" data-sortable="true" th:text="#{username}"></th>
-            <th data-field="email" data-sortable="true" th:text="#{email}">Email</th>
-            <th data-field="roleList" data-sortable="true" th:text="#{roles}">Roles</th>
-            <th data-field="enabled" data-sortable="true" th:text="#{enable}">Enabled</th>
-            <th data-field="created" data-sortable="true" th:text="#{created}">Created</th>
+            <th data-field="email" data-sortable="true" th:text="#{email}"></th>
+            <th data-field="roleList" data-sortable="true" data-formatter="memberRoleListFormatter" th:text="#{roles}"></th>
+            <th data-field="enabled" data-sortable="true" th:text="#{enable}"></th>
+            <th data-field="timezone" data-sortable="true" th:text="#{timezone}"></th>
+            <th data-field="created" data-sortable="true" th:text="#{created}"></th>
         </tr>
         </thead>
     </table>
@@ -98,6 +99,7 @@
 
 <th:block layout:fragment="script">
     <script th:src="@{/modules/member/member.js}"></script>
+    <script th:src="@{/modules/member/formatter.js}"></script>
     <script th:inline="javascript">
         /*<![CDATA[*/
         var filter = {};

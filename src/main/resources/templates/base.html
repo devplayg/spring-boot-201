@@ -31,6 +31,28 @@
 <script th:src="@{/plugins/bootstrap-table/bootstrap-table.min.js}"></script>
 <script th:src="@{/plugins/bootstrap-select/js/bootstrap-select.min.js}"></script>
 <script th:src="@{/plugins/jquery-validation/jquery.validate.min.js}"></script>
+<script th:inline="javascript">
+    var dataLayer = [];
+</script>
+
+<script th:inline="javascript">
+    /*<![CDATA[*/
+var items = [];
+    /*[# th:each="n : ${T(com.devplayg.coffee.definition.RoleType.Role).values()}"]*/
+
+    items.push("[(${n})]");
+    items.push("[(${n.value})]");
+
+    /*[/]*/
+
+
+
+    // var a = #{T(com.devplayg.coffee.definition.RoleType.Role).values()};
+    var values = [[ ${T(com.devplayg.coffee.definition.RoleType.Role).values()} ]];
+    console.log(values);
+    /*]]>*/
+</script>
+
 <!--/* Custom Javascript */-->
 <script layout:fragment="script"></script>
 </body>

@@ -77,7 +77,6 @@ public class WebConfig implements WebMvcConfigurer {
     }
 
     private class ZoneComparator implements Comparator<ZoneId> {
-
         @Override
         public int compare(ZoneId zoneId1, ZoneId zoneId2) {
             LocalDateTime now = LocalDateTime.now();

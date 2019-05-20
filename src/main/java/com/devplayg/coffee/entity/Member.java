@@ -12,6 +12,7 @@ import javax.persistence.*;
 import javax.validation.constraints.Email;
 import javax.validation.constraints.Pattern;
 import java.io.Serializable;
+import java.time.LocalDateTime;
 import java.util.ArrayList;
 import java.util.List;
 
@@ -57,8 +58,10 @@ public class Member implements Serializable {
     @Column(nullable = false)
     private boolean enabled = false;
 
-
+    @Column(nullable = false, length = 32)
     private String timezone;
+
+    private LocalDateTime created;
 
     // 사용자 권한
     @OneToMany(fetch = FetchType.EAGER,

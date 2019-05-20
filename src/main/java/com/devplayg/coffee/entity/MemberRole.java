@@ -21,6 +21,7 @@ public class MemberRole implements Serializable {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     @Column(name = "role_id")
+    @JsonIgnore
     private long id;
 
     @ManyToOne(cascade = {CascadeType.DETACH})
