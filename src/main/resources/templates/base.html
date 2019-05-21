@@ -19,7 +19,10 @@
     <a href="?lang=ko-KR">한국어</a> |
     <a href="?lang=en-US">English</a> |
     <a href="?lang=vi-VN">Tiếng việt</a> |
-    <div th:text="#{login.welcome}"></div>
+    <div>
+        <span th:text="#{login.welcome}"></span>
+        [[${#httpServletRequest.remoteUser}]]
+    </div>
     <hr>
 </div>
 
