@@ -1,5 +1,6 @@
 package com.devplayg.coffee.vo;
 
+import com.fasterxml.jackson.annotation.JsonIgnore;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
 import org.springframework.validation.BindingResult;
@@ -11,17 +12,21 @@ import java.util.List;
 @NoArgsConstructor
 @Getter
 public class Result {
+    private String error;
     private int total;
     private List rows;
-    private Object error;
-    private long lastInsertID;
+    private Object data;
+    private long id;
 
     public Result(String error) {
         this.error = error;
     }
 
     public Result(long id) {
-        this.lastInsertID = id;
+        this.id = id;
+    }
+    public Result(Object data) {
+        this.data = data;
     }
 
     public Result(BindingResult bindingResult) {
@@ -30,22 +35,7 @@ public class Result {
         for(FieldError e : bindingResult.getFieldErrors()){
             errors.add(String.format("%s: %s", e.getField(), e.getDefaultMessage()));
         }
-        this.error = errors;
+
+        this.error = String.join(",", errors);
     }
-
-//    public DBResult(String error, List rows) {
-//        this.error = error;
-//        this.rows = rows;
-//        this.total = (rows == null) ? 0 : rows.size();
-//    }
-
-//    public DBResult(String error, int total) {
-//        this.error = error;
-//        this.total = total; // affected rows
-//    }
-
-//    public DBResult(List rows, int total) {
-//        this.rows = rows;
-//        this.total = total;
-//    }
 }

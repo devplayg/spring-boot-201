@@ -2,9 +2,9 @@ package com.devplayg.coffee.controller;
 
 import com.devplayg.coffee.entity.Member;
 import com.devplayg.coffee.entity.MemberRole;
+import com.devplayg.coffee.exception.ResourceNotFoundException;
 import com.devplayg.coffee.repository.MemberRepository;
 import com.devplayg.coffee.vo.Result;
-import com.devplayg.coffee.vo.TimeZone;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
@@ -15,6 +15,7 @@ import org.springframework.validation.BindingResult;
 import org.springframework.web.bind.annotation.*;
 
 import javax.validation.Valid;
+import java.util.ArrayList;
 import java.util.List;
 
 /*
@@ -38,10 +39,6 @@ public class MemberController {
 
     @Autowired
     private BCryptPasswordEncoder bCryptPasswordEncoder;
-
-    @Autowired
-    private List<TimeZone> timezoneList;
-
 
     @GetMapping("/")
     public String display() {
@@ -83,14 +80,37 @@ public class MemberController {
     }
 
     @GetMapping("{id}")
-    public void get() {
+    public ResponseEntity<?> get(@PathVariable("id") long id) {
+        Member member = memberRepository.findById(id)
+                .orElseThrow(() -> new ResourceNotFoundException("member", "id", id));
+        return new ResponseEntity<>(new Result(member), HttpStatus.OK);
     }
 
     @PatchMapping("{id}")
-    public void update() {
+    public ResponseEntity<?> update(@ModelAttribute Member input, @PathVariable("id") long id) {
+        Member member = memberRepository.findById(id)
+                .orElseThrow(() -> new ResourceNotFoundException("member", "id", id));
+        member.setName(input.getName());
+        member.setEmail(input.getEmail());
+        member.setEnabled(input.isEnabled());
+        member.setTimezone(input.getTimezone());
+        member.setRoleList(new ArrayList<>());
+
+        // 입력받은 권한을 설정
+        for (MemberRole r : input.getRoleList()) {
+            if (r.getRole() != null) {
+                r.setMember(member);
+                member.getRoleList().add(r);
+            }
+        }
+
+        Member changed = memberRepository.save(member);
+        return new ResponseEntity<>(new Result(changed), HttpStatus.OK);
     }
 
     @DeleteMapping("{id}")
-    public void delete() {
+    public ResponseEntity<?> delete(@PathVariable("id") long id) {
+        memberRepository.deleteById(id);
+        return new ResponseEntity<>(new Result(id), HttpStatus.OK);
     }
 }

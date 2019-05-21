@@ -6,6 +6,7 @@ import lombok.Getter;
 import lombok.NoArgsConstructor;
 import lombok.Setter;
 import lombok.ToString;
+import org.hibernate.annotations.CreationTimestamp;
 import org.hibernate.validator.constraints.Length;
 
 import javax.persistence.*;
@@ -48,12 +49,9 @@ public class Member implements Serializable {
     private String inputPassword;
 
     @Column(length = 72, nullable = false)
-    private String password;
-
-    @Column(name = "password_salt", length = 32)
     @JsonIgnore
     @ToString.Exclude
-    private String passwordSalt = "";
+    private String password;
 
     @Column(nullable = false)
     private boolean enabled = false;
@@ -61,6 +59,8 @@ public class Member implements Serializable {
     @Column(nullable = false, length = 32)
     private String timezone;
 
+    @Column
+    @CreationTimestamp
     private LocalDateTime created;
 
     // 사용자 권한
@@ -71,7 +71,7 @@ public class Member implements Serializable {
                     CascadeType.MERGE // Child entities를 Insert할 때, Parent ID를 기록한 후 Insert 함
             },
             mappedBy = "member")
-    private List<MemberRole> roleList;
+    private List<MemberRole> roleList = new ArrayList<>();
 
     // For use on view(Thymeleaf template)
     @JsonIgnore
