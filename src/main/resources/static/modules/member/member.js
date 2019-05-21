@@ -1,25 +1,31 @@
 $(function () {
-    console.log(3);
+
     /*
      * 1. Define
      */
-    var $table = $( "#table-members" ),
-        $form = $( "#form-member-add" );
+    let $table = $("#table-member"),
+        $form = $("#form-member-add");
+
+    // Test
+    $("input[name=username]", $form).val("wsan");
+    $("input[name=name]", $form).val("WON SEOK AHN");
+    $("input[name=email]", $form).val("wsan@unisem.co.kr");
+    $("input[name=inputPassword]", $form).val("wsan123!@#");
 
 
     /*
      * 2. Initialize
      */
-    var fillTextData = function() {
-        $("input[name=username]", $form).val("wsan");
-        $("input[name=name]", $form).val("WON SEOK AHN");
-        $("input[name=email]", $form).val("wsan@unisem.co.kr");
-        $("input[name=inputPassword]", $form).val("wsan123!@#");
+    window.memberCommandEvents = {
+        "click .update": function (e, val, row, idx) {
+            updateMember(row);
+        },
+        "click .delete": function (e, val, row, idx) {
+            deleteMember(row);
+        }
     };
-    fillTextData();
-    $table.bootstrapTable({
-        url: $table.data( "url" )
-    });
+    $table.bootstrapTable();
+
 
     /*
      * 3. Events
@@ -28,7 +34,7 @@ $(function () {
         submitHandler: function (form, e) {
             e.preventDefault();
             //
-            console.log( $(form).serialize() );
+            console.log($(form).serialize());
 
             // var $form = $(form);
             $.ajax({
@@ -36,9 +42,9 @@ $(function () {
                 async: true,
                 url: '/members',
                 data: $(form).serialize()
-            }).done(function(result) {
+            }).done(function (result) {
                 if (result.error === null) {
-                    $('#table-members').bootstrapTable('refresh');
+                    $('#table-member').bootstrapTable('refresh');
                     $form.closest('.modal').modal('hide');
                 } else {
                     $form.find('.msg').text(result.error);
@@ -70,11 +76,36 @@ $(function () {
         }
     });
 
+    // let memberCommandEvents = {
+    //     'click .like': function (e, val, row, idx) {
+    //
+    //     },
+    //     'click .like': function (e, val, row, idx) {
+    //
+    //     }
+    // };
+
+    // console.log(3);
+    // window.memberCommandEvents = {
+    //     "click .update": function (e, val, row, idx) {
+    //         updateMember(row);
+    //     },
+    //     "click .delete": function (e, val, row, idx) {
+    //         deleteMember(row);
+    //     }
+    // };
+
 
     /*
      * 3. Functions
      */
+    function updateMember(row) {
+        console.log(row);
+    }
 
+    function deleteMember(row) {
+        console.log(row);
+    }
 
 
     // ------------------------------------------------------------------------------

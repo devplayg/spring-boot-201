@@ -24,7 +24,7 @@ import java.util.List;
  * GET      /members        list
  * POST     /members        insert
  * GET      /members/{id}   get
- * PATCH    /members/{id}   patch
+ * PATCH    /members/{id}   update
  * DELETE   /members/{id}   delete
  *
  */
@@ -82,53 +82,15 @@ public class MemberController {
         }
     }
 
-
     @GetMapping("{id}")
     public void get() {
     }
 
     @PatchMapping("{id}")
-    public void patch() {
+    public void update() {
     }
 
     @DeleteMapping("{id}")
     public void delete() {
     }
-
-    @GetMapping("tz")
-    public ResponseEntity<?> zone() {
-        return new ResponseEntity(timezoneList, HttpStatus.OK);
-    }
-
-//    public List<String> getTimeZoneList() {
-//        LocalDateTime now = LocalDateTime.now();
-//        List<String> list = ZoneId.getAvailableZoneIds().stream()
-//                .map(ZoneId::of)
-//                .sorted(new ZoneComparator())
-//                .map(id -> String.format(
-//                        "(UTC%s) %s", getOffset(now, id), id.getId()))
-//                .collect(Collectors.toList());
-//
-//        return list;
-//    }
-//
-//    private class ZoneComparator implements Comparator<ZoneId> {
-//
-//        @Override
-//        public int compare(ZoneId zoneId1, ZoneId zoneId2) {
-//            LocalDateTime now = LocalDateTime.now();
-//            ZoneOffset offset1 = now.atZone(zoneId1).getOffset();
-//            ZoneOffset offset2 = now.atZone(zoneId2).getOffset();
-//
-//            return offset1.compareTo(offset2);
-//        }
-//    }
-//
-//    private String getOffset(LocalDateTime dateTime, ZoneId id) {
-//        return dateTime
-//                .atZone(id)
-//                .getOffset()
-//                .getId()
-//                .replace("Z", "+00:00");
-//    }
 }

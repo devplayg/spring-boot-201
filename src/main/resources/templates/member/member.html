@@ -11,18 +11,18 @@
     <div id="toolbar-member">
         <button class="btn btn-primary" th:text="#{cmd.add}" data-toggle="modal" data-target="#modal-member-add"></button>
     </div>
-    <table id="table-members" class="table table-bordered table-hover"
+    <table id="table-member" class="table table-bordered table-hover"
            data-toolbar="#toolbar-member"
-           data-toggle="bootstrap-table"
            data-show-refresh="true"
            data-show-columns="true"
            data-pagination="true"
            data-side-pagination="client"
-           data-page-size="10"
+           data-page-size="5"
            data-url="/members"
     >
         <thead>
         <tr>
+            <th data-field="action" data-formatter="commonActionFormatter" data-events="memberCommandEvents">XX</th>
             <th data-field="id" data-sortable="true">ID</th>
             <th data-field="username" data-sortable="true" th:text="#{username}"></th>
             <th data-field="email" data-sortable="true" th:text="#{email}"></th>
@@ -35,12 +35,12 @@
     </table>
 
     <form id="form-member-add">
-        <div class="modal fade" id="modal-member-add" tabindex="-1" role="dialog" aria-labelledby="myModalLabel">
+        <div class="modal fade" id="modal-member-add" tabindex="-1" role="dialog">
             <div class="modal-dialog" role="document">
                 <div class="modal-content">
                     <div class="modal-header">
                         <button type="button" class="close" data-dismiss="modal" aria-label="Close"><span aria-hidden="true">&times;</span></button>
-                        <h4 class="modal-title" id="myModalLabel">Modal title</h4>
+                        <h4 class="modal-title">Modal title</h4>
                     </div>
                     <div class="modal-body">
                         <div class="form-group">
@@ -94,16 +94,15 @@
             </div>
         </div>
     </form>
-
 </div>
 
 <th:block layout:fragment="script">
     <script th:src="@{/modules/member/member.js}"></script>
     <script th:src="@{/modules/member/formatter.js}"></script>
-    <script th:inline="javascript">
-        /*<![CDATA[*/
-        var filter = {};
-        console.log("script");
-        /*]]>*/
+    <script>
+    /*<![CDATA[*/
+    // console.log("member.html");
+    /*]]>*/
     </script>
 </th:block>
+

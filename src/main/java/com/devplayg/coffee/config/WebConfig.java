@@ -42,7 +42,8 @@ public class WebConfig implements WebMvcConfigurer {
     @Bean
     public LocaleChangeInterceptor localeChangeInterceptor() {
         LocaleChangeInterceptor lci = new LocaleChangeInterceptor();
-        lci.setParamName("locale");
+        lci.setHttpMethods();
+        lci.setParamName("lang");
         return lci;
     }
 

@@ -1,11 +1,7 @@
 function memberRoleListFormatter(val, row, idx) {
-    var str = "";
-    $.each(val, function(i, role) {
-       console.log(role);
+    let str = "";
+    $.each(val, function(i, r) {
+        str += '<button type="bntton" class="btn btn-primary btn-xs">' + roles[r.role] + '</button>';
     });
-
-
     return str;
-    // console.log(val);
-    // return 3;
 }

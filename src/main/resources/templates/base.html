@@ -15,9 +15,9 @@
 <div>
     <b th:inline="text" class="user"> [[${#httpServletRequest.remoteUser}]] </b>
     <a href="/logout" th:href="@{/logout}">Logout</a>
-    <a href="?locale=ko-KR">한국어</a> |
-    <a href="?locale=en-US">English</a> |
-    <a href="?locale=vi-VN">Tiếng việt</a> |
+    <a href="?lang=ko-KR">한국어</a> |
+    <a href="?lang=en-US">English</a> |
+    <a href="?lang=vi-VN">Tiếng việt</a> |
     <div th:text="#{login.welcome}"></div>
     <hr>
 </div>
@@ -31,29 +31,11 @@
 <script th:src="@{/plugins/bootstrap-table/bootstrap-table.min.js}"></script>
 <script th:src="@{/plugins/bootstrap-select/js/bootstrap-select.min.js}"></script>
 <script th:src="@{/plugins/jquery-validation/jquery.validate.min.js}"></script>
+<script th:src="@{/js/custom.js}"></script>
+<script th:src="@{/js/formatter.js}"></script>
 <script th:inline="javascript">
-    var dataLayer = [];
+    let roles = {/*[# th:each="n : ${T(com.devplayg.coffee.definition.RoleType.Role).values()}"]*/"[(${n})]": "[(${n.value})]",/*[/]*/};
 </script>
-
-<script th:inline="javascript">
-    /*<![CDATA[*/
-var items = [];
-    /*[# th:each="n : ${T(com.devplayg.coffee.definition.RoleType.Role).values()}"]*/
-
-    items.push("[(${n})]");
-    items.push("[(${n.value})]");
-
-    /*[/]*/
-
-
-
-    // var a = #{T(com.devplayg.coffee.definition.RoleType.Role).values()};
-    var values = [[ ${T(com.devplayg.coffee.definition.RoleType.Role).values()} ]];
-    console.log(values);
-    /*]]>*/
-</script>
-
-<!--/* Custom Javascript */-->
 <script layout:fragment="script"></script>
 </body>
 </html>
