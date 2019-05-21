@@ -2,3 +2,11 @@ body {
     background: #32383e;
     color: #acacac;
 }
+
+.swal2-popup {
+    font-size: 1.6rem !important;
+}
+
+/*.swal2-container {*/
+/*    zoom: 1.5;*/
+/*}*/

@@ -75,7 +75,7 @@ $(function () {
                 if (rs.error !== null) {
                     return;
                 }
-                // $("#modal-member-update").modal("hide");
+                $("#modal-member-update").modal("hide");
             }).fail(function (jqXHR, textStatus) {
             });
         },
@@ -154,27 +154,29 @@ $(function () {
     }
 
     function deleteMember(row) {
-        console.log(row);
+        Swal.fire({
+            title: 'Are you sure?',
+            text: "You won't be able to revert this!",
+            type: 'warning',
+            showCancelButton: true,
+            confirmButtonColor: '#3085d6',
+            cancelButtonColor: '#d33',
+            confirmButtonText: 'Yes, delete it!'
+        }).then((result) => {
+            if (result.value) {
+                $.ajax({
+                    method: "DELETE",
+                    url: "/members/" + row.id,
+                }).done(function (rs) {
+                    console.log(rs);
+                    if (rs.error !== null) {
+                        return;
+                    }
+                    $table.bootstrapTable("refresh");
+                }).fail(function (jqXHR, textStatus) {
+                });
+            }
+        })
     }
-
-
-    // ------------------------------------------------------------------------------
-
-
-    //
-    // function doSomething(param) {
-    //     $.ajax({
-    //         method: "GET",
-    //         url: "",
-    //         data: $form.serialize()
-    //     }).done(function (data) {
-    //
-    //     }).fail(function (jqXHR, textStatus) {
-    //
-    //     }).always(function () {
-    //
-    //     });
-    // }
-
 
 });
