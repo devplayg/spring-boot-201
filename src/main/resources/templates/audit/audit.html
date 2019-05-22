@@ -4,8 +4,173 @@
       layout:decorate="~{base}">
 
 <div layout:fragment="content">
-    HELLO AUDIT,
-    <ul>
-        <li>ctrl: <span th:text="${ctrl}"></span></li>
-    </ul>
+    <div th:id="|toolbar-${ctrl}|">
+        <button class="btn btn-primary" th:text="#{cmd.add}" data-toggle="modal"
+                data-target="#modal-${ctrl}-add"></button>
+    </div>
+    <table th:id="|table-${ctrl}|" class="table table-bordered table-hover"
+           data-toolbar="#toolbar-${ctrl}"
+           data-show-refresh="true"
+           data-show-columns="true"
+           data-pagination="true"
+           data-side-pagination="client"
+           data-page-size="5"
+           data-url="/members">
+        <thead>
+        <tr>
+            <th data-field="action" data-formatter="commonActionFormatter" data-events="memberCommandEvents">XX</th>
+            <th data-field="id" data-sortable="true">ID</th>
+            <th data-field="username" data-sortable="true" th:text="#{username}"></th>
+            <th data-field="email" data-sortable="true" th:text="#{email}"></th>
+            <th data-field="roleList" data-sortable="true" data-formatter="memberRoleListFormatter"
+                th:text="#{roles}"></th>
+            <th data-field="enabled" data-sortable="true" th:text="#{enable}"></th>
+            <!-- <td data-field="password" th:text="${password}"></td> last changed-->
+            <th data-field="timezone" data-sortable="true" th:text="#{timezone}"></th>
+            <th data-field="created" data-sortable="true" th:text="#{created}"></th>
+        </tr>
+        </thead>
+    </table>
+
+    <form id="form-member-add">
+        <div class="modal fade modal-form" th:id="|modal-${ctrl}-add|" tabindex="-1" role="dialog">
+            <div class="modal-dialog" role="document">
+                <div class="modal-content">
+                    <div class="modal-header">
+                        <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+                            <span aria-hidden="true">&times;</span>
+                        </button>
+                        <h4 class="modal-title">#{registration}</h4>
+                    </div>
+                    <div class="modal-body">
+                        <div class="form-group">
+                            <label th:text="#{username}"></label>
+                            <input type="text" class="form-control" th:name="username">
+                        </div>
+                        <div class="form-group">
+                            <label th:text="#{email}"></label>
+                            <input type="text" class="form-control" th:name="email">
+                        </div>
+                        <div class="form-group">
+                            <label th:text="#{name}"></label>
+                            <input type="text" class="form-control" th:name="name">
+                        </div>
+                        <div class="form-group">
+                            <label th:text="#{password}"></label>
+                            <input type="text" class="form-control" th:name="inputPassword">
+                        </div>
+                        <div class="form-group">
+                            <label th:text="#{timezone}"></label>
+                            <select name="timezone" class="form-control selectpicker">
+                                <option th:each="zone : ${@timezoneList}"
+                                        th:value="${zone.id}"
+                                        th:text="${'(UTC' + zone.offset + ') ' + zone.id}"
+                                        th:selected="${zone.id == 'Asia/Seoul'}"></option>
+                            </select>
+                        </div>
+                        <div class="form-group">
+                            <label th:text="#{enable}"></label>
+                            <input type="checkbox" class="form-control" th:name="enabled">
+                        </div>
+                        <div class="form-group">
+                            <label th:text="#{roles}"></label>
+                            <ul>
+                                <li th:each="role, stat : ${T(com.devplayg.coffee.definition.RoleType.Role).values()}">
+                                    <input type="checkbox" th:id="${'grant_' + role}"
+                                           th:name="|roleList[${stat.index}].role|"
+                                           th:value="${role}"
+                                           th:checked="true"/>
+                                    <label th:for="${'grant_' + role}" th:text="${role.value}"></label>
+                                </li>
+                            </ul>
+                        </div>
+                        <div class="alert alert-warning fade hide">
+                            <i class="fa-fw fa fa-warning"></i>
+                            <strong>Warning</strong> <span class="msg"></span>
+                        </div>
+                    </div>
+                    <div class="modal-footer">
+                        <button type="submit" class="btn btn-primary" th:text="create"></button>
+                        <button type="button" class="btn btn-default" data-dismiss="modal">Close</button>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </form>
+
+    <form id="form-${ctrl}-update">
+        <input type="hidden" class="form-control" th:name="id">
+
+        <div class="modal fade modal-form" th:id="|modal-${ctrl}-update|" tabindex="-1" role="dialog">
+            <div class="modal-dialog" role="document">
+                <div class="modal-content">
+                    <div class="modal-header">
+                        <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+                            <span aria-hidden="true">&times;</span>
+                        </button>
+                        <h4 class="modal-title">Modal title</h4>
+                    </div>
+                    <div class="modal-body">
+                        <div class="form-group">
+                            <label th:text="#{username}"></label>
+                            <input type="text" class="form-control" th:name="username" readonly>
+                        </div>
+                        <div class="form-group">
+                            <label th:text="#{email}"></label>
+                            <input type="text" class="form-control" th:name="email">
+                        </div>
+                        <div class="form-group">
+                            <label th:text="#{name}"></label>
+                            <input type="text" class="form-control" th:name="name">
+                        </div>
+                        <div class="form-group">
+                            <label th:text="#{timezone}"></label>
+                            <select name="timezone" class="form-control selectpicker">
+                                <option th:each="zone : ${@timezoneList}"
+                                        th:value="${zone.id}"
+                                        th:text="${'(UTC' + zone.offset + ') ' + zone.id}"
+                                        th:selected="${zone.id == 'Asia/Seoul'}"></option>
+                            </select>
+                        </div>
+                        <div class="form-group">
+                            <label th:text="#{enable}"></label>
+                            <input type="checkbox" class="form-control" th:name="enabled">
+                        </div>
+                        <div class="form-group">
+                            <label th:text="#{roles}"></label>
+                            <ul>
+                                <li th:each="role, stat : ${T(com.devplayg.coffee.definition.RoleType.Role).values()}">
+                                    <input type="checkbox" th:id="${'revoke_' + role}"
+                                           th:name="|roleList[${stat.index}].role|"
+                                           th:value="${role}"/>
+                                    <label th:for="${'revoke_' + role}" th:text="${role.value}"></label>
+
+                                </li>
+                            </ul>
+                        </div>
+                        <div class="alert alert-warning fade hide">
+                            <i class="fa-fw fa fa-warning"></i>
+                            <strong>Warning</strong> <span class="msg"></span>
+                        </div>
+                    </div>
+                    <div class="modal-footer">
+                        <button type="submit" class="btn btn-primary" th:text="update"></button>
+                        <button type="button" class="btn btn-default" data-dismiss="modal">Close</button>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </form>
+
 </div>
+
+<th:block layout:fragment="script">
+    <script th:src="@{|/modules/${ctrl}/${ctrl}.js|}"></script>
+    <script th:src="@{|/modules/${ctrl}/formatter.js|}"></script>
+    <script>
+        /*<![CDATA[*/
+        // console.log("member.html");
+        /*]]>*/
+    </script>
+</th:block>
+

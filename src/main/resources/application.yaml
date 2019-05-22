@@ -23,6 +23,8 @@ server:
     address: 127.0.0.1
     error:
         path: /error
+#    servlet:
+#        context-path: /api
 
 logging:
     level:

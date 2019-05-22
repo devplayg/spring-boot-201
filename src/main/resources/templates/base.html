@@ -11,6 +11,7 @@
     <link rel="stylesheet" th:href="@{/plugins/bootstrap-select/css/bootstrap-select.min.css}">
     <link rel="stylesheet" th:href="@{/plugins/sweetalert2/sweetalert2.min.css}">
     <link rel="stylesheet" th:href="@{/css/custom.css}">
+    <link rel="stylesheet" th:href="@{|/modules/${ctrl}/${ctrl}.css|}">
 </head>
 <body class="container-fluid">
 <div>
@@ -41,6 +42,7 @@
 <script th:inline="javascript">
     let roles = {/*[# th:each="n : ${T(com.devplayg.coffee.definition.RoleType.Role).values()}"]*/"[(${n})]": "[(${n.value})]",/*[/]*/};
 </script>
+<script th:src="@{|/modules/${ctrl}/${ctrl}.js|}"></script>
 <script layout:fragment="script"></script>
 </body>
 </html>

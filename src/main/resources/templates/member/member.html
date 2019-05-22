@@ -3,24 +3,19 @@
       xmlns:th="http://www.thymeleaf.org"
       layout:decorate="~{base}">
 
-<head>
-    <title></title>
-    <link rel="stylesheet" th:href="@{/modules/member/member.css}">
-</head>
-
 <div layout:fragment="content">
-    <div id="toolbar-member">
+    <div th:id="|toolbar-${ctrl}|">
         <button class="btn btn-primary" th:text="#{cmd.add}" data-toggle="modal"
-                data-target="#modal-member-add"></button>
+                data-target="#modal-${ctrl}-add"></button>
     </div>
-    <table id="table-member" class="table table-bordered table-hover"
-           data-toolbar="#toolbar-member"
+    <table th:id="|table-${ctrl}|" class="table table-bordered table-hover"
+           data-th-toolbar="|#toolbar-${ctrl}|"
            data-show-refresh="true"
            data-show-columns="true"
            data-pagination="true"
            data-side-pagination="client"
            data-page-size="5"
-           data-url="/members">
+           th:data-url="@{/members}">
         <thead>
         <tr>
             <th data-field="action" data-formatter="commonActionFormatter" data-events="memberCommandEvents">XX</th>
@@ -37,8 +32,8 @@
         </thead>
     </table>
 
-    <form id="form-member-add">
-        <div class="modal fade modal-form" id="modal-member-add" tabindex="-1" role="dialog">
+    <form th:id="|form-${ctrl}-add|">
+        <div class="modal fade modal-form" th:id="|modal-${ctrl}-add|" tabindex="-1" role="dialog">
             <div class="modal-dialog" role="document">
                 <div class="modal-content">
                     <div class="modal-header">
@@ -103,10 +98,10 @@
         </div>
     </form>
 
-    <form id="form-member-update">
+    <form th:id="|form-${ctrl}-update|">
         <input type="hidden" class="form-control" th:name="id">
 
-        <div class="modal fade modal-form" id="modal-member-update" tabindex="-1" role="dialog">
+        <div class="modal fade modal-form" th:id="|modal-${ctrl}-update|" tabindex="-1" role="dialog">
             <div class="modal-dialog" role="document">
                 <div class="modal-content">
                     <div class="modal-header">
@@ -170,12 +165,11 @@
 </div>
 
 <th:block layout:fragment="script">
-    <script th:src="@{/modules/member/member.js}"></script>
-    <script th:src="@{/modules/member/formatter.js}"></script>
+    <script th:src="@{|/modules/${ctrl}/formatter.js|}"></script>
     <script>
         /*<![CDATA[*/
-        // console.log("member.html");
         /*]]>*/
     </script>
 </th:block>
+
 
