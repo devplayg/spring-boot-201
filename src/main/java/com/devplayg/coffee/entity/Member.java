@@ -7,6 +7,7 @@ import lombok.NoArgsConstructor;
 import lombok.Setter;
 import lombok.ToString;
 import org.hibernate.annotations.CreationTimestamp;
+import org.hibernate.annotations.UpdateTimestamp;
 import org.hibernate.validator.constraints.Length;
 
 import javax.persistence.*;
@@ -62,6 +63,10 @@ public class Member implements Serializable {
     @Column
     @CreationTimestamp
     private LocalDateTime created;
+
+    @Column
+    @UpdateTimestamp
+    private LocalDateTime updated;
 
     // 사용자 권한
     @OneToMany(fetch = FetchType.EAGER,

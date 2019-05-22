@@ -21,13 +21,16 @@ public class Audit implements Serializable {
     @JoinColumn(name = "member_id")
     private Member member;
 
-    @Column(length = 32)
+    @Column(length = 16, nullable = false)
     private String category;
 
-    @Column
+    @Column(length = 16, nullable = false)
+    private String action;
+
+    @Column(nullable = false)
     private Integer ip;
 
-    @Column(length = 256)
+    @Column(length = 512)
     private String message;
 
     @Column(length = 4096)

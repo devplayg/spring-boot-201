@@ -1,10 +1,11 @@
-<!DOCTYPE html>
-<html lang="en">
-<head>
-    <meta charset="UTF-8">
-    <title>Title</title>
-</head>
-<body>
+<html lang="ko"
+      xmlns:layout="http://www.ultraq.net.nz/thymeleaf/layout"
+      xmlns:th="http://www.thymeleaf.org"
+      layout:decorate="~{base}">
 
-</body>
-</html>
+<div layout:fragment="content">
+    HELLO AUDIT,
+    <ul>
+        <li>ctrl: <span th:text="${ctrl}"></span></li>
+    </ul>
+</div>

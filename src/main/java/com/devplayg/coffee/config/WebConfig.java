@@ -6,11 +6,15 @@
 
 package com.devplayg.coffee.config;
 
+import com.devplayg.coffee.util.RequestInterceptor;
 import com.devplayg.coffee.vo.TimeZone;
+import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.beans.factory.annotation.Qualifier;
 import org.springframework.context.MessageSource;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
 import org.springframework.context.support.ReloadableResourceBundleMessageSource;
+import org.springframework.web.servlet.HandlerInterceptor;
 import org.springframework.web.servlet.LocaleResolver;
 import org.springframework.web.servlet.config.annotation.InterceptorRegistry;
 import org.springframework.web.servlet.config.annotation.WebMvcConfigurer;
@@ -28,8 +32,29 @@ import java.util.stream.Collectors;
 @Configuration
 public class WebConfig implements WebMvcConfigurer {
 
+    @Autowired
+    @Qualifier(value = "requestInterceptor")
+    private HandlerInterceptor interceptor;
+
+
     /*
-     * Locale
+     * Request interceptor
+     */
+    @Override
+    public void addInterceptors(InterceptorRegistry registry) {
+        registry.addInterceptor(localeChangeInterceptor());
+
+        // 모든 Request 에 대해 Interceptor 를 적용하는 경우
+        // registry.addInterceptor(interceptor);
+
+        // 일부 Request Interceptor 를 적용하는 경우
+        registry.addInterceptor(interceptor)
+                .addPathPatterns("/audit/**", "/members/**", "/login/**");
+    }
+
+
+    /*
+     * Locale interceptor
      */
     @Bean
     public LocaleResolver localeResolver() {
@@ -47,11 +72,6 @@ public class WebConfig implements WebMvcConfigurer {
         return lci;
     }
 
-    @Override
-    public void addInterceptors(InterceptorRegistry registry) {
-        registry.addInterceptor(localeChangeInterceptor());
-    }
-
     @Bean
     public MessageSource messageSource() {
         ReloadableResourceBundleMessageSource messageSource = new ReloadableResourceBundleMessageSource();
@@ -63,9 +83,8 @@ public class WebConfig implements WebMvcConfigurer {
     }
 
     /*
-     * Timezone
+     * Timezone list
      */
-
     @Bean
     public List<TimeZone> timezoneList() {
         LocalDateTime now = LocalDateTime.now();

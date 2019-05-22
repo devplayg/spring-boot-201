@@ -2,6 +2,7 @@
       xmlns:layout="http://www.ultraq.net.nz/thymeleaf/layout"
       xmlns:th="http://www.thymeleaf.org"
       layout:decorate="~{base}">
+
 <head>
     <title></title>
     <link rel="stylesheet" th:href="@{/modules/member/member.css}">
@@ -19,8 +20,7 @@
            data-pagination="true"
            data-side-pagination="client"
            data-page-size="5"
-           data-url="/members"
-    >
+           data-url="/members">
         <thead>
         <tr>
             <th data-field="action" data-formatter="commonActionFormatter" data-events="memberCommandEvents">XX</th>
@@ -30,6 +30,7 @@
             <th data-field="roleList" data-sortable="true" data-formatter="memberRoleListFormatter"
                 th:text="#{roles}"></th>
             <th data-field="enabled" data-sortable="true" th:text="#{enable}"></th>
+            <!-- <td data-field="password" th:text="${password}"></td> last changed-->
             <th data-field="timezone" data-sortable="true" th:text="#{timezone}"></th>
             <th data-field="created" data-sortable="true" th:text="#{created}"></th>
         </tr>
@@ -41,9 +42,10 @@
             <div class="modal-dialog" role="document">
                 <div class="modal-content">
                     <div class="modal-header">
-                        <button type="button" class="close" data-dismiss="modal" aria-label="Close"><span
-                                aria-hidden="true">&times;</span></button>
-                        <h4 class="modal-title">Modal title</h4>
+                        <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+                            <span aria-hidden="true">&times;</span>
+                        </button>
+                        <h4 class="modal-title">#{registration}</h4>
                     </div>
                     <div class="modal-body">
                         <div class="form-group">
@@ -62,17 +64,19 @@
                             <label th:text="#{password}"></label>
                             <input type="text" class="form-control" th:name="inputPassword">
                         </div>
-                        <select name="timezone" class="selectpicker">
-                            <option th:each="zone : ${@timezoneList}"
-                                    th:value="${zone.id}"
-                                    th:text="${'(UTC' + zone.offset + ') ' + zone.id}"
-                                    th:selected="${zone.id == 'Asia/Seoul'}"></option>
-                        </select>
+                        <div class="form-group">
+                            <label th:text="#{timezone}"></label>
+                            <select name="timezone" class="form-control selectpicker">
+                                <option th:each="zone : ${@timezoneList}"
+                                        th:value="${zone.id}"
+                                        th:text="${'(UTC' + zone.offset + ') ' + zone.id}"
+                                        th:selected="${zone.id == 'Asia/Seoul'}"></option>
+                            </select>
+                        </div>
                         <div class="form-group">
                             <label th:text="#{enable}"></label>
                             <input type="checkbox" class="form-control" th:name="enabled">
                         </div>
-
                         <div class="form-group">
                             <label th:text="#{roles}"></label>
                             <ul>
@@ -80,10 +84,8 @@
                                     <input type="checkbox" th:id="${'grant_' + role}"
                                            th:name="|roleList[${stat.index}].role|"
                                            th:value="${role}"
-                                           th:checked="true"
-                                    />
+                                           th:checked="true"/>
                                     <label th:for="${'grant_' + role}" th:text="${role.value}"></label>
-
                                 </li>
                             </ul>
                         </div>
@@ -93,7 +95,7 @@
                         </div>
                     </div>
                     <div class="modal-footer">
-                        <button type="submit" class="btn btn-primary" th:text="add"></button>
+                        <button type="submit" class="btn btn-primary" th:text="create"></button>
                         <button type="button" class="btn btn-default" data-dismiss="modal">Close</button>
                     </div>
                 </div>
@@ -108,8 +110,9 @@
             <div class="modal-dialog" role="document">
                 <div class="modal-content">
                     <div class="modal-header">
-                        <button type="button" class="close" data-dismiss="modal" aria-label="Close"><span
-                                aria-hidden="true">&times;</span></button>
+                        <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+                            <span aria-hidden="true">&times;</span>
+                        </button>
                         <h4 class="modal-title">Modal title</h4>
                     </div>
                     <div class="modal-body">
@@ -125,17 +128,19 @@
                             <label th:text="#{name}"></label>
                             <input type="text" class="form-control" th:name="name">
                         </div>
-                        <select name="timezone" class="selectpicker">
-                            <option th:each="zone : ${@timezoneList}"
-                                    th:value="${zone.id}"
-                                    th:text="${'(UTC' + zone.offset + ') ' + zone.id}"
-                                    th:selected="${zone.id == 'Asia/Seoul'}"></option>
-                        </select>
+                        <div class="form-group">
+                            <label th:text="#{timezone}"></label>
+                            <select name="timezone" class="form-control selectpicker">
+                                <option th:each="zone : ${@timezoneList}"
+                                        th:value="${zone.id}"
+                                        th:text="${'(UTC' + zone.offset + ') ' + zone.id}"
+                                        th:selected="${zone.id == 'Asia/Seoul'}"></option>
+                            </select>
+                        </div>
                         <div class="form-group">
                             <label th:text="#{enable}"></label>
                             <input type="checkbox" class="form-control" th:name="enabled">
                         </div>
-
                         <div class="form-group">
                             <label th:text="#{roles}"></label>
                             <ul>
