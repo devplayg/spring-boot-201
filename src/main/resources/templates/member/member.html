@@ -1,6 +1,4 @@
-<html lang="ko"
-      xmlns:layout="http://www.ultraq.net.nz/thymeleaf/layout"
-      xmlns:th="http://www.thymeleaf.org"
+<html lang="ko" xmlns:layout="http://www.ultraq.net.nz/thymeleaf/layout" xmlns:th="http://www.thymeleaf.org"
       layout:decorate="~{base}">
 
 <div layout:fragment="content">
@@ -23,7 +21,8 @@
             <th data-field="username" data-sortable="true" th:text="#{username}"></th>
             <th data-field="name" data-sortable="true" th:text="#{name}"></th>
             <th data-field="email" data-sortable="true" th:text="#{email}"></th>
-            <th data-field="roleList" data-sortable="true" data-formatter="memberRoleListFormatter" th:text="#{roles}"></th>
+            <th data-field="roleList" data-sortable="true" data-formatter="memberRoleListFormatter"
+                th:text="#{roles}"></th>
             <th data-field="enabled" data-sortable="true" th:text="#{enable}"></th>
             <th data-field="timezone" data-sortable="true" th:text="#{timezone}"></th>
             <th data-field="created" data-sortable="true" th:text="#{created}"></th>

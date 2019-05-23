@@ -14,7 +14,6 @@ import org.springframework.validation.BindingResult;
 import org.springframework.web.bind.annotation.*;
 
 import javax.validation.Valid;
-import java.util.ArrayList;
 import java.util.List;
 import java.util.stream.Collectors;
 
@@ -60,10 +59,10 @@ public class MemberController {
             return new ResponseEntity<>(new Result(bindingResult), HttpStatus.OK);
         }
 
-        // Set roles' owner
+        // Set member role
         List<MemberRole> list = member.getRoleList().stream()
-                    .filter(r -> r.getRole() != null)
-                    .collect(Collectors.toList());
+                .filter(r -> r.getRole() != null)
+                .collect(Collectors.toList());
         list.forEach(r -> r.setMember(member));
         member.setRoleList(list);
 
@@ -94,15 +93,13 @@ public class MemberController {
         member.setEmail(input.getEmail());
         member.setEnabled(input.isEnabled());
         member.setTimezone(input.getTimezone());
-        member.setRoleList(new ArrayList<>());
 
-        // 입력받은 권한을 설정
-        for (MemberRole r : input.getRoleList()) {
-            if (r.getRole() != null) {
-                r.setMember(member);
-                member.getRoleList().add(r);
-            }
-        }
+        // Set member roles
+        List<MemberRole> list = input.getRoleList().stream()
+                .filter(r -> r.getRole() != null)
+                .collect(Collectors.toList());
+        list.forEach(r -> r.setMember(member));
+        member.setRoleList(list);
 
         Member changed = memberRepository.save(member);
         return new ResponseEntity<>(new Result(changed), HttpStatus.OK);
