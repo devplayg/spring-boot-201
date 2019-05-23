@@ -16,6 +16,7 @@ import org.springframework.web.bind.annotation.*;
 import javax.validation.Valid;
 import java.util.ArrayList;
 import java.util.List;
+import java.util.stream.Collectors;
 
 /*
  * REST API and method name
@@ -60,11 +61,11 @@ public class MemberController {
         }
 
         // Set roles' owner
-        if (member.getRoleList() != null) {
-            for (MemberRole role : member.getRoleList()) {
-                role.setMember(member);
-            }
-        }
+        List<MemberRole> list = member.getRoleList().stream()
+                    .filter(r -> r.getRole() != null)
+                    .collect(Collectors.toList());
+        list.forEach(r -> r.setMember(member));
+        member.setRoleList(list);
 
         // Encrypt password
         member.setPassword(bCryptPasswordEncoder.encode(member.getInputPassword()));

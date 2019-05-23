@@ -6,7 +6,6 @@
 
 package com.devplayg.coffee.config;
 
-import com.devplayg.coffee.util.RequestInterceptor;
 import com.devplayg.coffee.vo.TimeZone;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Qualifier;
