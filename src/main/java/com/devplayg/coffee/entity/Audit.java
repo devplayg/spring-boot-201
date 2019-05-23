@@ -19,7 +19,7 @@ public class Audit implements Serializable {
     @Column(name = "audit_id")
     private long id;
 
-//    @ManyToOne(fetch = FetchType.LAZY)
+//    @ManyToOne(targetEntity = Member.class, fetch = FetchType.EAGER)
 //    @JoinColumn(name = "member_id")
 //    private Member member;
 

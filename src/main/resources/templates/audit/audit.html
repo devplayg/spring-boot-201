@@ -5,6 +5,8 @@
     <div th:id="|toolbar-${ctrl}|">
         <button class="btn btn-primary" th:text="#{cmd.add}" data-toggle="modal" th:data-target="|#modal-${ctrl}-insert|">
         </button>
+
+        date range, category, contents, username
     </div>
     <table th:id="|table-${ctrl}|" class="table table-bordered table-hover"
            data-th-toolbar="|#toolbar-${ctrl}|"

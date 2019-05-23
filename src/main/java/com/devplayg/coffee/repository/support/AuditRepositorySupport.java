@@ -22,6 +22,7 @@ public class AuditRepositorySupport extends QuerydslRepositorySupport {
         QAudit audit = QAudit.audit;
         return queryFactory
                 .selectFrom(audit)
+                .limit(10)
                 .fetch();
     }
 }
