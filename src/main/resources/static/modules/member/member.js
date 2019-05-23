@@ -1,30 +1,42 @@
 $(function () {
 
     /*
-     * 1. Define
+     * 1. Define & initialize
      */
-    let $table = $("#table-member");
-
-    // Test
-    {
-        let $form = $("#form-member-add");
-        $("input[name=username]", $form).val("wsan");
-        $("input[name=name]", $form).val("WON SEOK AHN");
-        $("input[name=email]", $form).val("wsan@unisem.co.kr");
-        $("input[name=inputPassword]", $form).val("wsan123!@#");
-    }
-
-
-    /*
-     * 1. Initialize
-     */
-    initialize();
+    let $table = $("#table-member"),
+        $insertForm = $("#form-member-insert"),
+        $updateForm = $("#form-member-update");
 
 
     /*
      * 2. Events
      */
-    $("#form-member-add").validate({
+
+    window.memberCommandEvents = {
+        "click .update": function (e, val, row, idx) {
+            showMember(row);
+        },
+        "click .delete": function (e, val, row, idx) {
+            deleteMember(row);
+        }
+    };
+
+    $(".modal-form")
+        .on("hidden.bs.modal", function () {
+            let $form = $(this).closest("form");
+            $form.validate().resetForm();
+            $form.get(0).reset();
+            $(".alert", $form).addClass("hidden");
+            $(".alert .message", $form).empty();
+
+            $table.bootstrapTable("refresh");
+        });
+
+
+    /*
+     * 3. Validate forms
+     */
+    $insertForm.validate({
         submitHandler: function (form, e) {
             e.preventDefault();
 
@@ -35,7 +47,6 @@ $(function () {
                     $(form).find(".alert").removeClass("hide").addClass("in");
                     return;
                 }
-                // $("#table-member").bootstrapTable("refresh");
                 $(form).find(".modal").modal("hide");
             });
         },
@@ -62,7 +73,7 @@ $(function () {
         }
     });
 
-    $("#form-member-update").validate({
+    $updateForm.validate({
         submitHandler: function (form, e) {
             e.preventDefault();
 
@@ -71,11 +82,10 @@ $(function () {
                 url: "/members/" + $("input[name=id]", $(form)).val(),
                 data: $(form).serialize()
             }).done(function (rs) {
-                console.log(rs);
                 if (rs.error !== null) {
                     return;
                 }
-                $("#modal-member-update").modal("hide");
+                $(form).find(".modal").modal("hide");
             }).fail(function (jqXHR, textStatus) {
             });
         },
@@ -102,53 +112,27 @@ $(function () {
         }
     });
 
-    $(".modal-form")
-        .on("hidden.bs.modal", function () {
-            let $form = $(this).closest("form");
-            $form.validate().resetForm();
-            $form.get(0).reset();
-            $(".alert", $form).addClass("hidden");
-            $(".alert .message", $form).empty();
-
-            $table.bootstrapTable("refresh");
-        });
-
 
     /*
-     * 3. Functions
+     * 4. Functions
      */
-
-    function initialize() {
-        window.memberCommandEvents = {
-            "click .update": function (e, val, row, idx) {
-                showMember(row);
-            },
-            "click .delete": function (e, val, row, idx) {
-                deleteMember(row);
-            }
-        };
-        $table.bootstrapTable();
-    }
-
     function showMember(row) {
-        console.log(row);
         $.get("/members/" + row.id, function () {
         }).done(function (rs) {
             if (rs.error !== null) {
                 return;
             }
-
-            let $form = $("#form-member-update");
-            $("input[name=id]", $form).val(rs.data.id);
-            $("input[name=username]", $form).val(rs.data.username);
-            $("input[name=email]", $form).val(rs.data.email);
-            $("input[name=name]", $form).val(rs.data.name);
-            $("select[name=timezone]", $form).val(rs.data.timezone).selectpicker("refresh");
-            $("input[name=enabled]", $form).prop("checked", rs.data.enabled);
+            $("input[name=id]", $updateForm).val(rs.data.id);
+            $("input[name=username]", $updateForm).val(rs.data.username);
+            $("input[name=email]", $updateForm).val(rs.data.email);
+            $("input[name=name]", $updateForm).val(rs.data.name);
+            $("select[name=timezone]", $updateForm).val(rs.data.timezone).selectpicker("refresh");
+            $("input[name=enabled]", $updateForm).prop("checked", rs.data.enabled);
             $.each(rs.data.roleList, function (i, role) {
                 $("#revoke_" + role.role).prop("checked", true);
             });
-            $("#modal-member-update").modal("show");
+
+            $updateForm.find(".modal").modal("show");
         });
 
     }
@@ -168,7 +152,6 @@ $(function () {
                     method: "DELETE",
                     url: "/members/" + row.id,
                 }).done(function (rs) {
-                    console.log(rs);
                     if (rs.error !== null) {
                         return;
                     }
@@ -179,4 +162,14 @@ $(function () {
         })
     }
 
+    // Test code
+    {
+        // let $form = $("#form-member-insert");
+        // $("input[name=username]", $form).val("wsan");
+        // $("input[name=name]", $form).val("WON SEOK AHN");
+        // $("input[name=email]", $form).val("wsan@unisem.co.kr");
+        // $("input[name=inputPassword]", $form).val("wsan123!@#");
+    }
+
+    $table.bootstrapTable();
 });

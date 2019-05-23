@@ -5,8 +5,8 @@
 
 <div layout:fragment="content">
     <div th:id="|toolbar-${ctrl}|">
-        <button class="btn btn-primary" th:text="#{cmd.add}" data-toggle="modal"
-                data-target="#modal-${ctrl}-add"></button>
+        <button class="btn btn-primary" th:text="#{cmd.add}" data-toggle="modal" th:data-target="|#modal-${ctrl}-insert|">
+        </button>
     </div>
     <table th:id="|table-${ctrl}|" class="table table-bordered table-hover"
            data-th-toolbar="|#toolbar-${ctrl}|"
@@ -21,19 +21,18 @@
             <th data-field="action" data-formatter="commonActionFormatter" data-events="memberCommandEvents">XX</th>
             <th data-field="id" data-sortable="true">ID</th>
             <th data-field="username" data-sortable="true" th:text="#{username}"></th>
+            <th data-field="name" data-sortable="true" th:text="#{name}"></th>
             <th data-field="email" data-sortable="true" th:text="#{email}"></th>
-            <th data-field="roleList" data-sortable="true" data-formatter="memberRoleListFormatter"
-                th:text="#{roles}"></th>
+            <th data-field="roleList" data-sortable="true" data-formatter="memberRoleListFormatter" th:text="#{roles}"></th>
             <th data-field="enabled" data-sortable="true" th:text="#{enable}"></th>
-            <!-- <td data-field="password" th:text="${password}"></td> last changed-->
             <th data-field="timezone" data-sortable="true" th:text="#{timezone}"></th>
             <th data-field="created" data-sortable="true" th:text="#{created}"></th>
         </tr>
         </thead>
     </table>
 
-    <form th:id="|form-${ctrl}-add|">
-        <div class="modal fade modal-form" th:id="|modal-${ctrl}-add|" tabindex="-1" role="dialog">
+    <form th:id="|form-${ctrl}-insert|">
+        <div class="modal fade modal-form" th:id="|modal-${ctrl}-insert|" tabindex="-1" role="dialog">
             <div class="modal-dialog" role="document">
                 <div class="modal-content">
                     <div class="modal-header">
@@ -144,7 +143,6 @@
                                            th:name="|roleList[${stat.index}].role|"
                                            th:value="${role}"/>
                                     <label th:for="${'revoke_' + role}" th:text="${role.value}"></label>
-
                                 </li>
                             </ul>
                         </div>
