@@ -19,6 +19,7 @@ public class InitConfig {
     public EnumMapper enumMapper() {
         EnumMapper enumMapper = new EnumMapper();
         enumMapper.put("role", RoleType.Role.class);
+//        enumMapper.put("auditCategory", RoleType.Role.class);
         return enumMapper;
     }
 

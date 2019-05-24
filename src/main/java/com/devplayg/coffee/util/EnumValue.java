@@ -9,11 +9,11 @@ import lombok.Getter;
 
 @Getter
 public class EnumValue {
-    private String key;
-    private String value;
+    private String code;
+    private String description;
 
     public EnumValue(EnumModel enumModel) {
-        key = enumModel.getKey();
-        value = enumModel.getValue();
+        this.code = enumModel.getCode();
+        this.description = enumModel.getDescription();
     }
 }

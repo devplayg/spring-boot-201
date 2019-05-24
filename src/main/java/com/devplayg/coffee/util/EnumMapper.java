@@ -22,14 +22,14 @@ public class EnumMapper {
                 .collect(Collectors.toList());
     }
 
-    public void put(String key, Class<? extends EnumModel> e) {
-        factory.put(key, toEnumValues(e));
+    public void put(String name, Class<? extends EnumModel> e) {
+        factory.put(name, toEnumValues(e));
     }
 
-    public Map<String, List<EnumValue>> get(String keys) {
+    public Map<String, List<EnumValue>> get(String names) {
         return Arrays
-                .stream(keys.split(","))
-                .collect(Collectors.toMap(Function.identity(), key -> factory.get(key)));
+                .stream(names.split(","))
+                .collect(Collectors.toMap(Function.identity(), name -> factory.get(name)));
     }
 
     public Map<String, List<EnumValue>> getAll() {

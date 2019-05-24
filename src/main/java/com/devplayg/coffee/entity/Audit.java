@@ -1,6 +1,7 @@
 package com.devplayg.coffee.entity;
 
-import com.fasterxml.jackson.annotation.JsonIgnore;
+import com.devplayg.coffee.converter.AuditCategoryConverter;
+import com.devplayg.coffee.definition.AuditCategory;
 import lombok.Getter;
 import org.hibernate.annotations.CreationTimestamp;
 
@@ -23,8 +24,14 @@ public class Audit implements Serializable {
 //    @JoinColumn(name = "member_id")
 //    private Member member;
 
+//    @Column(length = 16, nullable = false)
+//    @Convert(converter = AuditCategoryConverter.class)
+//    private AuditCategory category;
+//
+
     @Column(length = 16, nullable = false)
-    private String category;
+    @Convert(converter = AuditCategoryConverter.class)
+    private AuditCategory category;
 
     @Column(length = 16, nullable = false)
     private String action;

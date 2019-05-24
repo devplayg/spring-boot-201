@@ -16,20 +16,21 @@ public class RoleType {
         SHERIFF("Sheriff"),
         USER("Normal user");
 
-        private String value;
+        private String description;
+        //private String code;
 
-        Role(String value) {
-            this.value = value;
+        Role(String description) {
+            this.description = description;
         }
 
         @Override
-        public String getKey() {
+        public String getDescription() {
+            return this.description;
+        }
+
+        @Override
+        public String getCode() {
             return name();
-        }
-
-        @Override
-        public String getValue() {
-            return value;
         }
     }
 }

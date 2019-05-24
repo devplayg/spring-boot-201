@@ -22,7 +22,7 @@
             <th data-field="name" data-sortable="true" th:text="#{name}"></th>
             <th data-field="email" data-sortable="true" th:text="#{email}"></th>
             <th data-field="roleList" data-sortable="true" data-formatter="memberRoleListFormatter"
-                th:text="#{roles}"></th>
+                th:text="#{role}"></th>
             <th data-field="enabled" data-sortable="true" th:text="#{enable}"></th>
             <th data-field="timezone" data-sortable="true" th:text="#{timezone}"></th>
             <th data-field="created" data-sortable="true" th:text="#{created}"></th>
@@ -71,14 +71,14 @@
                             <input type="checkbox" class="form-control" th:name="enabled">
                         </div>
                         <div class="form-group">
-                            <label th:text="#{roles}"></label>
+                            <label th:text="#{role}"></label>
                             <ul>
                                 <li th:each="role, stat : ${T(com.devplayg.coffee.definition.RoleType.Role).values()}">
                                     <input type="checkbox" th:id="${'grant_' + role}"
                                            th:name="|roleList[${stat.index}].role|"
                                            th:value="${role}"
                                            th:checked="true"/>
-                                    <label th:for="${'grant_' + role}" th:text="${role.value}"></label>
+                                    <label th:for="${'grant_' + role}" th:text="${role.description}"></label>
                                 </li>
                             </ul>
                         </div>
@@ -135,13 +135,13 @@
                             <input type="checkbox" class="form-control" th:name="enabled">
                         </div>
                         <div class="form-group">
-                            <label th:text="#{roles}"></label>
+                            <label th:text="#{role}"></label>
                             <ul>
                                 <li th:each="role, stat : ${T(com.devplayg.coffee.definition.RoleType.Role).values()}">
                                     <input type="checkbox" th:id="${'revoke_' + role}"
                                            th:name="|roleList[${stat.index}].role|"
                                            th:value="${role}"/>
-                                    <label th:for="${'revoke_' + role}" th:text="${role.value}"></label>
+                                    <label th:for="${'revoke_' + role}" th:text="${role.description}"></label>
                                 </li>
                             </ul>
                         </div>

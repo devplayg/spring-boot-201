@@ -3,9 +3,42 @@
 
 <div layout:fragment="content">
     <div th:id="|toolbar-${ctrl}|">
-        <button class="btn btn-primary" th:text="#{cmd.add}" data-toggle="modal" th:data-target="|#modal-${ctrl}-insert|">
-        </button>
 
+        <form th:id="|form-${ctrl}|">
+            <div class="form-inline">
+                <div class="form-group">
+
+                    <!-- Date ranges -->
+                    <div class="input-group date datetime" data-date="1979-09-16T05:25:07Z" data-date-format="yyyy-mm-dd HH:ii" data-link-field="">
+                        <input class="form-control mask-yyyymmddhhii" size="17" type="text" name="start_date" value="" autocomplete="off">
+                        <span class="input-group-addon"><i class="glyphicon glyphicon-th"></i></span>
+                    </div>
+                    <div class="input-group date datetime">
+                        <input class="form-control mask-yyyymmddhhii" size="17" type="text" name="end_date" value="" autocomplete="off">
+                        <span class="input-group-addon"><i class="glyphicon glyphicon-th"></i></span>
+                    </div>
+                    <div class="form-group">
+                        <label th:text="#{category}"></label>
+                        <select name="category" class="form-control selectpicker">
+                            <option th:each="category, stat : ${T(com.devplayg.coffee.definition.AuditCategory).values()}"
+                                    th:value="${category.code}"
+                                    th:text="${category.description}"></option>
+                        </select>
+                    </div>
+
+                    <!-- Buttons -->
+                    <button type="submit" class="btn blue">#{search}</button>
+                    <a class="btn btn-default" href="">#{cancel}</a>
+
+<!--                    <div class="input-group btn-group btn-page-group">-->
+<!--                        <button type="button" class="btn blue btn-move-page btn-prev" data-direction="-1" data-loading-text="&lt;">&lt;</button>-->
+<!--                        <button type="button" class="btn blue btn-move-page btn-page-text" data-direction="0">1</button>-->
+<!--                        <button type="button" class="btn blue btn-move-page btn-next" data-direction="1" data-loading-text="&gt;">&gt;</button>-->
+<!--                    </div>-->
+                    <a href="#" data-toggle="modal" data-target="#modal-filter"><i class="fa fa-filter icon-filter hidden font-red"></i>#{filter}</a>
+                </div>
+            </div>
+        </form>
         date range, category, contents, username
     </div>
     <table th:id="|table-${ctrl}|" class="table table-bordered table-hover"
@@ -13,7 +46,7 @@
            data-show-refresh="true"
            data-show-columns="true"
            data-pagination="true"
-           data-side-pagination="client"
+           data-side-pagination="server"
            data-page-size="5"
            th:data-url="@{/audit}">
         <thead>

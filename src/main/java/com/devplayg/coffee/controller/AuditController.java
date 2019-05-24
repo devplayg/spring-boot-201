@@ -9,6 +9,7 @@ package com.devplayg.coffee.controller;
 
 
 import com.devplayg.coffee.entity.Audit;
+import com.devplayg.coffee.repository.AuditRepository;
 import com.devplayg.coffee.repository.support.AuditRepositorySupport;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
@@ -35,5 +36,7 @@ public class AuditController {
     public ResponseEntity<?> list() {
         List<Audit> list = auditRepositorySupport.find("-4");
         return new ResponseEntity<>(list, HttpStatus.OK);
+
+
     }
 }

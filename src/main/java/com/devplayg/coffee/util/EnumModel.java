@@ -6,6 +6,12 @@
 package com.devplayg.coffee.util;
 
 public interface EnumModel {
-    String getKey();
-    String getValue();
+    // --------------   -------------------  -------------
+    // STATUS_RUNNING  ("System is running", "STATUS-0003")
+    // --------------   -------------------  -------------
+    //           name          description           code
+    // --------------   -------------------  -------------
+    //String getName(); // you don't need to set 'name'. java.lang.enum supports 'name'
+    String getDescription();
+    String getCode();
 }
