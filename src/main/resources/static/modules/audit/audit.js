@@ -9,6 +9,16 @@ $(function () {
     /*
      * 2. Classes
      */
+    $(".datetime").datetimepicker({
+        format: "yyyy-mm-dd hh:ii",
+        pickerPosition: "bottom-left",
+        todayHighlight: 1,
+        minView: 2,
+        maxView: 4,
+        autoclose: true
+    });
+
+
     // class Member {
     //     constructor (data) {
     //         this.data = data || null;
