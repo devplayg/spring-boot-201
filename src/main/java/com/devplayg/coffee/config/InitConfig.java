@@ -1,5 +1,6 @@
 package com.devplayg.coffee.config;
 
+import com.devplayg.coffee.definition.AuditCategory;
 import com.devplayg.coffee.definition.RoleType;
 import com.devplayg.coffee.util.EnumMapper;
 import com.querydsl.jpa.impl.JPAQueryFactory;
@@ -19,7 +20,7 @@ public class InitConfig {
     public EnumMapper enumMapper() {
         EnumMapper enumMapper = new EnumMapper();
         enumMapper.put("role", RoleType.Role.class);
-//        enumMapper.put("auditCategory", RoleType.Role.class);
+        //enumMapper.put("auditCategory", AuditCategory.class);
         return enumMapper;
     }
 

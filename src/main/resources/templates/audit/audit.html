@@ -18,8 +18,8 @@
                         <span class="input-group-addon"><i class="glyphicon glyphicon-th"></i></span>
                     </div>
                     <div class="form-group">
-                        <label th:text="#{category}"></label>
                         <select name="category" class="form-control selectpicker">
+                            <option value="-1" th:text="#{category}"></option>
                             <option th:each="category, stat : ${T(com.devplayg.coffee.definition.AuditCategory).values()}"
                                     th:value="${category.code}"
                                     th:text="${category.description}"></option>
@@ -27,8 +27,8 @@
                     </div>
 
                     <!-- Buttons -->
-                    <button type="submit" class="btn blue">#{search}</button>
-                    <a class="btn btn-default" href="">#{cancel}</a>
+                    <button type="submit" class="btn blue" th:text="#{search}">
+                    <a class="btn btn-default" href="" th:text="#{cancel}"></a>
 
 <!--                    <div class="input-group btn-group btn-page-group">-->
 <!--                        <button type="button" class="btn blue btn-move-page btn-prev" data-direction="-1" data-loading-text="&lt;">&lt;</button>-->
@@ -42,7 +42,7 @@
         date range, category, contents, username
     </div>
     <table th:id="|table-${ctrl}|" class="table table-bordered table-hover"
-           data-th-toolbar="|#toolbar-${ctrl}|"
+           th:data-toolbar="|#toolbar-${ctrl}|"
            data-show-refresh="true"
            data-show-columns="true"
            data-pagination="true"

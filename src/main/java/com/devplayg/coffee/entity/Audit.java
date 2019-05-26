@@ -8,7 +8,6 @@ import org.hibernate.annotations.CreationTimestamp;
 import javax.persistence.*;
 import java.io.Serializable;
 import java.time.LocalDateTime;
-import java.util.List;
 
 @Entity
 @Table(name = "adt_audit")
@@ -42,9 +41,9 @@ public class Audit implements Serializable {
     @Column(length = 512)
     private String message;
 
-    @OneToMany(fetch = FetchType.EAGER)
-    @JoinColumn(name="audit_id")
-    private List<AuditDetail> details;
+//    @OneToMany(fetch = FetchType.EAGER)
+//    @JoinColumn(name="audit_id")
+//    private List<AuditDetail> details;
 
     @Column
     @CreationTimestamp
