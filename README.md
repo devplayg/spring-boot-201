@@ -22,6 +22,7 @@
 - [x] JPA
 - [x] QueryDSL
 - [x] MariaDB
+- [ ] MyBatis (needed)
 
 
 ## Documents
