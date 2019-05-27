@@ -8,6 +8,7 @@ package com.devplayg.coffee.controller;
  */
 
 
+import com.devplayg.coffee.config.AppConfig;
 import com.devplayg.coffee.filter.AuditFilter;
 import com.devplayg.coffee.repository.support.AuditRepositorySupport;
 import com.devplayg.coffee.vo.Result;
@@ -30,6 +31,9 @@ public class AuditController {
     @Autowired
     private AuditRepositorySupport auditRepositorySupport;
 
+    @Autowired
+    private AppConfig appConfig;
+
     @RequestMapping(value = "/", method = {RequestMethod.GET, RequestMethod.POST})
     public String display(@ModelAttribute AuditFilter filter, Model model) {
         String tz = "Asia/Taipei";
@@ -42,7 +46,9 @@ public class AuditController {
     public ResponseEntity<?> list(@ModelAttribute AuditFilter filter) {
         String tz = "Asia/Taipei";
         filter.check(tz);
+        log.info("appConfig: {}", appConfig.toString());
         log.info("filter: {}", filter.toString());
+        log.info("df: {}", appConfig.getDateFormat().getThymeleaf());
         Result rs = auditRepositorySupport.find(filter);
         return new ResponseEntity<>(rs, HttpStatus.OK);
     }

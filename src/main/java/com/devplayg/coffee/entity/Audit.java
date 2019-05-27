@@ -2,15 +2,12 @@ package com.devplayg.coffee.entity;
 
 import com.devplayg.coffee.converter.AuditCategoryConverter;
 import com.devplayg.coffee.definition.AuditCategory;
-import com.fasterxml.jackson.annotation.JsonIgnore;
 import lombok.Getter;
 import org.hibernate.annotations.CreationTimestamp;
 
 import javax.persistence.*;
 import java.io.Serializable;
 import java.time.LocalDateTime;
-import java.util.ArrayList;
-import java.util.List;
 
 @Entity
 @Table(name = "adt_audit")
