@@ -1,6 +1,5 @@
 package com.devplayg.coffee.config;
 
-import com.devplayg.coffee.definition.AuditCategory;
 import com.devplayg.coffee.definition.RoleType;
 import com.devplayg.coffee.util.EnumMapper;
 import com.querydsl.jpa.impl.JPAQueryFactory;

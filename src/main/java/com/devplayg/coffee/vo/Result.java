@@ -12,7 +12,7 @@ import java.util.List;
 @Getter
 public class Result {
     private String error;
-    private int total;
+    private long total;
     private List rows;
     private Object data;
     private long id;
@@ -31,6 +31,11 @@ public class Result {
     public Result(List rows) {
         this.rows = rows;
         this.total = rows.size();
+    }
+
+    public Result(List rows, long total) {
+        this.rows = rows;
+        this.total = total;
     }
 
     public Result(BindingResult bindingResult) {

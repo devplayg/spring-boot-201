@@ -4,7 +4,9 @@ import com.devplayg.coffee.entity.Audit;
 import com.devplayg.coffee.entity.QAudit;
 import com.devplayg.coffee.filter.AuditFilter;
 import com.devplayg.coffee.util.StringUtils;
+import com.devplayg.coffee.vo.Result;
 import com.querydsl.core.BooleanBuilder;
+import com.querydsl.core.QueryResults;
 import com.querydsl.core.types.Order;
 import com.querydsl.core.types.OrderSpecifier;
 import com.querydsl.core.types.Path;
@@ -12,10 +14,6 @@ import com.querydsl.core.types.dsl.Expressions;
 import com.querydsl.jpa.impl.JPAQueryFactory;
 import org.springframework.data.jpa.repository.support.QuerydslRepositorySupport;
 import org.springframework.stereotype.Repository;
-
-import javax.persistence.Query;
-import javax.transaction.Transactional;
-import java.util.List;
 
 @Repository
 public class AuditRepositorySupport extends QuerydslRepositorySupport {
@@ -30,8 +28,7 @@ public class AuditRepositorySupport extends QuerydslRepositorySupport {
     // Tips
     // https://leanpub.com/opinionatedjpa/read
 
-    @Transactional
-    public List<Audit> find(AuditFilter filter) {
+    public Result find(AuditFilter filter) {
         QAudit audit = QAudit.audit;
 
         BooleanBuilder builder = new BooleanBuilder();
@@ -45,39 +42,23 @@ public class AuditRepositorySupport extends QuerydslRepositorySupport {
             builder.and(audit.message.contains(filter.getMessage()));
         }
 
-       Query jpaQuery = query.selectFrom(audit)
+
+//    Query jpaQuery = query.selectFrom(audit)
+//            .where(builder)
+//            .orderBy(this.getSortedColumn(Order.DESC, filter.getSort()))
+//            .offset(filter.getOffset())
+//            .limit(filter.getLimit())
+//            .createQuery();
+
+        QueryResults<Audit> result =query.selectFrom(audit)
                 .where(builder)
                 .orderBy(this.getSortedColumn(Order.DESC, filter.getSort()))
                 .offset(filter.getOffset())
                 .limit(filter.getLimit())
-               .createQuery();
-
-        List rows = jpaQuery.getResultList();
-        return rows;
-
-
-
-
-//        Query jpaQuery = query.selectFrom(audit)
-//                .where(audit.id.lt(100))
-//            .leftJoin(audit.details, auditDetail)
-//                .fetchJoin()p
-//                .offset(0).limit(5)
-//                .createQuery();
-//        List results = jpaQuery.getResultList();
-
-
-
-        // Good
-//        return query
-//                .selectFrom(audit)
-//                .where(builder)
-//                .orderBy(this.getSortedColumn(Order.DESC, filter.getSort()))
-//                .offset(filter.getOffset())
-//                .limit(filter.getLimit())
-//                .fetch();
-
+                .fetchResults();
+        return new Result(result.getResults(), result.getTotal());
     }
+
 
     private OrderSpecifier<?> getSortedColumn(Order order, String fieldName){
         Path<Object> fieldPath = Expressions.path(Object.class, QAudit.audit, fieldName);
@@ -85,6 +66,24 @@ public class AuditRepositorySupport extends QuerydslRepositorySupport {
     }
 
 
+//        Query jpaQuery = query.selectFrom(audit)
+//                .where(audit.id.lt(100))
+//            .leftJoin(audit.details, auditDetail)
+//                .fetchJoin()
+//                .offset(0).limit(5)
+//                .createQuery();
+//        List results = jpaQuery.getResultList();
+
+
+
+    // Good
+//        return query
+//                .selectFrom(audit)
+//                .where(builder)
+//                .orderBy(this.getSortedColumn(Order.DESC, filter.getSort()))
+//                .offset(filter.getOffset())
+//                .limit(filter.getLimit())
+//                .fetch();
 
         // Default
 //        return query
@@ -109,14 +108,6 @@ public class AuditRepositorySupport extends QuerydslRepositorySupport {
 //                .where(audit.category.eq(AuditCategory.MEMBER))
 //                .limit(10).fetch();
 
-//        QueryResults<Audit> list =  query.selectFrom(audit)
-//                .where(audit.id.lt(100))
-//                .leftJoin(audit.details, auditDetail)
-//                .fetchJoin()
-//                .offset(0).limit(5)
-//                .fetchResults();
-//
-//        return list.getResults();
 //        Query jpaQuery = query.selectFrom(audit)
 //                .where(audit.id.lt(100))
 //            .leftJoin(audit.details, auditDetail)
