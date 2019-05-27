@@ -28,6 +28,11 @@ public class Result {
         this.data = data;
     }
 
+    public Result(List rows) {
+        this.rows = rows;
+        this.total = rows.size();
+    }
+
     public Result(BindingResult bindingResult) {
         List<String> errors = new ArrayList<>();
 

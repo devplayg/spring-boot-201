@@ -50,8 +50,6 @@ dependencies {
     // Mysql
     runtimeOnly 'mysql:mysql-connector-java'
 
-    // Utils
-    compile('org.apache.commons:commons-lang3:3.8.1')
 }
 
 // QueryDSL

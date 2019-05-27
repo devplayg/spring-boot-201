@@ -77,14 +77,4 @@ public class Member implements Serializable {
             },
             mappedBy = "member")
     private List<MemberRole> roleList = new ArrayList<>();
-
-    // For use on view(Thymeleaf template)
-    @JsonIgnore
-    public List<RoleType.Role> getRoleEnumList() {
-        List<RoleType.Role> list = new ArrayList<>();
-        for (MemberRole role : roleList) {
-            list.add(role.getRole());
-        }
-        return list;
-    }
 }

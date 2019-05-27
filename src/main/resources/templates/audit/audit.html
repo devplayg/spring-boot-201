@@ -5,11 +5,9 @@
 <div layout:fragment="content">
     <div th:id="|toolbar-${ctrl}|">
 
-
-
-
-
         <form th:id="|form-${ctrl}|" method="post" th:action="@{/audit/}" th:object="${filter}">
+            <span th:text="${#strings.arrayJoin(#object.categoryList,',')}"></span>
+
             <div class="form-inline">
                 <div class="form-group">
                     <!-- Date ranges -->
@@ -26,7 +24,7 @@
                             <option th:each="category, stat : ${T(com.devplayg.coffee.definition.AuditCategory).values()}"
                                     th:value="${category}"
                                     th:text="${category.description}"
-                                    th:selected="${#lists.contains(#object.getCategoryEnumList(), category)}"
+                                    th:selected="${#lists.contains(#object.categoryList, category)}"
                             ></option>
                         </select>
                     </div>
@@ -75,7 +73,9 @@
            data-pagination="true"
            data-side-pagination="server"
            data-page-size="5"
-           th:data-url="@{/audit}">
+           data-sort-name="created"
+           data-sort-order="desc"
+           th:data-url="@{/audit(startDate=*{#temporals.format(startDate, 'yyyy-MM-dd HH:mm')}, endDate=*{#temporals.format(endDate, 'yyyy-MM-dd HH:mm')}, message=*{message}, categoryList=*{categoryList}     )      }">
         <thead>
         <tr>
             <th data-field="id" data-sortable="true">ID</th>

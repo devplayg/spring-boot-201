@@ -11,6 +11,7 @@ package com.devplayg.coffee.controller;
 import com.devplayg.coffee.entity.Audit;
 import com.devplayg.coffee.filter.AuditFilter;
 import com.devplayg.coffee.repository.support.AuditRepositorySupport;
+import com.devplayg.coffee.vo.Result;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
@@ -41,9 +42,14 @@ public class AuditController {
     }
 
     @GetMapping
-    public ResponseEntity<?> list() {
-        List<Audit> list = auditRepositorySupport.find("-4");
-        return new ResponseEntity<>(list, HttpStatus.OK);
+    public ResponseEntity<?> list(@ModelAttribute AuditFilter filter) {
+        String tz = "Asia/Taipei";
+        filter.check(tz);
+
+        log.info("filter: {}", filter.toString());
+        List<Audit> list = auditRepositorySupport.find(filter);
+
+        return new ResponseEntity<>(new Result(list), HttpStatus.OK);
     }
 
     @GetMapping("filter")

@@ -7,7 +7,7 @@ import java.io.Serializable;
 import java.time.LocalDateTime;
 
 @Getter
-//@Setter
+@Setter
 @ToString
 public class PagingFilter implements Serializable {
     private static final long serialVersionUID = 1L;
@@ -18,6 +18,8 @@ public class PagingFilter implements Serializable {
     private String sort;
     private String order;
     private boolean fastPaging;
+
+
 
 
 

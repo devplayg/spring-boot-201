@@ -1,13 +1,19 @@
 package com.devplayg.coffee.repository.support;
 
-import com.devplayg.coffee.definition.AuditCategory;
 import com.devplayg.coffee.entity.Audit;
 import com.devplayg.coffee.entity.QAudit;
-import com.devplayg.coffee.entity.QAuditDetail;
+import com.devplayg.coffee.filter.AuditFilter;
+import com.devplayg.coffee.util.StringUtils;
+import com.querydsl.core.BooleanBuilder;
+import com.querydsl.core.types.Order;
+import com.querydsl.core.types.OrderSpecifier;
+import com.querydsl.core.types.Path;
+import com.querydsl.core.types.dsl.Expressions;
 import com.querydsl.jpa.impl.JPAQueryFactory;
 import org.springframework.data.jpa.repository.support.QuerydslRepositorySupport;
 import org.springframework.stereotype.Repository;
 
+import javax.persistence.Query;
 import javax.transaction.Transactional;
 import java.util.List;
 
@@ -25,9 +31,67 @@ public class AuditRepositorySupport extends QuerydslRepositorySupport {
     // https://leanpub.com/opinionatedjpa/read
 
     @Transactional
-    public List<Audit> find(String name) {
+    public List<Audit> find(AuditFilter filter) {
         QAudit audit = QAudit.audit;
-        QAuditDetail auditDetail = QAuditDetail.auditDetail;
+
+        BooleanBuilder builder = new BooleanBuilder();
+        builder.and(audit.created.between(filter.getStartDate(), filter.getEndDate()));
+
+        if (filter.getCategoryList().size() > 0) {
+            builder.and(audit.category.in(filter.getCategoryList()));
+        }
+
+        if (!StringUtils.isBlank(filter.getMessage())) {
+            builder.and(audit.message.contains(filter.getMessage()));
+        }
+
+       Query jpaQuery = query.selectFrom(audit)
+                .where(builder)
+                .orderBy(this.getSortedColumn(Order.DESC, filter.getSort()))
+                .offset(filter.getOffset())
+                .limit(filter.getLimit())
+               .createQuery();
+
+        List rows = jpaQuery.getResultList();
+        return rows;
+
+
+
+
+//        Query jpaQuery = query.selectFrom(audit)
+//                .where(audit.id.lt(100))
+//            .leftJoin(audit.details, auditDetail)
+//                .fetchJoin()p
+//                .offset(0).limit(5)
+//                .createQuery();
+//        List results = jpaQuery.getResultList();
+
+
+
+        // Good
+//        return query
+//                .selectFrom(audit)
+//                .where(builder)
+//                .orderBy(this.getSortedColumn(Order.DESC, filter.getSort()))
+//                .offset(filter.getOffset())
+//                .limit(filter.getLimit())
+//                .fetch();
+
+    }
+
+    private OrderSpecifier<?> getSortedColumn(Order order, String fieldName){
+        Path<Object> fieldPath = Expressions.path(Object.class, QAudit.audit, fieldName);
+        return new OrderSpecifier(order, fieldPath);
+    }
+
+
+
+        // Default
+//        return query
+//                .selectFrom(audit)
+//                .where(audit.category.eq(AuditCategory.MEMBER))
+//                .limit(10)
+//                .fetch();
 
 //        return from(audit).fetch();
 //        QAuditDetail auditDetail = QAuditDetail.auditDetail;
@@ -61,23 +125,4 @@ public class AuditRepositorySupport extends QuerydslRepositorySupport {
 //                .createQuery();
 //        List results = jpaQuery.getResultList();
 //        return results;
-
-
-
-        return query
-                .selectFrom(audit)
-                .where(audit.category.eq(AuditCategory.MEMBER))
-                .limit(10)
-                .fetch();
-//
-//                .fetchJoin()
-//                .offset(0)
-//                .limit(5)
-//                .fetch();
-
-//                .on(audit.id.eq(auditDetail.auditID))
-//                .where(audit.id.lt(10))
-//                .limit(10);
-//
-    }
 }

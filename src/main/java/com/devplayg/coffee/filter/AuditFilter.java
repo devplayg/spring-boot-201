@@ -1,7 +1,7 @@
 package com.devplayg.coffee.filter;
 
 import com.devplayg.coffee.definition.AuditCategory;
-import com.fasterxml.jackson.annotation.JsonIgnore;
+import com.devplayg.coffee.util.StringUtils;
 import lombok.Getter;
 import lombok.Setter;
 import lombok.ToString;
@@ -18,6 +18,9 @@ import java.util.List;
 @Setter
 @ToString(callSuper = true)
 public class AuditFilter extends PagingFilter {
+    private final String sortName = "created";
+    private final String sortOrder = "desc";
+
     @DateTimeFormat(pattern = "yyyy-MM-dd HH:mm")
     private LocalDateTime startDate;
 
@@ -29,21 +32,18 @@ public class AuditFilter extends PagingFilter {
     private String message;
     private List<AuditCategory> categoryList = new ArrayList<>();
 
-    @JsonIgnore
-    public List<AuditCategory> getCategoryEnumList() {
-        List<AuditCategory> list = new ArrayList<>();
-        for (AuditCategory category : categoryList) {
-            list.add(category);
-        }
-        return list;
-    }
-
     public void check(String tz) {
         LocalDateTime now = ZonedDateTime.now(ZoneId.of(tz)).toLocalDateTime();
         this.now = now;
         if (this.startDate == null) {
             this.startDate = now.toLocalDate().atTime(LocalTime.MIN).minusSeconds(12345);
+        }
+        if (this.endDate == null) {
             this.endDate = now.toLocalDate().atTime(LocalTime.MAX);
+        }
+
+        if (StringUtils.isBlank(this.getSort())) {
+            this.setSort(sortName);
         }
     }
 }

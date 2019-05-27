@@ -3,7 +3,6 @@ package com.devplayg.coffee.util;
 
 import com.devplayg.coffee.exception.ResourceNotFoundException;
 import lombok.Getter;
-import org.apache.commons.lang3.StringUtils;
 
 import javax.persistence.AttributeConverter;
 import java.util.EnumSet;
