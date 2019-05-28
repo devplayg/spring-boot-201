@@ -11,12 +11,5 @@ import org.springframework.stereotype.Component;
 @ToString
 @ConfigurationProperties("app-config")
 public class AppConfig {
-    private DateFormat dateFormat = new DateFormat();
-
-    @Getter @Setter
-    public class DateFormat {
-        private String datetimePicker;
-        private String thymeleaf;
-    }
-
+    private String homeUri;
 }

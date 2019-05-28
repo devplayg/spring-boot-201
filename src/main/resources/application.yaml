@@ -39,10 +39,7 @@ logging:
                 SQL: info
                 type.descriptor.sql.BasicBinder: info
 app-config:
-    date-format:
-        datetime-picker:  yyyy-mm-dd hh:ii
-        thymeleaf: yyyy-MM-dd HH:mm
-
+    homeUri: /audit/
 ---
 #
 # Development mode

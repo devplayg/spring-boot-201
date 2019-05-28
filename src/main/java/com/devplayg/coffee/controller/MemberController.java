@@ -18,7 +18,7 @@ import java.util.List;
 import java.util.stream.Collectors;
 
 /*
- * REST API and method name
+ * REST APIs
  *
  * GET      /members/       display
  * GET      /members        list

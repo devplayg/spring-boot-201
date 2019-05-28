@@ -8,7 +8,6 @@ package com.devplayg.coffee.controller;
  */
 
 
-import com.devplayg.coffee.config.AppConfig;
 import com.devplayg.coffee.filter.AuditFilter;
 import com.devplayg.coffee.repository.support.AuditRepositorySupport;
 import com.devplayg.coffee.vo.Result;
@@ -23,6 +22,15 @@ import org.springframework.web.bind.annotation.ModelAttribute;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestMethod;
 
+/*
+ * REST APIs
+ *
+ * GET      /audit/       display
+ * GET      /audit        list
+ *
+ */
+
+
 @Controller
 @Slf4j
 @RequestMapping("audit")
@@ -30,9 +38,6 @@ public class AuditController {
 
     @Autowired
     private AuditRepositorySupport auditRepositorySupport;
-
-    @Autowired
-    private AppConfig appConfig;
 
     @RequestMapping(value = "/", method = {RequestMethod.GET, RequestMethod.POST})
     public String display(@ModelAttribute AuditFilter filter, Model model) {
@@ -46,19 +51,8 @@ public class AuditController {
     public ResponseEntity<?> list(@ModelAttribute AuditFilter filter) {
         String tz = "Asia/Taipei";
         filter.check(tz);
-        log.info("appConfig: {}", appConfig.toString());
-        log.info("filter: {}", filter.toString());
-        log.info("df: {}", appConfig.getDateFormat().getThymeleaf());
         Result rs = auditRepositorySupport.find(filter);
         return new ResponseEntity<>(rs, HttpStatus.OK);
     }
-
-    @GetMapping("filter")
-    public ResponseEntity<?> filter() {
-        AuditFilter filter = new AuditFilter();
-        filter.check("Asia/Seoul");
-        return new ResponseEntity<>(filter, HttpStatus.OK);
-    }
-
 }
 

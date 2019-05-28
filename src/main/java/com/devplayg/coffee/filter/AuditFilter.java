@@ -1,12 +1,10 @@
 package com.devplayg.coffee.filter;
 
-import com.devplayg.coffee.config.AppConfig;
 import com.devplayg.coffee.definition.AuditCategory;
 import com.devplayg.coffee.util.StringUtils;
 import lombok.Getter;
 import lombok.Setter;
 import lombok.ToString;
-import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.format.annotation.DateTimeFormat;
 
 import java.time.LocalDateTime;
@@ -20,8 +18,6 @@ import java.util.List;
 @Setter
 @ToString(callSuper = true)
 public class AuditFilter extends PagingFilter {
-    @Autowired
-    private AppConfig appConfig;
 
     private final String sortName = "created";
     private final String sortOrder = "desc";

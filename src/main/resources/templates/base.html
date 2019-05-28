@@ -16,15 +16,11 @@
 </head>
 <body class="container-fluid">
 <div>
-    <b th:inline="text" class="user"> [[${#httpServletRequest.remoteUser}]] </b>
-    <a href="/logout" th:href="@{/logout}">Logout</a>
+    <b th:inline="text" class="user"> [[${#httpServletRequest.remoteUser}]] </b> |
+    <a href="/logout" th:href="@{/logout}" th:text="#{logout}"></a> |
     <a href="?lang=ko-KR">한국어</a> |
     <a href="?lang=en-US">English</a> |
     <a href="?lang=vi-VN">Tiếng việt</a> |
-    <div>
-        <span th:text="#{login.welcome}"></span>
-        [[${#httpServletRequest.remoteUser}]]
-    </div>
     <hr>
 </div>
 
