@@ -43,7 +43,7 @@ public class SecurityConfig extends WebSecurityConfigurerAdapter {
                 .formLogin()
                 // https://docs.spring.io/spring-security/site/docs/current/guides/html5/form-javaconfig.html
                 // 로그인 페이지
-                .loginPage("/login/")
+                .loginPage("/login")
 
                 // 로그인 절차 진행
                 .loginProcessingUrl("/app-login")
