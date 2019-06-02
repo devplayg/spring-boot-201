@@ -1,5 +1,6 @@
 package com.devplayg.coffee.config;
 
+import com.devplayg.coffee.util.CustomAuthenticationSuccessHandler;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
@@ -7,8 +8,11 @@ import org.springframework.security.config.annotation.web.builders.HttpSecurity;
 import org.springframework.security.config.annotation.web.configuration.EnableWebSecurity;
 import org.springframework.security.config.annotation.web.configuration.WebSecurityConfigurerAdapter;
 import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
+import org.springframework.security.web.authentication.AuthenticationSuccessHandler;
 import org.springframework.security.web.csrf.CsrfFilter;
 import org.springframework.web.filter.CharacterEncodingFilter;
+
+import java.util.Hashtable;
 
 @Configuration
 @EnableWebSecurity
@@ -16,6 +20,11 @@ public class SecurityConfig extends WebSecurityConfigurerAdapter {
 
     @Autowired
     private AppConfig appConfig;
+
+    @Bean
+    public AuthenticationSuccessHandler authenticationSuccessHandler(){
+        return new CustomAuthenticationSuccessHandler();
+    }
 
     @Override
     protected void configure(HttpSecurity httpSecurity) throws Exception {
@@ -57,6 +66,7 @@ public class SecurityConfig extends WebSecurityConfigurerAdapter {
                 // 로그인 성공 시
                 //.successForwardUrl("/app/articles")
                 .defaultSuccessUrl(appConfig.getHomeUri())
+                .successHandler(authenticationSuccessHandler())
                 //.successForwardUrl("/members")
                 .permitAll()
                 .and()
@@ -96,5 +106,10 @@ public class SecurityConfig extends WebSecurityConfigurerAdapter {
     @Bean
     public BCryptPasswordEncoder passwordEncoder() {
         return new BCryptPasswordEncoder();
+    }
+
+    @Bean
+    public Hashtable<String, Boolean> userWatcher() {
+        return new Hashtable<>();
     }
 }

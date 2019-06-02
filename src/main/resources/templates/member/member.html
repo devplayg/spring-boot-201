@@ -75,7 +75,7 @@
                             <ul>
                                 <li th:each="role, stat : ${T(com.devplayg.coffee.definition.RoleType.Role).values()}">
                                     <input type="checkbox" th:id="${'grant_' + role}"
-                                           th:name="|roleList[${stat.index}].role|"
+                                           th:name="roleList"
                                            th:value="${role}"
                                            th:checked="true"/>
                                     <label th:for="${'grant_' + role}" th:text="${role.description}"></label>
@@ -97,8 +97,6 @@
     </form>
 
     <form th:id="|form-${ctrl}-update|">
-        <input type="hidden" class="form-control" th:name="id">
-
         <div class="modal fade modal-form" th:id="|modal-${ctrl}-update|" tabindex="-1" role="dialog">
             <div class="modal-dialog" role="document">
                 <div class="modal-content">
@@ -139,7 +137,7 @@
                             <ul>
                                 <li th:each="role, stat : ${T(com.devplayg.coffee.definition.RoleType.Role).values()}">
                                     <input type="checkbox" th:id="${'revoke_' + role}"
-                                           th:name="|roleList[${stat.index}].role|"
+                                           th:name="roleList"
                                            th:value="${role}"/>
                                     <label th:for="${'revoke_' + role}" th:text="${role.description}"></label>
                                 </li>

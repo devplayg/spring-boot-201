@@ -1,10 +1,10 @@
 package com.devplayg.coffee.controller;
 
 import com.devplayg.coffee.entity.Member;
-import com.devplayg.coffee.entity.MemberRole;
 import com.devplayg.coffee.exception.ResourceNotFoundException;
 import com.devplayg.coffee.repository.MemberRepository;
 import com.devplayg.coffee.vo.Result;
+import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
@@ -13,9 +13,10 @@ import org.springframework.stereotype.Controller;
 import org.springframework.validation.BindingResult;
 import org.springframework.web.bind.annotation.*;
 
+import javax.persistence.EntityManager;
 import javax.validation.Valid;
+import java.util.Hashtable;
 import java.util.List;
-import java.util.stream.Collectors;
 
 /*
  * REST APIs
@@ -31,6 +32,7 @@ import java.util.stream.Collectors;
 
 @Controller
 @RequestMapping("members")
+@Slf4j
 public class MemberController {
 
     @Autowired
@@ -38,6 +40,12 @@ public class MemberController {
 
     @Autowired
     private BCryptPasswordEncoder bCryptPasswordEncoder;
+
+    @Autowired
+    private Hashtable<String, Boolean> userWatcher;
+
+    @Autowired
+    private EntityManager em;
 
     @GetMapping("/")
     public String display() {
@@ -47,7 +55,6 @@ public class MemberController {
     @GetMapping
     public ResponseEntity<?> list() {
         List<Member> list = memberRepository.findAll();
-        ResponseEntity.ok(list);
         return new ResponseEntity<>(list, HttpStatus.OK);
     }
 
@@ -59,12 +66,15 @@ public class MemberController {
             return new ResponseEntity<>(new Result(bindingResult), HttpStatus.OK);
         }
 
+//        log.info("member: {}", member.toString());
+        member.setRoles(member.getRoleList().stream().mapToInt(i-> i.getValue()).sum());
+        //  member: Member(id=0, username=xxxxaa, email=xxxxaa@a.com, name=xxxxaa, enabled=false, roles=0, timezone=Asia/Seoul, created=null, updated=null, roleList=[ADMIN, SHERIFF, USER])
         // Set member role
-        List<MemberRole> list = member.getRoleList().stream()
-                .filter(r -> r.getRole() != null)
-                .collect(Collectors.toList());
-        list.forEach(r -> r.setMember(member));
-        member.setRoleList(list);
+//        List<MemberRole> list = member.getRoleList().stream()
+//                .filter(r -> r.getRole() != null)
+//                .collect(Collectors.toList());
+//        list.forEach(r -> r.setMember(member));
+//        member.setRoleList(list);
 
         // Encrypt password
         member.setPassword(bCryptPasswordEncoder.encode(member.getInputPassword()));
@@ -93,13 +103,13 @@ public class MemberController {
         member.setEmail(input.getEmail());
         member.setEnabled(input.isEnabled());
         member.setTimezone(input.getTimezone());
-
-        // Set member roles
-        List<MemberRole> list = input.getRoleList().stream()
-                .filter(r -> r.getRole() != null)
-                .collect(Collectors.toList());
-        list.forEach(r -> r.setMember(member));
-        member.setRoleList(list);
+        member.setRoles(input.getRoleList().stream().mapToInt(i-> i.getValue()).sum());
+//        // Set member roles
+//        List<MemberRole> list = input.getRoleList().stream()
+//                .filter(r -> r.getRole() != null)
+//                .collect(Collectors.toList());
+//        list.forEach(r -> r.setMember(member));
+//        member.setRoleList(list);
 
         Member changed = memberRepository.save(member);
         return new ResponseEntity<>(new Result(changed), HttpStatus.OK);
@@ -109,5 +119,11 @@ public class MemberController {
     public ResponseEntity<?> delete(@PathVariable("id") long id) {
         memberRepository.deleteById(id);
         return new ResponseEntity<>(new Result(id), HttpStatus.OK);
+    }
+
+    @GetMapping("test")
+    public ResponseEntity<?> test() {
+        userWatcher.put("member", false);
+        return new ResponseEntity<>(userWatcher, HttpStatus.OK);
     }
 }

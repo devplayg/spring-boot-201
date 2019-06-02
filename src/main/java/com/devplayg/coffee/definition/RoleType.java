@@ -12,15 +12,17 @@ public class RoleType {
     private Role role;
 
     public enum Role implements EnumModel {
-        ADMIN("Administrator"),
-        SHERIFF("Sheriff"),
-        USER("Normal user");
+        ADMIN("Administrator", (int) Math.pow(2, 10)), // 1024
+        SHERIFF("Sheriff" , (int) Math.pow(2, 9)), // 512
+        USER("Normal user" , (int) Math.pow(2, 8)); // 256
 
         private String description;
+        private int value;
         //private String code;
 
-        Role(String description) {
+        Role(String description, int value) {
             this.description = description;
+            this.value = value;
         }
 
         @Override
@@ -31,6 +33,10 @@ public class RoleType {
         @Override
         public String getCode() {
             return name();
+        }
+
+        public int getValue() {
+            return value;
         }
     }
 }

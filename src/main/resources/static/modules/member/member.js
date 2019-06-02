@@ -5,7 +5,8 @@ $(function () {
      */
     let $table = $("#table-member"),
         $insertForm = $("#form-member-insert"),
-        $updateForm = $("#form-member-update");
+        $updateForm = $("#form-member-update"),
+        selectedMemberID = null;
 
 
     /*
@@ -22,14 +23,14 @@ $(function () {
                 if (rs.error !== null) {
                     return;
                 }
-                $("input[name=id]", $updateForm).val(rs.data.id);
-                $("input[name=username]", $updateForm).val(rs.data.username);
+                selectedMemberID = rs.data.id;
+                $("input[name=username]", $updateForm). val(rs.data.username);
                 $("input[name=email]", $updateForm).val(rs.data.email);
                 $("input[name=name]", $updateForm).val(rs.data.name);
                 $("select[name=timezone]", $updateForm).val(rs.data.timezone).selectpicker("refresh");
                 $("input[name=enabled]", $updateForm).prop("checked", rs.data.enabled);
                 $.each(rs.data.roleList, function (i, role) {
-                    $("#revoke_" + role.role).prop("checked", true);
+                    $("#revoke_" + role).prop("checked", true);
                 });
 
                 $updateForm.find(".modal").modal("show");
@@ -131,7 +132,7 @@ $(function () {
 
             $.ajax({
                 method: "PATCH",
-                url: "/members/" + $("input[name=id]", $(form)).val(),
+                url: "/members/" + selectedMemberID,
                 data: $(form).serialize()
             }).done(function (rs) {
                 if (rs.error !== null) {
