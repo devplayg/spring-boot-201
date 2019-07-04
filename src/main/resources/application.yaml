@@ -38,8 +38,8 @@ logging:
             hibernate:
                 SQL: info
                 type.descriptor.sql.BasicBinder: info
-app-config:
-    homeUri: /audit/
+appconfig:
+    homeUri: /members/
 ---
 #
 # Development mode

@@ -9,7 +9,7 @@ import org.springframework.stereotype.Component;
 @Component
 @Getter @Setter
 @ToString
-@ConfigurationProperties("app-config")
+@ConfigurationProperties("appconfig")
 public class AppConfig {
     private String homeUri;
 }

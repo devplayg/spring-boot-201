@@ -1,5 +1,6 @@
 package com.devplayg.coffee.config;
 
+import com.devplayg.coffee.util.CustomAuthenticationFailureHandler;
 import com.devplayg.coffee.util.CustomAuthenticationSuccessHandler;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.context.annotation.Bean;
@@ -8,6 +9,7 @@ import org.springframework.security.config.annotation.web.builders.HttpSecurity;
 import org.springframework.security.config.annotation.web.configuration.EnableWebSecurity;
 import org.springframework.security.config.annotation.web.configuration.WebSecurityConfigurerAdapter;
 import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
+import org.springframework.security.web.authentication.AuthenticationFailureHandler;
 import org.springframework.security.web.authentication.AuthenticationSuccessHandler;
 import org.springframework.security.web.csrf.CsrfFilter;
 import org.springframework.web.filter.CharacterEncodingFilter;
@@ -18,12 +20,14 @@ import java.util.Hashtable;
 @EnableWebSecurity
 public class SecurityConfig extends WebSecurityConfigurerAdapter {
 
-    @Autowired
-    private AppConfig appConfig;
+    @Bean
+    public AuthenticationSuccessHandler authenticationSuccessHandler() {
+        return new CustomAuthenticationSuccessHandler();
+    }
 
     @Bean
-    public AuthenticationSuccessHandler authenticationSuccessHandler(){
-        return new CustomAuthenticationSuccessHandler();
+    public AuthenticationFailureHandler authenticationFailureHandler() {
+        return new CustomAuthenticationFailureHandler();
     }
 
     @Override
@@ -65,8 +69,13 @@ public class SecurityConfig extends WebSecurityConfigurerAdapter {
 
                 // 로그인 성공 시
                 //.successForwardUrl("/app/articles")
-                .defaultSuccessUrl(appConfig.getHomeUri())
+                //.defaultSuccessUrl(appConfig.getHomeUri())
                 .successHandler(authenticationSuccessHandler())
+
+                // 로그인 실패 시
+                .failureHandler(authenticationFailureHandler())
+                //.failureUrl("/login?error")
+//                .failureForwardUrl()
                 //.successForwardUrl("/members")
                 .permitAll()
                 .and()

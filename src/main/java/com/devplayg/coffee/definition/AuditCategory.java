@@ -6,15 +6,19 @@ import lombok.Getter;
 
 @Getter
 public enum AuditCategory implements EnumModel {
-    MEMBER("this is user category", "0001"),
-    SYSTEM("this is system category", "0002"),
-    REPORT("this is report category", "0003"),
-    DATABASE("this is database category", "0004");
+
+    MEMBER_REMOVE("1011", ""),
+    MEMBER_INSERT("1012", ""),
+    MEMBER_UPDATE("1013", ""),
+
+    LOGIN_SUCCESS("1021", ""),
+    LOGIN_FAILED("1022", ""),
+    LOGOUT("1023", "");
 
     private String description;
     private String code;
 
-    AuditCategory(String description, String code) {
+    AuditCategory(String code, String description) {
         this.description = description;
         this.code = code;
     }

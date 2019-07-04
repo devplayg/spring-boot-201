@@ -22,13 +22,7 @@ import org.springframework.web.bind.annotation.ModelAttribute;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestMethod;
 
-/*
- * REST APIs
- *
- * GET      /audit/       display
- * GET      /audit        list
- *
- */
+import java.util.List;
 
 
 @Controller
@@ -51,8 +45,8 @@ public class AuditController {
     public ResponseEntity<?> list(@ModelAttribute AuditFilter filter) {
         String tz = "Asia/Taipei";
         filter.check(tz);
-        Result rs = auditRepositorySupport.find(filter);
-        return new ResponseEntity<>(rs, HttpStatus.OK);
+        List list = auditRepositorySupport.search(filter);
+        return new ResponseEntity<>(list, HttpStatus.OK);
     }
 }
 
