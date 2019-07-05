@@ -5,7 +5,7 @@ import com.devplayg.coffee.entity.Audit;
 import com.devplayg.coffee.entity.Member;
 import com.devplayg.coffee.repository.AuditRepository;
 import com.devplayg.coffee.util.SubnetUtils;
-import com.devplayg.coffee.vo.MembershipCenter;
+import com.devplayg.coffee.membership.MembershipCenter;
 import com.fasterxml.jackson.core.JsonProcessingException;
 import com.fasterxml.jackson.databind.ObjectMapper;
 import lombok.extern.slf4j.Slf4j;
@@ -19,14 +19,14 @@ import org.springframework.web.context.request.ServletRequestAttributes;
 
 import javax.servlet.http.HttpServletRequest;
 
+/**
+ * 감사로그 서비스
+ */
 @Service
 @Slf4j
 public class AuditService {
     @Autowired
     private AuditRepository auditRepository;
-
-    @Autowired
-    private MembershipCenter membershipCenter;
 
     public void audit(AuditCategory category, Object message) {
         Audit audit = Audit.builder()
@@ -50,7 +50,7 @@ public class AuditService {
     public UserDetails getCurrentMember() {
         Authentication auth = SecurityContextHolder.getContext().getAuthentication();
         if (auth == null) {
-            return membershipCenter.getSystemAccount();
+            return MembershipCenter.getSystemAccount();
         }
 
         return (Member)auth.getPrincipal();

@@ -5,14 +5,13 @@ import com.devplayg.coffee.entity.Member;
 import com.devplayg.coffee.exception.ResourceNotFoundException;
 import com.devplayg.coffee.repository.MemberRepository;
 import com.devplayg.coffee.service.AuditService;
-import com.devplayg.coffee.vo.MembershipCenter;
+import com.devplayg.coffee.membership.MembershipCenter;
 import com.devplayg.coffee.vo.Result;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.security.core.Authentication;
-import org.springframework.security.core.session.SessionInformation;
 import org.springframework.security.core.session.SessionRegistry;
 import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
 import org.springframework.stereotype.Controller;
@@ -45,9 +44,6 @@ public class MemberController {
     @Autowired
     private BCryptPasswordEncoder bCryptPasswordEncoder;
 
-//    @Autowired
-//    private MembershipCenter membershipCenter;
-
     @Autowired
     private AuditService auditService;
 
@@ -74,7 +70,6 @@ public class MemberController {
         }
 
         member.setRoles(member.getRoleList().stream().mapToInt(i-> i.getValue()).sum());
-        //  member: Member(id=0, username=xxxxaa, email=xxxxaa@a.com, name=xxxxaa, enabled=false, roles=0, timezone=Asia/Seoul, created=null, updated=null, roleList=[ADMIN, SHERIFF, USER])
         // Set member role
 //        List<MemberRole> list = member.getRoleList().stream()
 //                .filter(r -> r.getRole() != null)
@@ -123,48 +118,8 @@ public class MemberController {
         log.debug("## member changed: {}", changed);
         log.debug("## member     now: {}", member);
         auditService.audit(AuditCategory.MEMBER_UPDATE, member);
-        this.updateSession(changed);
+        MembershipCenter.notifyChanges(changed);
         return new ResponseEntity<>(new Result(changed), HttpStatus.OK);
-    }
-
-    private void updateSession(Member member) {
-        MembershipCenter mc = MembershipCenter.getInstance();
-        log.debug("### after edit {}: {}", member.getUsername(), member);
-        mc.update(member.getUsername(), member);
-
-//        int a = list.stream()
-//                .peek(num -> System.out.println("will filter " + num))
-//                .filter(x -> x > 5)
-//                .findFirst()
-//                .get();
-//        List<UserDetails> list = sessionRegistry.getAllPrincipals()
-//                .stream()
-//                .map(e -> (UserDetails) e)
-//                .collect(Collectors.toList());
-
-//        sessionRegistry.getAllPrincipals().stream()
-//                .filter(principal -> principal instanceof UserDetails)
-//                .map(UserDetails.class::cast)
-//                .filter(m -> ((UserDetails)m).getUsername().equals(member.getUsername()) )
-//                .findFirst()
-//                .get();
-
-//        SessionInformation info = sessionRegistry.getSessionInformation("Asdfasd");
-
-
-
-//        for (UserDetails user : list) {
-//            if (user.getUsername().equals(username)) {
-//                List<GrantedAuthority> roles = new ArrayList<>(user.getAuthorities());
-//                roles.add(new SimpleGrantedAuthority("ROLE_" + role.toUpperCase()));
-//                Authentication newAuth = new UsernamePasswordAuthenticationToken(user.getUsername(), user.getPassword(), roles);
-//                List<SessionInformation> sessions = sessionRegistry.getAllSessions(user, false);
-//
-//                log.info("sessions: {}", sessions.toString());
-//                for (SessionInformation s : sessions) {
-//                }
-//            }
-//        }
     }
 
     @DeleteMapping("{id}")
@@ -176,6 +131,9 @@ public class MemberController {
         return new ResponseEntity<>(new Result(id), HttpStatus.OK);
     }
 
+
+
+    // test -------------------------------------------------------------------------
     @GetMapping("ship")
     public ResponseEntity<?> ship() {
         MembershipCenter mc = MembershipCenter.getInstance();
@@ -199,6 +157,18 @@ public class MemberController {
         List<Object> loggedUsers = sessionRegistry.getAllPrincipals();
         log.info("logged: {}", loggedUsers);
         return new ResponseEntity<>(loggedUsers, HttpStatus.OK);
+//        for (UserDetails user : list) {
+//            if (user.getUsername().equals(username)) {
+//                List<GrantedAuthority> roles = new ArrayList<>(user.getAuthorities());
+//                roles.add(new SimpleGrantedAuthority("ROLE_" + role.toUpperCase()));
+//                Authentication newAuth = new UsernamePasswordAuthenticationToken(user.getUsername(), user.getPassword(), roles);
+//                List<SessionInformation> sessions = sessionRegistry.getAllSessions(user, false);
+//
+//                log.info("sessions: {}", sessions.toString());
+//                for (SessionInformation s : sessions) {
+//                }
+//            }
+//        }
 //        List<UserDetails> list = sessionRegistry.getAllPrincipals()
 //                .stream()
 //                .map(e -> (UserDetails) e)
