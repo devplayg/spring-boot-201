@@ -1,13 +1,12 @@
 package com.devplayg.coffee.entity;
 
 import com.devplayg.coffee.definition.RoleType;
-import com.devplayg.coffee.entity.listener.MemberListener;
 import com.devplayg.coffee.entity.view.AuditView;
 import com.fasterxml.jackson.annotation.JsonIgnore;
 import com.fasterxml.jackson.annotation.JsonProperty;
 import com.fasterxml.jackson.annotation.JsonView;
+import lombok.EqualsAndHashCode;
 import lombok.Getter;
-import lombok.NoArgsConstructor;
 import lombok.Setter;
 import lombok.ToString;
 import org.hibernate.annotations.CreationTimestamp;
@@ -21,7 +20,6 @@ import org.springframework.security.core.userdetails.UserDetails;
 import javax.persistence.*;
 import javax.validation.constraints.Email;
 import javax.validation.constraints.Pattern;
-import java.io.Serializable;
 import java.time.LocalDateTime;
 import java.util.ArrayList;
 import java.util.Arrays;
@@ -34,9 +32,8 @@ import java.util.stream.Collectors;
 @Getter
 @Setter
 @ToString
-@EntityListeners(MemberListener.class)
+@EqualsAndHashCode(exclude = {"roleList", "updated"})
 public class Member implements UserDetails, CredentialsContainer {
-//    private static final long serialVersionUID = 1L;
 
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
@@ -55,7 +52,7 @@ public class Member implements UserDetails, CredentialsContainer {
     private String email;
 
     @Column(name = "name", length = 32, nullable = false)
-    @Length(min = 4, max = 16)
+    @Length(min = 4, max = 32   )
     @JsonView({AuditView.Normal.class})
     private String name;
 
@@ -92,9 +89,8 @@ public class Member implements UserDetails, CredentialsContainer {
     @JsonIgnore
     private List<RoleType.Role> roleList = new ArrayList<>();
 
-    //    @JsonProperty("roleList")
-//    @JsonView({AuditView.Normal.class})
-    @JsonIgnore
+//    @JsonIgnore
+    @JsonProperty("roleList")
     public List<RoleType.Role> getRolesKeys() {
         List<RoleType.Role> roles = Arrays.stream(RoleType.Role.values())
                 .filter(r -> (r.getValue() & this.roles) > 0)
@@ -111,8 +107,8 @@ public class Member implements UserDetails, CredentialsContainer {
 //            mappedBy = "member")
 //    private List<MemberRole> roleList = new ArrayList<>();
 
-
     @Override
+    @JsonIgnore
     public Collection<? extends GrantedAuthority> getAuthorities() {
         String[] roles = this.getRolesKeys().stream().map(role -> "ROLE_" + role).toArray(String[]::new);
         List<GrantedAuthority> authorities = AuthorityUtils.createAuthorityList(roles);
@@ -126,7 +122,6 @@ public class Member implements UserDetails, CredentialsContainer {
 
     @Override
     public boolean isAccountNonLocked() {
-
         return true;
     }
 

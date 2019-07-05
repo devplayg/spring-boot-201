@@ -1,17 +1,18 @@
 package com.devplayg.coffee.service;
 
-import com.devplayg.coffee.config.MembershipCenter;
 import com.devplayg.coffee.definition.AuditCategory;
 import com.devplayg.coffee.entity.Audit;
 import com.devplayg.coffee.entity.Member;
 import com.devplayg.coffee.repository.AuditRepository;
 import com.devplayg.coffee.util.SubnetUtils;
+import com.devplayg.coffee.vo.MembershipCenter;
 import com.fasterxml.jackson.core.JsonProcessingException;
 import com.fasterxml.jackson.databind.ObjectMapper;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.security.core.Authentication;
 import org.springframework.security.core.context.SecurityContextHolder;
+import org.springframework.security.core.userdetails.UserDetails;
 import org.springframework.stereotype.Service;
 import org.springframework.web.context.request.RequestContextHolder;
 import org.springframework.web.context.request.ServletRequestAttributes;
@@ -37,7 +38,16 @@ public class AuditService {
         auditRepository.save(audit);
     }
 
-    public Member getCurrentMember() {
+    public void audit(AuditCategory category) {
+        Audit audit = Audit.builder()
+                .category(category)
+                .ip(this.getCurrentIp())
+                .member(getCurrentMember())
+                .build();
+        auditRepository.save(audit);
+    }
+
+    public UserDetails getCurrentMember() {
         Authentication auth = SecurityContextHolder.getContext().getAuthentication();
         if (auth == null) {
             return membershipCenter.getSystemAccount();
@@ -53,6 +63,10 @@ public class AuditService {
     }
 
     private String getRequestIp() {
+        if (RequestContextHolder.getRequestAttributes() == null) {
+            return "127.0.0.1";
+        }
+
         HttpServletRequest req = ((ServletRequestAttributes) RequestContextHolder.currentRequestAttributes()).getRequest();
         String ip = req.getHeader("X-FORWARDED-FOR");
         if (ip == null) {
@@ -62,6 +76,10 @@ public class AuditService {
     }
 
     private String toJson(Object obj) {
+        if (obj == null ) {
+            return "";
+        }
+
         ObjectMapper objectMapper = new ObjectMapper();
         String json = "";
         try {

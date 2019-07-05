@@ -28,7 +28,6 @@ repositories {
     mavenCentral()
 }
 
-
 dependencies {
 
     // Spring Boot starter
@@ -37,8 +36,9 @@ dependencies {
     implementation 'org.springframework.boot:spring-boot-starter-validation'
     implementation 'org.springframework.boot:spring-boot-starter-security'
     implementation 'org.springframework.boot:spring-boot-starter-thymeleaf'
-    implementation('org.springframework.boot:spring-boot-devtools')
-    testCompile('org.springframework.boot:spring-boot-starter-test')
+    implementation 'org.springframework.boot:spring-boot-devtools'
+
+    testCompile 'org.springframework.boot:spring-boot-starter-test'
     annotationProcessor "org.springframework.boot:spring-boot-configuration-processor"
 
     // Lombok
@@ -54,7 +54,6 @@ dependencies {
 
     // Mysql
     runtimeOnly 'mysql:mysql-connector-java'
-
 }
 
 // QueryDSL

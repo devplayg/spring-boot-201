@@ -1,5 +1,6 @@
 $(function () {
 
+
     /*
      * 1. Define & initialize
      */
@@ -7,7 +8,6 @@ $(function () {
         $insertForm = $("#form-member-insert"),
         $updateForm = $("#form-member-update"),
         selectedMemberID = null;
-
 
     /*
      * 2. Classes
@@ -175,10 +175,11 @@ $(function () {
 
     // Test code
     {
-        // let $form = $("#form-member-insert");
-        // $("input[name=username]", $form).val("msgxxx");
-        // $("input[name=name]", $form).val("WON SEOK AHN");
-        // $("input[name=email]", $form).val("wsan@unisem.co.kr");
-        // $("input[name=inputPassword]", $form).val("wsan123!@#");
+        console.log(3);
+        let $form = $("#form-member-insert");
+        $("input[name=username]", $form).val("msgxxx");
+        $("input[name=name]", $form).val("WON SEOK AHN");
+        $("input[name=email]", $form).val("wsan@unisem.co.kr");
+        $("input[name=inputPassword]", $form).val("wsan123!@#");
     }
 });

@@ -1,21 +1,25 @@
 package com.devplayg.coffee.controller;
 
+import com.devplayg.coffee.definition.AuditCategory;
 import com.devplayg.coffee.entity.Member;
 import com.devplayg.coffee.exception.ResourceNotFoundException;
 import com.devplayg.coffee.repository.MemberRepository;
+import com.devplayg.coffee.service.AuditService;
+import com.devplayg.coffee.vo.MembershipCenter;
 import com.devplayg.coffee.vo.Result;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
+import org.springframework.security.core.Authentication;
+import org.springframework.security.core.session.SessionInformation;
+import org.springframework.security.core.session.SessionRegistry;
 import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
 import org.springframework.stereotype.Controller;
 import org.springframework.validation.BindingResult;
 import org.springframework.web.bind.annotation.*;
 
-import javax.persistence.EntityManager;
 import javax.validation.Valid;
-import java.util.Hashtable;
 import java.util.List;
 
 /*
@@ -41,11 +45,14 @@ public class MemberController {
     @Autowired
     private BCryptPasswordEncoder bCryptPasswordEncoder;
 
-    @Autowired
-    private Hashtable<String, Boolean> userWatcher;
+//    @Autowired
+//    private MembershipCenter membershipCenter;
 
     @Autowired
-    private EntityManager em;
+    private AuditService auditService;
+
+    @Autowired
+    private SessionRegistry sessionRegistry;
 
     @GetMapping("/")
     public String display() {
@@ -59,14 +66,13 @@ public class MemberController {
     }
 
     @PostMapping
-    public ResponseEntity<?> insert(@ModelAttribute @Valid Member member, BindingResult bindingResult) {
+    public ResponseEntity<?> create(@ModelAttribute @Valid Member member, BindingResult bindingResult) {
 
         // Check binding errors
         if (bindingResult.hasErrors()) {
             return new ResponseEntity<>(new Result(bindingResult), HttpStatus.OK);
         }
 
-//        log.info("member: {}", member.toString());
         member.setRoles(member.getRoleList().stream().mapToInt(i-> i.getValue()).sum());
         //  member: Member(id=0, username=xxxxaa, email=xxxxaa@a.com, name=xxxxaa, enabled=false, roles=0, timezone=Asia/Seoul, created=null, updated=null, roleList=[ADMIN, SHERIFF, USER])
         // Set member role
@@ -82,8 +88,10 @@ public class MemberController {
         // Save
         try {
             Member newMember = memberRepository.save(member);
+            auditService.audit(AuditCategory.MEMBER_CREATE, newMember);
             return new ResponseEntity<>(new Result(newMember.getId()), HttpStatus.OK);
         } catch (Exception e) {
+            log.error(e.getMessage());
             return new ResponseEntity<>(new Result(e.getMessage()), HttpStatus.OK);
         }
     }
@@ -112,18 +120,92 @@ public class MemberController {
 //        member.setRoleList(list);
 
         Member changed = memberRepository.save(member);
+        log.debug("## member changed: {}", changed);
+        log.debug("## member     now: {}", member);
+        auditService.audit(AuditCategory.MEMBER_UPDATE, member);
+        this.updateSession(changed);
         return new ResponseEntity<>(new Result(changed), HttpStatus.OK);
+    }
+
+    private void updateSession(Member member) {
+        MembershipCenter mc = MembershipCenter.getInstance();
+        log.debug("### after edit {}: {}", member.getUsername(), member);
+        mc.update(member.getUsername(), member);
+
+//        int a = list.stream()
+//                .peek(num -> System.out.println("will filter " + num))
+//                .filter(x -> x > 5)
+//                .findFirst()
+//                .get();
+//        List<UserDetails> list = sessionRegistry.getAllPrincipals()
+//                .stream()
+//                .map(e -> (UserDetails) e)
+//                .collect(Collectors.toList());
+
+//        sessionRegistry.getAllPrincipals().stream()
+//                .filter(principal -> principal instanceof UserDetails)
+//                .map(UserDetails.class::cast)
+//                .filter(m -> ((UserDetails)m).getUsername().equals(member.getUsername()) )
+//                .findFirst()
+//                .get();
+
+//        SessionInformation info = sessionRegistry.getSessionInformation("Asdfasd");
+
+
+
+//        for (UserDetails user : list) {
+//            if (user.getUsername().equals(username)) {
+//                List<GrantedAuthority> roles = new ArrayList<>(user.getAuthorities());
+//                roles.add(new SimpleGrantedAuthority("ROLE_" + role.toUpperCase()));
+//                Authentication newAuth = new UsernamePasswordAuthenticationToken(user.getUsername(), user.getPassword(), roles);
+//                List<SessionInformation> sessions = sessionRegistry.getAllSessions(user, false);
+//
+//                log.info("sessions: {}", sessions.toString());
+//                for (SessionInformation s : sessions) {
+//                }
+//            }
+//        }
     }
 
     @DeleteMapping("{id}")
     public ResponseEntity<?> delete(@PathVariable("id") long id) {
+        Member member = memberRepository.findById(id)
+                .orElseThrow(() -> new ResourceNotFoundException("member", "id", id));
         memberRepository.deleteById(id);
+        auditService.audit(AuditCategory.MEMBER_REMOVE, member);
         return new ResponseEntity<>(new Result(id), HttpStatus.OK);
     }
 
-    @GetMapping("test")
-    public ResponseEntity<?> test() {
-        userWatcher.put("member", false);
-        return new ResponseEntity<>(userWatcher, HttpStatus.OK);
+    @GetMapping("ship")
+    public ResponseEntity<?> ship() {
+        MembershipCenter mc = MembershipCenter.getInstance();
+        return new ResponseEntity<>(mc.getMembership(), HttpStatus.OK);
     }
+
+    @GetMapping("news")
+    public ResponseEntity<?> news() {
+        MembershipCenter mc = MembershipCenter.getInstance();
+        return new ResponseEntity<>(mc.getMemberNews(), HttpStatus.OK);
+    }
+
+    @GetMapping("info")
+    public ResponseEntity<?> currentUserName(Authentication auth) {
+        log.debug("## auth: {}", auth);
+        return new ResponseEntity<>(auth, HttpStatus.OK);
+    }
+
+    @GetMapping("session")
+    public ResponseEntity<?> getAllSessions() {
+        List<Object> loggedUsers = sessionRegistry.getAllPrincipals();
+        log.info("logged: {}", loggedUsers);
+        return new ResponseEntity<>(loggedUsers, HttpStatus.OK);
+//        List<UserDetails> list = sessionRegistry.getAllPrincipals()
+//                .stream()
+//                .map(e -> (UserDetails) e)
+//                .collect(Collectors.toList());
+//
+//        return new ResponseEntity<>(list, HttpStatus.OK);
+
+    }
+
 }

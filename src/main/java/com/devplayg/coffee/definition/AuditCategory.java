@@ -7,13 +7,16 @@ import lombok.Getter;
 @Getter
 public enum AuditCategory implements EnumModel {
 
-    MEMBER_REMOVE("1011", ""),
-    MEMBER_INSERT("1012", ""),
-    MEMBER_UPDATE("1013", ""),
+    MEMBER_CREATE("1011", ""),
+    MEMBER_UPDATE("1012", ""),
+    MEMBER_REMOVE("1013", ""),
 
     LOGIN_SUCCESS("1021", ""),
     LOGIN_FAILED("1022", ""),
-    LOGOUT("1023", "");
+    LOGOUT("1023", ""),
+
+    APPLICATION_STARTED("1031", ""),
+    APPLICATION_STOPPED("1032", "");
 
     private String description;
     private String code;
@@ -23,3 +26,4 @@ public enum AuditCategory implements EnumModel {
         this.code = code;
     }
 }
+

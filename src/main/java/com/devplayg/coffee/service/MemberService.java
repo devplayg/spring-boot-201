@@ -20,12 +20,13 @@ public class MemberService implements UserDetailsService {
     public UserDetails loadUserByUsername(String username) throws UsernameNotFoundException {
         Member member = memberRepository.findByUsername(username)
                 .orElseThrow(() -> new ResourceNotFoundException("member", "username", username));
+        return member;
+
 //        log.info("member: {}", member.toString());
 //        String[] roles = member.getRoleEnumList().stream().map(role -> role.getKey()).toArray(String[]::new);
 //        List<GrantedAuthority> authorities = AuthorityUtils.createAuthorityList(roles);
 //        UserDetails userDetails = (UserDetails) new User(member.getUsername(), member.getPassword(), getAuthorities(member));
 
-        return member;
     }
 
 //    private List<? extends GrantedAuthority> getAuthorities(Member member) {

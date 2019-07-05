@@ -1,9 +1,3 @@
-/*
- * Developed by Won.
- * Last modified 19. 5. 20 오전 9:57.
- * Copyright (c) 2019. All rights reserved.
- */
-
 package com.devplayg.coffee.config;
 
 import com.devplayg.coffee.vo.TimeZone;
@@ -35,7 +29,6 @@ public class WebConfig implements WebMvcConfigurer {
     @Qualifier(value = "requestInterceptor")
     private HandlerInterceptor interceptor;
 
-
     /*
      * Request interceptor
      */
@@ -50,7 +43,6 @@ public class WebConfig implements WebMvcConfigurer {
         registry.addInterceptor(interceptor)
                 .addPathPatterns("/audit/**", "/members/**", "/login/**");
     }
-
 
     /*
      * Locale interceptor

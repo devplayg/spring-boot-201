@@ -7,7 +7,7 @@
         </button>
     </div>
     <table th:id="|table-${ctrl}|" class="table table-bordered table-hover"
-           data-th-toolbar="|#toolbar-${ctrl}|"
+           th:data-toolbar="|#toolbar-${ctrl}|"
            data-show-refresh="true"
            data-show-columns="true"
            data-pagination="true"
@@ -150,7 +150,7 @@
                     </div>
                     <div class="modal-footer">
                         <button type="submit" class="btn btn-primary" th:text="update"></button>
-                        <button type="button" class="btn btn-default" data-dismiss="modal">Close</button>
+                        <button type="button" class="btn btn-default" data-dismiss="modal" th:text="close"></button>
                     </div>
                 </div>
             </div>

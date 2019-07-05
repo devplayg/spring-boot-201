@@ -1,5 +1,8 @@
 # Common configuration
 spring:
+    data:
+        rest:
+            basePath: /api
     profiles:
         active: dev
     jpa:
@@ -8,7 +11,7 @@ spring:
             ddl-auto: validate
         open-in-view: false
     datasource: # DB 설정
-        url: jdbc:mysql://127.0.0.1:3306/sb201?useUnicode=yes&characterEncoding=UTF-8
+        url: jdbc:mysql://127.0.0.1:3306/smartfactory?useUnicode=yes&characterEncoding=UTF-8
         driver-class-name: com.mysql.cj.jdbc.Driver
         username: root
         password: Uniiot12!@
@@ -32,7 +35,7 @@ server:
 logging:
     level:
         root: info
-        com.devplayg: info
+        com.devplayg: debug
         org:
             mybatis: info
             hibernate:

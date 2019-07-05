@@ -8,6 +8,8 @@ import org.springframework.context.annotation.Configuration;
 import org.springframework.security.config.annotation.web.builders.HttpSecurity;
 import org.springframework.security.config.annotation.web.configuration.EnableWebSecurity;
 import org.springframework.security.config.annotation.web.configuration.WebSecurityConfigurerAdapter;
+import org.springframework.security.core.session.SessionRegistry;
+import org.springframework.security.core.session.SessionRegistryImpl;
 import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
 import org.springframework.security.web.authentication.AuthenticationFailureHandler;
 import org.springframework.security.web.authentication.AuthenticationSuccessHandler;
@@ -97,7 +99,9 @@ public class SecurityConfig extends WebSecurityConfigurerAdapter {
                 .and()
 
                 .addFilterBefore(filter, CsrfFilter.class)
-                .csrf().disable();
+                .csrf().disable()
+
+                .sessionManagement().maximumSessions(10).sessionRegistry(sessionRegistry());
     }
 
 //    @Override
@@ -111,6 +115,11 @@ public class SecurityConfig extends WebSecurityConfigurerAdapter {
 //            .csrf()
 //                .disable();
 //    }
+
+    @Bean
+    public SessionRegistry sessionRegistry() {
+        return new SessionRegistryImpl();
+    }
 
     @Bean
     public BCryptPasswordEncoder passwordEncoder() {
