@@ -1,6 +1,8 @@
 package com.devplayg.coffee.framework;
 
+import com.devplayg.coffee.entity.Member;
 import lombok.extern.slf4j.Slf4j;
+import org.springframework.security.authentication.AnonymousAuthenticationToken;
 import org.springframework.security.authentication.UsernamePasswordAuthenticationToken;
 import org.springframework.security.core.Authentication;
 import org.springframework.security.core.context.SecurityContextHolder;
@@ -24,22 +26,29 @@ public class RequestInterceptor extends HandlerInterceptorAdapter {
 
     @Override
     public boolean preHandle(HttpServletRequest req, HttpServletResponse res, Object handler) {
-        // Logging
         Authentication auth = SecurityContextHolder.getContext().getAuthentication();
-        log.info("# Auth-1: name={}, isLogged={}, role={}", auth.getName(), auth.isAuthenticated(), auth.getAuthorities());
-//        log.info("##### Auth-2: username={}, detail={}", auth.getPrincipal(), auth.getDetails());
-//        log.info("##### Auth-3: object={}", auth.getDetails());
-
-        Principal principal = req.getUserPrincipal();
-        if (principal == null) {
+        if (auth instanceof AnonymousAuthenticationToken) {
+            log.debug("### RequestInterceptor-0: not logged in yet");
             return true;
         }
+//
+//        Principal principal = req.getUserPrincipal();
+//        if (principal == null) {
+//            log.debug("### RequestInterceptor: WHAAAAAAAAAAAAAAAAAAAAAAA!");
+//            return true;
+//        }
+        // Logging
+        log.debug("### RequestInterceptor-1: name={}, isLogged={}, role={}", auth.getName(), auth.isAuthenticated(), auth.getAuthorities());
+        log.debug("### RequestInterceptor-2: username={}, detail={}", auth.getPrincipal(), auth.getDetails());
+        log.debug("### RequestInterceptor-3: object={}", auth.getDetails());
+        Member member = (Member)SecurityContextHolder.getContext().getAuthentication().getPrincipal();
+        log.debug("### RequestInterceptor-4: member={}", member);
 
         username = req.getUserPrincipal().getName();
-        if ("anonymousUser".equals(username)) {
-            return true;
-        }
-
+//        if ("anonymousUser".equals(username)) {
+//            return true;
+//        }
+//
         Boolean anyNews = MembershipCenter.anyNews(username);
         if (!anyNews) {
             return true;
@@ -51,11 +60,13 @@ public class RequestInterceptor extends HandlerInterceptorAdapter {
     }
 
     private void readNews(String username) {
-        log.debug("# Got news to {}", username);
+        log.debug("==============================");
+        log.debug("Got news to {}", username);
+        log.debug("==============================");
         UserDetails userDetails = MembershipCenter.readNews(username);
         if (userDetails != null) {
             Authentication auth = SecurityContextHolder.getContext().getAuthentication();
-            Authentication newAuth = new UsernamePasswordAuthenticationToken(auth.getPrincipal(), auth.getCredentials(), userDetails.getAuthorities());
+            Authentication newAuth = new UsernamePasswordAuthenticationToken(userDetails, auth.getCredentials(), userDetails.getAuthorities());
             SecurityContextHolder.getContext().setAuthentication(newAuth);
         }
     }
@@ -68,7 +79,7 @@ public class RequestInterceptor extends HandlerInterceptorAdapter {
             String controllerName = handlerMethod.getBeanType().getSimpleName().replace("Controller", "").toLowerCase();
             String methodName = handlerMethod.getMethod().getName();
 
-            log.info("# Request from {} ({}, {}/{}): {}?{}", username, req.getMethod(), controllerName, methodName, req.getRequestURI(), req.getQueryString());
+            log.info("### Request from {} ({}, {}/{}): {}?{}", username, req.getMethod(), controllerName, methodName, req.getRequestURI(), req.getQueryString());
             if (methodName.startsWith("display")) {
                 model.addObject("ctrl", controllerName);
             }
@@ -85,13 +96,13 @@ public class RequestInterceptor extends HandlerInterceptorAdapter {
 //        log.debug("### anyNews to {}: {}", req.getUserPrincipal().getName(), anyNews);
 //        membershipCenter.anyNews("system");
 //        membershipCenter().anyNews("abc");
-//        log.info("##### Request: {} -- {}?{}", req.getMethod(), req.getRequestURI(), req.getQueryString());
+//        log.info("### Request: {} -- {}?{}", req.getMethod(), req.getRequestURI(), req.getQueryString());
 //        Member m = (Member) auth.getDetails();
 //        Authentication auth = SecurityContextHolder.getContext().getAuthentication();
 //        log.debug("# session member: {}", m);
-//        log.info("##### Auth-1: name={}, isLogged={}, role={}", auth.getName(), auth.isAuthenticated(), auth.getAuthorities());
-//        log.info("##### Auth-2: username={}, detail={}", auth.getPrincipal(), auth.getDetails());
-//        log.info("##### Auth-3: object={}", auth.getDetails());
+//        log.info("### Auth-1: name={}, isLogged={}, role={}", auth.getName(), auth.isAuthenticated(), auth.getAuthorities());
+//        log.info("### Auth-2: username={}, detail={}", auth.getPrincipal(), auth.getDetails());
+//        log.info("### Auth-3: object={}", auth.getDetails());
 //        SecurityContextHolder.getContext().getAuthentication().
 
 //        Object principal = SecurityContextHolder.getContext().getAuthentication().getPrincipal();
