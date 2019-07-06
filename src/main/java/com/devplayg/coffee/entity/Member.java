@@ -90,6 +90,7 @@ public class Member implements UserDetails, CredentialsContainer {
     private List<RoleType.Role> roleList = new ArrayList<>();
 
 //    @JsonIgnore
+    @Transient
     @JsonProperty("roleList")
     public List<RoleType.Role> getRolesKeys() {
         List<RoleType.Role> roles = Arrays.stream(RoleType.Role.values())

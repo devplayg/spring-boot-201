@@ -20,11 +20,13 @@ import java.security.Principal;
 @Component
 @Slf4j
 public class RequestInterceptor extends HandlerInterceptorAdapter {
+    private String username = "";
+
     @Override
     public boolean preHandle(HttpServletRequest req, HttpServletResponse res, Object handler) {
         // Logging
-//        Authentication auth = SecurityContextHolder.getContext().getAuthentication();
-//        log.info("##### Auth-1: name={}, isLogged={}, role={}", auth.getName(), auth.isAuthenticated(), auth.getAuthorities());
+        Authentication auth = SecurityContextHolder.getContext().getAuthentication();
+        log.info("# Auth-1: name={}, isLogged={}, role={}", auth.getName(), auth.isAuthenticated(), auth.getAuthorities());
 //        log.info("##### Auth-2: username={}, detail={}", auth.getPrincipal(), auth.getDetails());
 //        log.info("##### Auth-3: object={}", auth.getDetails());
 
@@ -33,11 +35,10 @@ public class RequestInterceptor extends HandlerInterceptorAdapter {
             return true;
         }
 
-        String username = req.getUserPrincipal().getName();
+        username = req.getUserPrincipal().getName();
         if ("anonymousUser".equals(username)) {
             return true;
         }
-//        log.debug("## interceptor username: {}", username);
 
         Boolean anyNews = MembershipCenter.anyNews(username);
         if (!anyNews) {
@@ -63,11 +64,11 @@ public class RequestInterceptor extends HandlerInterceptorAdapter {
     public void postHandle(HttpServletRequest req, HttpServletResponse response, Object handler, ModelAndView model) throws Exception {
         if (handler instanceof HandlerMethod) {
             HandlerMethod handlerMethod = (HandlerMethod) handler;
-            //controllerName = handlerMethod.getBean().getClass().getSimpleName().replace("Controller", "");
+
             String controllerName = handlerMethod.getBeanType().getSimpleName().replace("Controller", "").toLowerCase();
             String methodName = handlerMethod.getMethod().getName();
 
-            log.info("# Request from {} ({}, {}/{}): {}?{}", req.getUserPrincipal(), req.getMethod(), controllerName, methodName, req.getRequestURI(), req.getQueryString());
+            log.info("# Request from {} ({}, {}/{}): {}?{}", username, req.getMethod(), controllerName, methodName, req.getRequestURI(), req.getQueryString());
             if (methodName.startsWith("display")) {
                 model.addObject("ctrl", controllerName);
             }

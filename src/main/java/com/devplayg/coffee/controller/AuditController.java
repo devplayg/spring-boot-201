@@ -10,7 +10,6 @@ package com.devplayg.coffee.controller;
 
 import com.devplayg.coffee.filter.AuditFilter;
 import com.devplayg.coffee.repository.support.AuditRepositorySupport;
-import com.devplayg.coffee.vo.Result;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
@@ -35,6 +34,7 @@ public class AuditController {
 
     @RequestMapping(value = "/", method = {RequestMethod.GET, RequestMethod.POST})
     public String display(@ModelAttribute AuditFilter filter, Model model) {
+        log.debug("xxLLLLl");
         String tz = "Asia/Taipei";
         filter.check(tz);
         model.addAttribute("filter", filter);

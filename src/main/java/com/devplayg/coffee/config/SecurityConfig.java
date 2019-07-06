@@ -1,9 +1,11 @@
 package com.devplayg.coffee.config;
 
+import com.devplayg.coffee.definition.RoleType;
 import com.devplayg.coffee.framework.CustomAuthenticationFailureHandler;
 import com.devplayg.coffee.framework.CustomAuthenticationSuccessHandler;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
+import org.springframework.security.config.annotation.method.configuration.EnableGlobalMethodSecurity;
 import org.springframework.security.config.annotation.web.builders.HttpSecurity;
 import org.springframework.security.config.annotation.web.configuration.EnableWebSecurity;
 import org.springframework.security.config.annotation.web.configuration.WebSecurityConfigurerAdapter;
@@ -19,17 +21,8 @@ import java.util.Hashtable;
 
 @Configuration
 @EnableWebSecurity
+@EnableGlobalMethodSecurity(prePostEnabled = true)
 public class SecurityConfig extends WebSecurityConfigurerAdapter {
-
-    @Bean
-    public AuthenticationSuccessHandler authenticationSuccessHandler() {
-        return new CustomAuthenticationSuccessHandler();
-    }
-
-    @Bean
-    public AuthenticationFailureHandler authenticationFailureHandler() {
-        return new CustomAuthenticationFailureHandler();
-    }
 
     @Override
     protected void configure(HttpSecurity httpSecurity) throws Exception {
@@ -38,9 +31,8 @@ public class SecurityConfig extends WebSecurityConfigurerAdapter {
                 .authorizeRequests()
 
                 // 아래 URL 패턴에 매칭되면
-                //.antMatchers("/admin/**")
-                // 아래 권한이 있어야 함
-                //.hasAnyRole("ADMIN", "USER")
+                .antMatchers("/audit/**")
+                .hasAnyRole(RoleType.Role.ADMIN.getCode(), RoleType.Role.SHERIFF.getCode())
 
                 // 아래 URL 패턴에 매칭되면
                 .antMatchers("/", "/login/**", "/modules/**", "/plugins/**", "/css/**", "/img/**", "/js/**")
@@ -50,7 +42,6 @@ public class SecurityConfig extends WebSecurityConfigurerAdapter {
                 .anyRequest()
                 // 인증을 요구
                 .authenticated()
-
                 .and()
 
                 // 로그인
@@ -129,4 +120,15 @@ public class SecurityConfig extends WebSecurityConfigurerAdapter {
     public Hashtable<String, Boolean> userWatcher() {
         return new Hashtable<>();
     }
+
+    @Bean
+    public AuthenticationSuccessHandler authenticationSuccessHandler() {
+        return new CustomAuthenticationSuccessHandler();
+    }
+
+    @Bean
+    public AuthenticationFailureHandler authenticationFailureHandler() {
+        return new CustomAuthenticationFailureHandler();
+    }
+
 }

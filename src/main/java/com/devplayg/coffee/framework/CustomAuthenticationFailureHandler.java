@@ -2,7 +2,7 @@ package com.devplayg.coffee.framework;
 
 import com.devplayg.coffee.definition.AuditCategory;
 import com.devplayg.coffee.service.AuditService;
-import com.google.common.io.CharStreams;
+import com.devplayg.coffee.util.AuditUtils;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.security.core.AuthenticationException;
 import org.springframework.security.web.authentication.AuthenticationFailureHandler;
@@ -19,16 +19,11 @@ public class CustomAuthenticationFailureHandler implements AuthenticationFailure
 
     @Override
     public void onAuthenticationFailure(HttpServletRequest req, HttpServletResponse res, AuthenticationException exception) throws IOException, ServletException {
-        HashMap<String, Object> m  = new HashMap<>();
-        m.put("uri", req.getRequestURI());
-        m.put("method", req.getMethod());
-        m.put("body", CharStreams.toString(req.getReader()));
-//                test = req.getReader().lines().collect(Collectors.joining(System.lineSeparator()));
-
+        HashMap<String, Object> m = AuditUtils.getRequestSummary(req);
         auditService.audit(AuditCategory.LOGIN_FAILED, m);
         res.sendRedirect("/login?error");
     }
-//
+
 //    public String getBody(HttpServletRequest request) throws IOException {
 //
 //        String body = null;

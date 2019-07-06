@@ -1,6 +1,5 @@
 $(function () {
 
-
     /*
      * 1. Define & initialize
      */
