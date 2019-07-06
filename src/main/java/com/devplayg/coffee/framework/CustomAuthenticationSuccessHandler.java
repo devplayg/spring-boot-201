@@ -1,4 +1,4 @@
-package com.devplayg.coffee.util;
+package com.devplayg.coffee.framework;
 
 // https://www.baeldung.com/spring_redirect_after_login
 

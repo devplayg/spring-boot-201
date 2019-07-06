@@ -5,7 +5,7 @@ import com.devplayg.coffee.entity.Member;
 import com.devplayg.coffee.exception.ResourceNotFoundException;
 import com.devplayg.coffee.repository.MemberRepository;
 import com.devplayg.coffee.service.AuditService;
-import com.devplayg.coffee.membership.MembershipCenter;
+import com.devplayg.coffee.framework.MembershipCenter;
 import com.devplayg.coffee.vo.Result;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.factory.annotation.Autowired;

@@ -1,8 +1,7 @@
 package com.devplayg.coffee.config;
 
-import com.devplayg.coffee.util.CustomAuthenticationFailureHandler;
-import com.devplayg.coffee.util.CustomAuthenticationSuccessHandler;
-import org.springframework.beans.factory.annotation.Autowired;
+import com.devplayg.coffee.framework.CustomAuthenticationFailureHandler;
+import com.devplayg.coffee.framework.CustomAuthenticationSuccessHandler;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
 import org.springframework.security.config.annotation.web.builders.HttpSecurity;

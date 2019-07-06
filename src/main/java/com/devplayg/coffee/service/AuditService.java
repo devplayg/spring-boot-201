@@ -5,7 +5,7 @@ import com.devplayg.coffee.entity.Audit;
 import com.devplayg.coffee.entity.Member;
 import com.devplayg.coffee.repository.AuditRepository;
 import com.devplayg.coffee.util.SubnetUtils;
-import com.devplayg.coffee.membership.MembershipCenter;
+import com.devplayg.coffee.framework.MembershipCenter;
 import com.fasterxml.jackson.core.JsonProcessingException;
 import com.fasterxml.jackson.databind.ObjectMapper;
 import lombok.extern.slf4j.Slf4j;

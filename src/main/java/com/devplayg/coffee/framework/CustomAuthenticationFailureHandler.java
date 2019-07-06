@@ -1,4 +1,4 @@
-package com.devplayg.coffee.util;
+package com.devplayg.coffee.framework;
 
 import com.devplayg.coffee.definition.AuditCategory;
 import com.devplayg.coffee.service.AuditService;

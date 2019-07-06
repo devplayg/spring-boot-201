@@ -1,14 +1,10 @@
-package com.devplayg.coffee.util;
+package com.devplayg.coffee.framework;
 
-import com.devplayg.coffee.membership.MembershipCenter;
 import lombok.extern.slf4j.Slf4j;
-import org.springframework.security.authentication.AnonymousAuthenticationProvider;
 import org.springframework.security.authentication.UsernamePasswordAuthenticationToken;
 import org.springframework.security.core.Authentication;
 import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.security.core.userdetails.UserDetails;
-import org.springframework.security.provisioning.UserDetailsManager;
-import org.springframework.security.web.authentication.WebAuthenticationDetails;
 import org.springframework.stereotype.Component;
 import org.springframework.web.method.HandlerMethod;
 import org.springframework.web.servlet.ModelAndView;
@@ -16,8 +12,6 @@ import org.springframework.web.servlet.handler.HandlerInterceptorAdapter;
 
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
-import javax.servlet.http.HttpSession;
-import java.net.http.HttpRequest;
 import java.security.Principal;
 
 /**
@@ -43,7 +37,7 @@ public class RequestInterceptor extends HandlerInterceptorAdapter {
         if ("anonymousUser".equals(username)) {
             return true;
         }
-        log.debug("## interceptor username: {}", username);
+//        log.debug("## interceptor username: {}", username);
 
         Boolean anyNews = MembershipCenter.anyNews(username);
         if (!anyNews) {
@@ -56,6 +50,7 @@ public class RequestInterceptor extends HandlerInterceptorAdapter {
     }
 
     private void readNews(String username) {
+        log.debug("# Got news to {}", username);
         UserDetails userDetails = MembershipCenter.readNews(username);
         if (userDetails != null) {
             Authentication auth = SecurityContextHolder.getContext().getAuthentication();
@@ -72,7 +67,7 @@ public class RequestInterceptor extends HandlerInterceptorAdapter {
             String controllerName = handlerMethod.getBeanType().getSimpleName().replace("Controller", "").toLowerCase();
             String methodName = handlerMethod.getMethod().getName();
 
-            log.info("# Request({}, {}/{}): {}?{}", req.getMethod(), controllerName, methodName, req.getRequestURI(), req.getQueryString());
+            log.info("# Request from {} ({}, {}/{}): {}?{}", req.getUserPrincipal(), req.getMethod(), controllerName, methodName, req.getRequestURI(), req.getQueryString());
             if (methodName.startsWith("display")) {
                 model.addObject("ctrl", controllerName);
             }
