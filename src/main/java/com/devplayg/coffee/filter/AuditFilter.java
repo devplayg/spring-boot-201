@@ -33,7 +33,7 @@ public class AuditFilter extends PagingFilter {
     private String message;
     private List<AuditCategory> categoryList = new ArrayList<>();
 
-    public void check(String tz) {
+    public void tune(String tz) {
         LocalDateTime now = ZonedDateTime.now(ZoneId.of(tz)).toLocalDateTime();
         this.now = now;
         if (this.startDate == null) {

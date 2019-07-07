@@ -1,5 +1,6 @@
 package com.devplayg.coffee.config;
 
+import com.devplayg.coffee.framework.RequestInterceptor;
 import com.devplayg.coffee.vo.TimeZone;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Qualifier;
@@ -25,9 +26,9 @@ import java.util.stream.Collectors;
 @Configuration
 public class WebConfig implements WebMvcConfigurer {
 
-    @Autowired
-    @Qualifier(value = "requestInterceptor")
-    private HandlerInterceptor interceptor;
+//    @Autowired
+//    @Qualifier(value = "requestInterceptor")
+//    private HandlerInterceptor interceptor;
 
     /*
      * Request interceptor
@@ -40,7 +41,7 @@ public class WebConfig implements WebMvcConfigurer {
         // registry.addInterceptor(interceptor);
 
         // 일부 Request Interceptor 를 적용하는 경우
-        registry.addInterceptor(interceptor)
+        registry.addInterceptor(new RequestInterceptor())
                 .addPathPatterns("/audit/**", "/members/**", "/login/**");
     }
 

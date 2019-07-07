@@ -1,11 +1,15 @@
 package com.devplayg.coffee.repository.support;
 
+// 추후 변경될 방식: https://adrenal.tistory.com/25
+
+
 import com.devplayg.coffee.entity.Audit;
 import com.devplayg.coffee.entity.QAudit;
 import com.devplayg.coffee.entity.QMember;
 import com.devplayg.coffee.filter.AuditFilter;
 import com.devplayg.coffee.util.StringUtils;
 import com.querydsl.core.BooleanBuilder;
+import com.querydsl.core.QueryResults;
 import com.querydsl.core.types.Order;
 import com.querydsl.core.types.OrderSpecifier;
 import com.querydsl.core.types.Path;
@@ -26,10 +30,7 @@ public class AuditRepositorySupport extends QuerydslRepositorySupport {
         this.query = queryFactory;
     }
 
-    // Tips
-    // https://leanpub.com/opinionatedjpa/read
-
-    public List search(AuditFilter filter) {
+    public QueryResults<Audit> search(AuditFilter filter) {
         QAudit audit = QAudit.audit;
         QMember member = QMember.member;
 
@@ -43,6 +44,36 @@ public class AuditRepositorySupport extends QuerydslRepositorySupport {
         if (!StringUtils.isBlank(filter.getMessage())) {
             builder.and(audit.message.contains(filter.getMessage()));
         }
+        QueryResults<Audit> result = query.select(audit)
+                .from(audit)
+                .leftJoin(member)
+                .on(audit.member.eq(member))
+                .where(builder)
+                .orderBy(this.getSortedColumn(Order.DESC, filter.getSort()))
+                .offset(filter.getOffset())
+                .limit(filter.getLimit())
+                .fetchResults();
+        return result;
+    }
+
+    // Tips
+    // https://leanpub.com/opinionatedjpa/read
+
+    public List searchFast(AuditFilter filter) {
+        QAudit audit = QAudit.audit;
+        QMember member = QMember.member;
+
+        BooleanBuilder builder = new BooleanBuilder();
+        builder.and(audit.created.between(filter.getStartDate(), filter.getEndDate()));
+
+        if (filter.getCategoryList().size() > 0) {
+            builder.and(audit.category.in(filter.getCategoryList()));
+        }
+
+        if (!StringUtils.isBlank(filter.getMessage())) {
+            builder.and(audit.message.contains(filter.getMessage()));
+        }
+
         List<Audit> list = query.select(audit)
                 .from(audit)
                 .leftJoin(member)

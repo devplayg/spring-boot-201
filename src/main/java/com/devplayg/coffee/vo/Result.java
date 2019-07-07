@@ -1,5 +1,6 @@
 package com.devplayg.coffee.vo;
 
+import com.querydsl.core.QueryResults;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
 import org.springframework.validation.BindingResult;
@@ -15,14 +16,14 @@ public class Result {
     private long total;
     private List rows;
     private Object data;
-    private long id;
+    private long lastInsertId;
 
     public Result(String error) {
         this.error = error;
     }
 
-    public Result(long id) {
-        this.id = id;
+    public Result(long lastInsertId) {
+        this.lastInsertId = lastInsertId;
     }
     public Result(Object data) {
         this.data = data;

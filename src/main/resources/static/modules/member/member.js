@@ -174,7 +174,6 @@ $(function () {
 
     // Test code
     {
-        console.log(3);
         let $form = $("#form-member-insert");
         $("input[name=username]", $form).val("msgxxx");
         $("input[name=name]", $form).val("WON SEOK AHN");

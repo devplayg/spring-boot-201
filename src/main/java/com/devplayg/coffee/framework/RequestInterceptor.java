@@ -23,6 +23,7 @@ import java.security.Principal;
 @Slf4j
 public class RequestInterceptor extends HandlerInterceptorAdapter {
     private String username = "";
+    private String userTz = "";
 
     @Override
     public boolean preHandle(HttpServletRequest req, HttpServletResponse res, Object handler) {
@@ -31,7 +32,7 @@ public class RequestInterceptor extends HandlerInterceptorAdapter {
             log.debug("### RequestInterceptor-0: not logged in yet");
             return true;
         }
-//
+
 //        Principal principal = req.getUserPrincipal();
 //        if (principal == null) {
 //            log.debug("### RequestInterceptor: WHAAAAAAAAAAAAAAAAAAAAAAA!");
@@ -45,6 +46,7 @@ public class RequestInterceptor extends HandlerInterceptorAdapter {
         log.debug("### RequestInterceptor-4: member={}", member);
 
         username = req.getUserPrincipal().getName();
+        userTz = member.getTimezone();
 //        if ("anonymousUser".equals(username)) {
 //            return true;
 //        }
@@ -57,6 +59,29 @@ public class RequestInterceptor extends HandlerInterceptorAdapter {
         readNews(username);
         return true;
 
+        // https://www.leafcats.com/40
+//        HttpSession session = request.getSession();
+//        UserVO loginVO = (UserVO) session.getAttribute("loginUser");
+//        if(ObjectUtils.isEmpty(loginVO)){
+//            response.sendRedirect("/moveLogin.go");
+//            return false;
+//        }
+    }
+
+    @Override
+    public void postHandle(HttpServletRequest req, HttpServletResponse response, Object handler, ModelAndView model) throws Exception {
+        if (handler instanceof HandlerMethod) {
+            HandlerMethod handlerMethod = (HandlerMethod) handler;
+
+            String controllerName = handlerMethod.getBeanType().getSimpleName().replace("Controller", "").toLowerCase();
+            String methodName = handlerMethod.getMethod().getName();
+
+            log.info("### postHandle from {} ({}, {}/{}): {}?{}", username, req.getMethod(), controllerName, methodName, req.getRequestURI(), req.getQueryString());
+            if (methodName.startsWith("display")) {
+                model.addObject("ctrl", controllerName);
+                model.addObject("userTz", userTz);
+            }
+        }
     }
 
     private void readNews(String username) {
@@ -71,20 +96,6 @@ public class RequestInterceptor extends HandlerInterceptorAdapter {
         }
     }
 
-    @Override
-    public void postHandle(HttpServletRequest req, HttpServletResponse response, Object handler, ModelAndView model) throws Exception {
-        if (handler instanceof HandlerMethod) {
-            HandlerMethod handlerMethod = (HandlerMethod) handler;
-
-            String controllerName = handlerMethod.getBeanType().getSimpleName().replace("Controller", "").toLowerCase();
-            String methodName = handlerMethod.getMethod().getName();
-
-            log.info("### Request from {} ({}, {}/{}): {}?{}", username, req.getMethod(), controllerName, methodName, req.getRequestURI(), req.getQueryString());
-            if (methodName.startsWith("display")) {
-                model.addObject("ctrl", controllerName);
-            }
-        }
-    }
 }
 
 

@@ -16,7 +16,8 @@
 </head>
 <body class="container-fluid">
 <div>
-    <b th:inline="text" class="user"> [[${#httpServletRequest.remoteUser}]] </b> |
+    <b th:if="${#httpServletRequest.remoteUser != null}"> [[${#httpServletRequest.remoteUser}]]</b> |
+    <span th:text="|${tz}|"></span>
     <a href="/logout" th:href="@{/logout}" th:text="#{logout}"></a> |
     <a href="?lang=ko-KR">한국어</a> |
     <a href="?lang=en-US">English</a> |
@@ -25,7 +26,6 @@
     <a th:href="@{/audit/}">audit</a> |
     <a th:href="@{/members/}">member</a> |
     <hr>
-
 </div>
 
 <!--/* Contents */-->
@@ -43,7 +43,15 @@
 <script th:src="@{/js/custom.js}"></script>
 <script th:src="@{/js/formatter.js}"></script>
 <script th:inline="javascript">
-    let roles = {/*[# th:each="n : ${T(com.devplayg.coffee.definition.RoleType.Role).values()}"]*/"[(${n})]": "[(${n.description})]",/*[/]*/};
+    /*<![CDATA[*/
+
+    let userRoles = {/*[# th:each="n : ${T(com.devplayg.coffee.definition.RoleType.Role).values()}"]*/"[(${n})]": "[(${n.description})]",/*[/]*/};
+    console.log(userRoles);
+
+    let userTz = [[ ${userTz} ]];
+    console.log(userTz);
+    /*]]>*/
+
 </script>
 <script th:src="@{|/modules/${ctrl}/${ctrl}.js|}"></script>
 <script layout:fragment="script"></script>
