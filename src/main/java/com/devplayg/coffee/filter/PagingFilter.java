@@ -1,15 +1,15 @@
 package com.devplayg.coffee.filter;
 
-import lombok.*;
-import lombok.experimental.SuperBuilder;
+import lombok.Getter;
+import lombok.Setter;
+import lombok.ToString;
 
 import java.io.Serializable;
-import java.time.LocalDateTime;
 
 @Getter
 @Setter
 @ToString
-public class PagingFilter implements Serializable {
+public class PagingFilter implements  Serializable {
     private static final long serialVersionUID = 1L;
 //    private static final long LIMIT = 100;
 
@@ -18,6 +18,8 @@ public class PagingFilter implements Serializable {
     private String sort;
     private String order;
     private boolean fastPaging;
+
+
 
 //    public void setOffset(int offset) {
 //        this.offset = (offset > 0) ? offset : 0;
