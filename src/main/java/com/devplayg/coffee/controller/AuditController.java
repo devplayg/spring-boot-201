@@ -17,6 +17,8 @@ import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
+import org.springframework.security.authentication.AnonymousAuthenticationToken;
+import org.springframework.security.core.Authentication;
 import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
@@ -24,6 +26,9 @@ import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.ModelAttribute;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestMethod;
+
+import java.time.ZoneId;
+import java.util.TimeZone;
 
 
 @Controller
@@ -54,8 +59,15 @@ public class AuditController {
     }
 
     private void tune(AuditFilter filter) {
+        Authentication auth = SecurityContextHolder.getContext().getAuthentication();
+        if (auth instanceof AnonymousAuthenticationToken) {
+            log.debug("### RequestInterceptor-0: not logged in yet");
+            filter.tune(TimeZone.getDefault().toZoneId());
+            return;
+        }
+
         Member member = (Member) SecurityContextHolder.getContext().getAuthentication().getPrincipal();
-        filter.tune(member.getTimezone());
+        filter.tune(ZoneId.of(member.getTimezone()));
     }
 
 

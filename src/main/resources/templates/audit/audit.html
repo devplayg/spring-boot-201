@@ -16,12 +16,11 @@
         <thead>
         <tr>
             <th data-field="id" data-sortable="true">ID</th>
-            <th data-field="member_id" data-sortable="true" th:text="#{user}"></th>
+            <th data-field="member" data-formatter="auditMemberFormatter" data-sortable="true" th:text="#{user}"></th>
             <th data-field="category" data-sortable="true" th:text="#{category}"></th>
-            <th data-field="action" data-sortable="true" th:text="#{action}"></th>
-            <th data-field="ip" data-sortable="true" th:text="IP"></th>
+            <th data-field="ip" data-formatter="intIpFormatter" data-sortable="true" th:text="IP"></th>
             <th data-field="message" data-sortable="true" th:text="#{message}"></th>
-            <th data-field="created" data-sortable="true" th:text="#{created}"></th>
+            <th data-field="created" data-formatter="dateFormatter" data-sortable="true" th:text="#{created}"></th>
         </tr>
         </thead>
     </table>

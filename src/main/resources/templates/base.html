@@ -17,7 +17,7 @@
 <body class="container-fluid">
 <div>
     <b th:if="${#httpServletRequest.remoteUser != null}"> [[${#httpServletRequest.remoteUser}]]</b> |
-    <span th:text="|${tz}|"></span>
+    <span th:text="|${userTz}|"></span> |
     <a href="/logout" th:href="@{/logout}" th:text="#{logout}"></a> |
     <a href="?lang=ko-KR">한국어</a> |
     <a href="?lang=en-US">English</a> |
@@ -38,20 +38,29 @@
 <script th:src="@{/plugins/bootstrap-select/js/bootstrap-select.min.js}"></script>
 <script th:src="@{/plugins/jquery-validation/jquery.validate.min.js}"></script>
 <script th:src="@{/plugins/jquery-mask/jquery.mask.min.js}"></script>
+<script th:src="@{/plugins/moment/moment.min.js}"></script>
+<script th:src="@{/plugins/moment/moment-timezone-with-data.min.js}"></script>
 <script th:src="@{/plugins/bootstrap-datetimepicker/bootstrap-datetimepicker.min.js}"></script>
 <script th:src="@{/plugins/sweetalert2/sweetalert2.min.js}"></script>
 <script th:src="@{/js/custom.js}"></script>
 <script th:src="@{/js/formatter.js}"></script>
 <script th:inline="javascript">
-    /*<![CDATA[*/
-
+/*<![CDATA[*/
     let userRoles = {/*[# th:each="n : ${T(com.devplayg.coffee.definition.RoleType.Role).values()}"]*/"[(${n})]": "[(${n.description})]",/*[/]*/};
-    console.log(userRoles);
+    let systemTz = [[ ${systemTz} ]],
+        userTz = [[ ${userTz} ]],
 
-    let userTz = [[ ${userTz} ]];
-    console.log(userTz);
-    /*]]>*/
+        systemTzOffset = [[ ${systemTzOffset} ]],
+        userTzOffset = [[ ${userTzOffset} ]];
+// var tz = moment.tz.guess();
+// console.info('Timezone: ' + tz);
+    // moment.locale(systemTz);
+    moment.tz.setDefault(systemTz);
+    // console.log("systemTz: " + systemTz);
 
+
+
+/*]]>*/
 </script>
 <script th:src="@{|/modules/${ctrl}/${ctrl}.js|}"></script>
 <script layout:fragment="script"></script>

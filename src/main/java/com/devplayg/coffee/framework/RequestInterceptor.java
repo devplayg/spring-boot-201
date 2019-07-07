@@ -14,7 +14,7 @@ import org.springframework.web.servlet.handler.HandlerInterceptorAdapter;
 
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
-import java.security.Principal;
+import java.util.TimeZone;
 
 /**
  * Interceptors
@@ -23,7 +23,7 @@ import java.security.Principal;
 @Slf4j
 public class RequestInterceptor extends HandlerInterceptorAdapter {
     private String username = "";
-    private String userTz = "";
+    private String userTz = TimeZone.getDefault().toZoneId().getId();
 
     @Override
     public boolean preHandle(HttpServletRequest req, HttpServletResponse res, Object handler) {
@@ -79,7 +79,11 @@ public class RequestInterceptor extends HandlerInterceptorAdapter {
             log.info("### postHandle from {} ({}, {}/{}): {}?{}", username, req.getMethod(), controllerName, methodName, req.getRequestURI(), req.getQueryString());
             if (methodName.startsWith("display")) {
                 model.addObject("ctrl", controllerName);
+
+                model.addObject("systemTz",  TimeZone.getDefault().toZoneId().getId());
                 model.addObject("userTz", userTz);
+
+                log.debug("system tz: {}", TimeZone.getDefault().getRawOffset());
             }
         }
     }

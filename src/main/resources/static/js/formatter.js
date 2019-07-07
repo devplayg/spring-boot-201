@@ -1,3 +1,8 @@
+
+function dateFormatter(val, row, idx) {
+    return moment(val).tz(userTz).format();
+}
+
 function commonActionFormatter(val, row, idx) {
     return [
         '<a class="update" href="javascript:void(0)" title="Update">',
@@ -8,4 +13,8 @@ function commonActionFormatter(val, row, idx) {
         'X',
         '</a>'
     ].join('');
+}
+
+function intIpFormatter(val, row, idx) {
+    return intToip(val);
 }

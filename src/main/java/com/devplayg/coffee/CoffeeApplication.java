@@ -24,6 +24,6 @@ public class CoffeeApplication {
 
     @PostConstruct
     public void initApp() {
-        TimeZone.setDefault(TimeZone.getTimeZone("UTCjh"));
+        TimeZone.setDefault(TimeZone.getTimeZone("America/New_York"));
     }
 }

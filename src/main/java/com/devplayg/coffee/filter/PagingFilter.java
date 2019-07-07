@@ -19,10 +19,6 @@ public class PagingFilter implements Serializable {
     private String order;
     private boolean fastPaging;
 
-
-
-
-
 //    public void setOffset(int offset) {
 //        this.offset = (offset > 0) ? offset : 0;
 //    }

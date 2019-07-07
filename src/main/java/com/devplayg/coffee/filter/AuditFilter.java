@@ -33,8 +33,8 @@ public class AuditFilter extends PagingFilter {
     private String message;
     private List<AuditCategory> categoryList = new ArrayList<>();
 
-    public void tune(String tz) {
-        LocalDateTime now = ZonedDateTime.now(ZoneId.of(tz)).toLocalDateTime();
+    public void tune(ZoneId zoneId) {
+        LocalDateTime now = ZonedDateTime.now(zoneId).toLocalDateTime();
         this.now = now;
         if (this.startDate == null) {
             this.startDate = now.toLocalDate().atTime(LocalTime.MIN).minusSeconds(12345);
@@ -42,7 +42,6 @@ public class AuditFilter extends PagingFilter {
         if (this.endDate == null) {
             this.endDate = now.toLocalDate().atTime(LocalTime.MAX);
         }
-
         if (StringUtils.isBlank(this.getSort())) {
             this.setSort(sortName);
         }
