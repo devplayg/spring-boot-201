@@ -26,4 +26,16 @@ public class CoffeeApplication {
     public void initApp() {
         TimeZone.setDefault(TimeZone.getTimeZone("America/New_York"));
     }
+
+
+//    @Bean
+//    CommandLineRunner initialize(UserRepository userRepository) {
+//        return args -> {
+//            Stream.of("John", "Robert", "Nataly", "Helen", "Mary").forEach(name -> {
+//                User user = new User(name);
+//                userRepository.save(user);
+//            });
+//            userRepository.findAll().forEach(System.out::println);
+//        };
+//    }
 }

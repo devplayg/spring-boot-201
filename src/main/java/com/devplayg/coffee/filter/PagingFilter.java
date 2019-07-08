@@ -3,13 +3,15 @@ package com.devplayg.coffee.filter;
 import lombok.Getter;
 import lombok.Setter;
 import lombok.ToString;
+import org.springframework.data.domain.Page;
+import org.springframework.data.domain.Pageable;
 
 import java.io.Serializable;
 
 @Getter
 @Setter
 @ToString
-public class PagingFilter implements  Serializable {
+public class PagingFilter implements Serializable {
     private static final long serialVersionUID = 1L;
 //    private static final long LIMIT = 100;
 
