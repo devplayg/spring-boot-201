@@ -4,7 +4,7 @@ $(function () {
      * 1. Define & initialize
      */
     let $table = $("#table-member"),
-        $insertForm = $("#form-member-insert"),
+        $createForm = $("#form-member-create"),
         $updateForm = $("#form-member-update"),
         selectedMemberID = null;
 
@@ -88,7 +88,7 @@ $(function () {
             $table.bootstrapTable("refresh");
         });
 
-    $insertForm.validate({
+    $createForm.validate({
         submitHandler: function (form, e) {
             e.preventDefault();
 
@@ -174,7 +174,7 @@ $(function () {
 
     // Test code
     {
-        let $form = $("#form-member-insert");
+        let $form = $("#form-member-create");
         $("input[name=username]", $form).val("msgxxx");
         $("input[name=name]", $form).val("WON SEOK AHN");
         $("input[name=email]", $form).val("wsan@korean.com");

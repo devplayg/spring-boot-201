@@ -22,7 +22,7 @@ public class MemberService implements UserDetailsService {
 
     public UserDetails loadUserByUsername(String username) throws UsernameNotFoundException {
         Member member = memberRepository.findByUsername(username)
-                .orElseThrow(() -> new ResourceNotFoundException("member", "username", username));
+                .orElseThrow(() -> new ResourceNotFoundException("member", "member.username", username));
         return member;
 
 //        log.info("member: {}", member.toString());
