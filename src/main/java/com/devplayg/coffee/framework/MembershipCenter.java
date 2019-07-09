@@ -3,9 +3,14 @@ package com.devplayg.coffee.framework;
 import com.devplayg.coffee.definition.RoleType;
 import com.devplayg.coffee.entity.Member;
 import lombok.extern.slf4j.Slf4j;
+import org.springframework.security.authentication.AnonymousAuthenticationToken;
+import org.springframework.security.core.Authentication;
+import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.security.core.userdetails.UserDetails;
 
+import java.time.ZoneId;
 import java.util.Hashtable;
+import java.util.TimeZone;
 
 @Slf4j
 // 실시간 사용자 권한관리 Singleton 패턴 클래스
@@ -85,5 +90,16 @@ public class MembershipCenter {
 
     public static Hashtable<String, Boolean> getMemberNews() {
         return mc.memberNews;
+    }
+
+    public static ZoneId getMemberTimezone() {
+        Authentication auth = SecurityContextHolder.getContext().getAuthentication();
+        if (auth instanceof AnonymousAuthenticationToken) {
+            return TimeZone.getDefault().toZoneId();
+        }
+
+        Member member = (Member) SecurityContextHolder.getContext().getAuthentication().getPrincipal();
+        return ZoneId.of(member.getTimezone());
+
     }
 }

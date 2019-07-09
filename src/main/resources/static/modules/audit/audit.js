@@ -1,5 +1,4 @@
 $(function () {
-
     /*
      * 1. Define & initialize
      */
@@ -9,34 +8,27 @@ $(function () {
     /*
      * 2. Classes
      */
-    $(".datetime").datetimepicker({
-        format: "yyyy-mm-dd hh:ii",
-        pickerPosition: "bottom-left",
-        todayHighlight: 1,
-        minView: 2,
-        maxView: 4,
-        autoclose: true
+    $(".datetime").datetimepicker(defaultDatetimeOption);
+
+
+    /*
+     * 3. Main
+     */
+    $table.bootstrapTable({
+        url: "/audit",
+        method: "get",
+        sidePagination: "server",
+        queryParams: function(p) {
+            refineJavaDateWithPaging(filter, p);
+            return $.param(filter, true);
+        },
+        responseHandler: function(res) {
+            return {
+                total: res.totalElements,
+                rows: res.content
+            };
+        }
     });
-
-
-    /*
-     * 3. Events
-     */
-    // $(".modal-form")
-    //     .on("hidden.bs.modal", function () {
-    //         let $form = $(this).closest("form");
-    //         $form.validate().resetForm();
-    //         $form.get(0).reset();
-    //         $(".alert", $form).addClass("hide").removeClass("in");
-    //         $(".alert .message", $form).empty();
-    //
-    //         $table.bootstrapTable("refresh");
-    //     });
-
-    /*
-     * 4. Main
-     */
-    $table.bootstrapTable();
 
 
     // Test code

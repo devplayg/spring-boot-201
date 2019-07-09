@@ -2,20 +2,17 @@ package com.devplayg.coffee.controller;
 
 import com.devplayg.coffee.entity.Audit;
 import com.devplayg.coffee.entity.Member;
-import com.devplayg.coffee.filter.AuditFilter;
+import com.devplayg.coffee.entity.filter.AuditFilter;
 import com.devplayg.coffee.repository.AuditRepository;
 import com.devplayg.coffee.repository.MemberRepository;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
-import org.springframework.data.querydsl.binding.QuerydslPredicate;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.ModelAttribute;
 import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.RestController;
-
-import java.util.function.Predicate;
 
 @RestController
 @Slf4j
@@ -37,7 +34,6 @@ public class TestController {
         log.debug("page: {}", pageable);
         return memberRepository.findAll(pageable);
     }
-
 
     @GetMapping("/test/{id}")
     public Audit findAuditById(@PathVariable("id") Audit audit) {

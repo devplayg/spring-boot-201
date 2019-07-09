@@ -11,7 +11,7 @@ spring:
             ddl-auto: validate
         open-in-view: false
     datasource: # DB 설정
-        url: jdbc:mysql://127.0.0.1:3306/sb201?useUnicode=yes&characterEncoding=UTF-8
+        url: jdbc:mysql://127.0.0.1:3306/smartfactory?useUnicode=yes&characterEncoding=UTF-8
         driver-class-name: com.mysql.cj.jdbc.Driver
         username: root
         password: Uniiot12!@
@@ -27,8 +27,12 @@ spring:
 #        time-zone: America/Sao_Paulo
 server:
     address: 127.0.0.1
+    servlet:
+        session:
+            timeout: 1440m
     error:
         path: /error
+
 #    servlet:
 #        context-path: /api
 

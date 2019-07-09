@@ -69,7 +69,7 @@ public class RequestInterceptor extends HandlerInterceptorAdapter {
     }
 
     @Override
-    public void postHandle(HttpServletRequest req, HttpServletResponse response, Object handler, ModelAndView model) throws Exception {
+    public void postHandle(HttpServletRequest req, HttpServletResponse response, Object handler, ModelAndView mv) throws Exception {
         if (handler instanceof HandlerMethod) {
             HandlerMethod handlerMethod = (HandlerMethod) handler;
 
@@ -78,11 +78,9 @@ public class RequestInterceptor extends HandlerInterceptorAdapter {
 
             log.info("### postHandle from {} ({}, {}/{}): {}?{}", username, req.getMethod(), controllerName, methodName, req.getRequestURI(), req.getQueryString());
             if (methodName.startsWith("display")) {
-                model.addObject("ctrl", controllerName);
-
-                model.addObject("systemTz",  TimeZone.getDefault().toZoneId().getId());
-                model.addObject("userTz", userTz);
-
+                mv.addObject("ctrl", controllerName);
+                mv.addObject("systemTz",  TimeZone.getDefault().toZoneId().getId());
+                mv.addObject("userTz", userTz);
                 log.debug("system tz: {}", TimeZone.getDefault().getRawOffset());
             }
         }
