@@ -6,10 +6,10 @@ function datePrettyFormatter(val, row, idx) {
     var dt = convertToUserTime(val);
     var m = moment(dt);
 
-    return '' + m.format("YYYY-MM-DD")
-        + '<span class="text-muted">T</span>'
+    return '<small>' + m.format("YYYY-MM-DD")
+        + '<span class="txt-color-grayLight">T</span>'
         + '' + m.format("HH:mm:ss") + ''
-        + '<span class="text-muted">' + m.format("Z") + '</span>';
+        + '<span class="txt-color-grayLight">' + m.format("Z") + '</span></small>';
 }
 
 function commonActionFormatter(val, row, idx) {

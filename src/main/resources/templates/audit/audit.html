@@ -50,7 +50,7 @@
                                 <label th:text="#{message}"></label>
                                 <input type="text" class="form-control" th:name="message" th:value="*{message}">
                             </div>
-                            <div class="form-group">
+                            <div class="form-group hidden">
                                 <label th:text="#{fastPaging}"></label>
                                 <input type="checkbox" class="form-control" th:name="fastPaging" th:checked="*{fastPaging}"/>
                             </div>
@@ -72,12 +72,9 @@
         </form>
     </div>
 
-    <table th:id="|table-${ctrl}|" class="table table-bordered table-hover" th:object="${filter}"
+    <table th:id="|table-${ctrl}|"
+           th:object="${filter}"
            th:data-toolbar="|#toolbar-${ctrl}|"
-           data-show-refresh="true"
-           data-show-columns="true"
-           data-pagination="true"
-           data-page-size="15"
            data-sort-name="created"
            data-sort-order="desc"
            data-query-params-type=""
@@ -87,12 +84,12 @@
     >
         <thead>
         <tr>
-            <th data-field="id" data-sortable="true">ID</th>
+            <th data-field="created" data-formatter="datePrettyFormatter" data-sortable="true" th:text="#{created}"></th>
+            <th data-field="id" data-sortable="true" data-visible="false">ID</th>
             <th data-field="member" data-formatter="auditMemberFormatter" data-sortable="true" th:text="#{user}"></th>
             <th data-field="category" data-sortable="true" th:text="#{category}"></th>
             <th data-field="ip" data-formatter="intIpFormatter" data-sortable="true" th:text="IP"></th>
-            <th data-field="message" data-sortable="true" th:text="#{message}"></th>
-            <th data-field="created" data-formatter="dateFormatter" data-sortable="true" th:text="#{created}"></th>
+            <th data-field="message" data-sortable="true" data-formatter="auditMessageFormatter" th:text="#{message}"></th>
         </tr>
         </thead>
     </table>
