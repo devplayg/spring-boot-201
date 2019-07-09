@@ -81,7 +81,6 @@ public class RequestInterceptor extends HandlerInterceptorAdapter {
                 mv.addObject("ctrl", controllerName);
                 mv.addObject("systemTz",  TimeZone.getDefault().toZoneId().getId());
                 mv.addObject("userTz", userTz);
-                log.debug("system tz: {}", TimeZone.getDefault().getRawOffset());
             }
         }
     }

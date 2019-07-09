@@ -36,7 +36,7 @@ $(function () {
         // let $form = $("#form-member-insert");
         // $("input[name=username]", $form).val("msgxxx");
         // $("input[name=name]", $form).val("WON SEOK AHN");
-        // $("input[name=email]", $form).val("wsan@unisem.co.kr");
+        // $("input[name=email]", $form).val("wsan@korea.com");
         // $("input[name=inputPassword]", $form).val("wsan123!@#");
     }
 });

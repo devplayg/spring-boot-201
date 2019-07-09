@@ -20,7 +20,7 @@
                     </div>
                     <div class="form-group">
                         <select name="categoryList" class="form-control selectpicker" multiple th:title="#{category}">
-                            <option th:each="category, stat : ${T(kr.co.unisem.iot.smartfactory.definition.AuditCategory).values()}"
+                            <option th:each="category, stat : ${T(com.devplayg.coffee.definition.AuditCategory).values()}"
                                     th:value="${category}"
                                     th:text="${category.description}"
                                     th:selected="${#lists.contains(#object.categoryList, category)}"

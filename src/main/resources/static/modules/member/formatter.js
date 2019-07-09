@@ -1,7 +1,16 @@
 function memberRoleListFormatter(val, row, idx) {
-    let str = "";
+    let role = [];
     $.each(val, function(i, r) {
-        str += '<button type="bntton" class="btn btn-primary btn-xs">' + userRoles[r] + '</button>';
+        var tag = "";
+        if (r === "ADMIN") {
+            tag = '<button type="bntton" class="btn btn-danger btn-xs">' + userRoles[r] + '</button>';
+            role.push(tag);
+            return true;
+        }
+
+        tag = '<button type="bntton" class="btn btn-primary btn-xs">' + userRoles[r] + '</button>';
+        role.push(tag);
+
     });
-    return str;
+    return role.join('&nbsp;');
 }

@@ -16,7 +16,7 @@
            th:data-url="@{/members}">
         <thead>
         <tr>
-            <th data-field="action" data-formatter="commonActionFormatter" data-events="memberCommandEvents">XX</th>
+            <th data-field="action" data-formatter="commonActionFormatter" data-events="memberCommandEvents" th:text="action"></th>
             <th data-field="id" data-sortable="true">ID</th>
             <th data-field="username" data-sortable="true" th:text="#{username}"></th>
             <th data-field="name" data-sortable="true" th:text="#{name}"></th>
@@ -160,6 +160,7 @@
 </div>
 
 <th:block layout:fragment="script">
+    <script th:src="@{|/modules/${ctrl}/${ctrl}.js|}"></script>
     <script th:src="@{|/modules/${ctrl}/formatter.js|}"></script>
     <script>
         /*<![CDATA[*/

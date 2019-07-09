@@ -18,6 +18,7 @@
     <link rel="stylesheet" type="text/css" media="screen" th:href="@{/plugins/bootstrap-select/css/bootstrap-select.min.css}">
     <link rel="stylesheet" type="text/css" media="screen" th:href="@{/plugins/sweetalert2/sweetalert2.min.css}">
     <link rel="stylesheet" type="text/css" media="screen" th:href="@{/plugins/bootstrap-datetimepicker/bootstrap-datetimepicker.min.css}">
+    <link rel="stylesheet" type="text/css" media="screen" th:href="@{/plugins/flag-icon-css/css/flag-icon.min.css}">
     <link rel="stylesheet" type="text/css" media="screen" th:href="@{/css/custom.css}">
     <link rel="shortcut icon" th:href="@{/img/favicon.ico}" type="image/x-icon">
     <link rel="icon" th:href="@{/img/favicon.ico}" type="image/x-icon">
@@ -92,9 +93,9 @@
 
     <!-- #PROJECTS: projects dropdown -->
     <div class="project-context hidden-xs">
-
-        <span class="label">Projects:</span>
-        <span class="project-selector dropdown-toggle" data-toggle="dropdown">Recent projects <i class="fa fa-angle-down"></i></span>
+        <span class="label" >User Timezone</span>
+        <span class="project-selector " th:text="|${userTz}|">Timezone</span>
+<!--        <span class="project-selector dropdown-toggle" data-toggle="dropdown">Recent projects <i class="fa fa-angle-down"></i></span>-->
 
         <!-- Suggestion: populate this list with fetch and push technique -->
         <ul class="dropdown-menu">
@@ -142,28 +143,21 @@
         <!-- multiple lang dropdown : find all flags in the flags page -->
         <ul class="header-dropdown-list hidden-xs">
             <li>
-                <a href="#" class="dropdown-toggle" data-toggle="dropdown"> <img th:src="@{/img/flags/ko-kr.svg}" height="15" style="border:1px solid #acacac;" alt="United States"> <span> English (US) </span> <i class="fa fa-angle-down"></i> </a>
+                <a href="#" class="dropdown-toggle" data-toggle="dropdown"> <span class="flag-icon flag-icon-kr"></span> <span> 한국어 (KR) </span> <i class="fa fa-angle-down"></i> </a>
                 <ul class="dropdown-menu pull-right">
                     <li class="active">
-                        <a href="javascript:void(0);"><img th:src="@{/img/flags/en-us.svg}" style="border:1px solid #acacac;" height="15" alt="United States"> English (US)</a>
+                        <a href="javascript:void(0);"><span class="flag-icon flag-icon-us"></span> English (US)</a>
                     </li>
                     <li>
-                        <a href="javascript:void(0);"><img th:src="@{/img/flags/ko-kr.svg}" style="border:1px solid #acacac;" height="15" alt="Korean"> 한국어</a>
+                        <a href="javascript:void(0);"><span class="flag-icon flag-icon-kr"></span> 한국어</a>
                     </li>
                     <li>
-                        <a href="javascript:void(0);"><img th:src="@{/img/flags/vi-vn.svg}" style="border:1px solid #acacac;" height="15" alt="Russia"> Tiếng việt (VN)</a>
+                        <a href="javascript:void(0);"><span class="flag-icon flag-icon-vn"></span> Tiếng việt (VN)</a>
                     </li>
                 </ul>
             </li>
         </ul>
         <!-- end multiple lang -->
-
-        <ul class="header-dropdown-list hidden-xs">
-            <li>
-                <a href="#" class="dropdown-toggle" data-toggle="dropdown"><span th:text="|${userTz}|"></span> </a>
-            </li>
-        </ul>
-
     </div>
     <!-- end pulled right: nav area -->
 
@@ -179,7 +173,7 @@
     <div class="login-info">
         <span> <!-- User image size is adjusted inside CSS, it should stay as it -->
             <a href="javascript:void(0);">
-                <img th:src="@{/assets/img/avatars/unisem.png}" alt="me" class="online" />
+                <img th:src="@{/img/avatar.png}" alt="me" class="online" />
                 <span th:text="${#httpServletRequest.remoteUser}"></span>
             </a>
         </span>
@@ -345,22 +339,19 @@
 <!-- MomentJS -->
 <script th:src="@{/plugins/moment/moment.min.js}"></script>
 <script th:src="@{/plugins/moment/moment-timezone-with-data.min.js}"></script>
+
 <script th:src="@{/plugins/bootstrap-table/bootstrap-table.min.js}"></script>
 <script th:src="@{/plugins/bootstrap-select/js/bootstrap-select.min.js}"></script>
 <script th:src="@{/plugins/jquery-validation/jquery.validate.min.js}"></script>
 <script th:src="@{/plugins/jquery-mask/jquery.mask.min.js}"></script>
-<script th:src="@{/plugins/moment/moment.min.js}"></script>
-<script th:src="@{/plugins/moment/moment-timezone-with-data.min.js}"></script>
 <script th:src="@{/plugins/bootstrap-datetimepicker/bootstrap-datetimepicker.min.js}"></script>
 <script th:src="@{/plugins/sweetalert2/sweetalert2.min.js}"></script>
 <script th:inline="javascript">
     /*<![CDATA[*/
-    let userRoles = {/*[# th:each="n : ${T(kr.co.unisem.iot.smartfactory.definition.RoleType.Role).values()}"]*/"[(${n})]": "[(${n.description})]",/*[/]*/};
+    let userRoles = {/*[# th:each="n : ${T(com.devplayg.coffee.definition.RoleType.Role).values()}"]*/"[(${n})]": "[(${n.description})]",/*[/]*/};
     let systemTz = [[ ${systemTz} ]],
         userTz = [[ ${userTz} ]];
     moment.tz.setDefault(systemTz);
-
-    let customDateFormat = 'yyyy-mm-dd';
     /*]]>*/
 
     $(document).ready(function() {
