@@ -1,16 +1,13 @@
 $(function () {
 
     /*
-     * 1. Define & initialize
+     * 1. Definition
      */
     let $table = $("#table-member"),
         $createForm = $("#form-member-create"),
         $updateForm = $("#form-member-update"),
         selectedMemberID = null;
 
-    /*
-     * 2. Classes
-     */
     class Member {
         constructor (data) {
             this.data = data || null;
@@ -66,7 +63,12 @@ $(function () {
 
 
     /*
-     * 3. Events
+     * 2. Initialize
+     */
+
+
+    /*
+     * 3. Event
      */
     window.memberCommandEvents = {
         "click .update": function (e, val, row, idx) {
@@ -171,13 +173,12 @@ $(function () {
      */
     $table.bootstrapTable();
 
-
     // Test code
     {
         let $form = $("#form-member-create");
-        $("input[name=username]", $form).val("msgxxx");
-        $("input[name=name]", $form).val("WON SEOK AHN");
-        $("input[name=email]", $form).val("wsan@korean.com");
-        $("input[name=inputPassword]", $form).val("wsan123!@#");
+        $("input[name=username]", $form).val("my_name_is");
+        $("input[name=name]", $form).val("DEV Play G");
+        $("input[name=email]", $form).val("devplayg@korean.com");
+        $("input[name=inputPassword]", $form).val("dev123!@#");
     }
 });

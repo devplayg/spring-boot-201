@@ -70,19 +70,6 @@ public class AuditController {
 //        return new ResponseEntity<>(new Result(result.getResults(), result.getTotal()), HttpStatus.OK);
 //    }
 //
-//    private void tune(AuditFilter filter) {
-//        Authentication auth = SecurityContextHolder.getContext().getAuthentication();
-//        if (auth instanceof AnonymousAuthenticationToken) {
-//            log.debug("### RequestInterceptor-0: not logged in yet");
-//            filter.tune(TimeZone.getDefault().toZoneId());
-//            return;
-//        }
-//
-//        Member member = (Member) SecurityContextHolder.getContext().getAuthentication().getPrincipal();
-//        filter.tune(ZoneId.of(member.getTimezone()));
-//    }
-
-
 //    Pageable pageable = PageRequest.of(0, 5, Sort.by("name"));
 //        return userRepository.findAll(pageable);
 }

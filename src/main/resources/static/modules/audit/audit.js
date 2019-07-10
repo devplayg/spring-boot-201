@@ -1,4 +1,5 @@
 $(function () {
+
     /*
      * 1. Definition
      */
