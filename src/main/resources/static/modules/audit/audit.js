@@ -1,21 +1,16 @@
 $(function () {
     /*
-     * 1. Define & initialize
+     * 1. Definition
      */
-    let $table = $("#table-audit");
+    let $table = $("#table-" + ctrl);
 
 
     /*
-     * 2. Classes
+     * 2. Initialize
      */
     $(".datetime").datetimepicker(defaultDatetimeOption);
-
-
-    /*
-     * 3. Main
-     */
     $table.bootstrapTable({
-        url: "/audit",
+        url: "/" + ctrl,
         method: "get",
         sidePagination: "server",
         queryParams: function(p) {
@@ -31,12 +26,22 @@ $(function () {
     });
 
 
+    /*
+     * 3. Event
+     */
+
+
+    /*
+     * 4. Function
+     */
+
+
     // Test code
-    {
+    // {
         // let $form = $("#form-member-insert");
         // $("input[name=username]", $form).val("msgxxx");
         // $("input[name=name]", $form).val("WON SEOK AHN");
         // $("input[name=email]", $form).val("wsan@korea.com");
         // $("input[name=inputPassword]", $form).val("wsan123!@#");
-    }
+    // }
 });

@@ -3,13 +3,13 @@ function dateFormatter(val, row, idx) {
 }
 
 function datePrettyFormatter(val, row, idx) {
-    var dt = convertToUserTime(val);
-    var m = moment(dt);
+    var dt = convertToUserTime(val),
+        m = moment(dt);
 
-    return '<small>' + m.format("YYYY-MM-DD")
+    return '' + m.format("YYYY-MM-DD")
         + '<span class="txt-color-grayLight">T</span>'
         + '' + m.format("HH:mm:ss") + ''
-        + '<span class="txt-color-grayLight">' + m.format("Z") + '</span></small>';
+        + '<span class="txt-color-grayLight">' + m.format("Z") + '</span>';
 }
 
 function commonActionFormatter(val, row, idx) {

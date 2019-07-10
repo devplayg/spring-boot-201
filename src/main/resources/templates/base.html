@@ -261,7 +261,7 @@
     <!-- END RIBBON -->
 
     <!-- MAIN CONTENT -->
-    <div id="content">
+    <div id="content" class="p20">
         <div layout:fragment="content"></div>
     </div>
     <!-- END MAIN CONTENT -->
@@ -340,13 +340,24 @@
 /*<![CDATA[*/
     let userRoles = {/*[# th:each="n : ${T(com.devplayg.coffee.definition.RoleType.Role).values()}"]*/"[(${n})]": "[(${n.description})]",/*[/]*/};
     let systemTz = [[ ${systemTz} ]],
-        userTz = [[ ${userTz} ]];
+        userTz = [[ ${userTz} ]],
+        ctrl = [[ ${ctrl} ]];
     moment.tz.setDefault(systemTz);
+
     $(document).ready(function() {
         pageSetUp();
+        // // activate tooltips
+        // $("[rel=tooltip]").tooltip();
+        //
+        // // activate popovers
+        // $("[rel=popover]").popover();
+        //
+        // // activate popovers with hover states
+        // $("[rel=popover-hover]").popover({ trigger: "hover" });
+
         drawBreadCrumb();
     })
-        $('a[href="' + this.location.pathname + '"]').parents('li,ul').addClass('active');
+    $('a[href="' + this.location.pathname + '"]').parents('li,ul').addClass('active');
 /*]]>*/
 </script>
 <script th:src="@{/js/custom.js}"></script>

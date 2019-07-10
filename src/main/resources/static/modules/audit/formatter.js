@@ -1,6 +1,6 @@
 function auditMemberFormatter(member, row, idx) {
     if (member === null) {
-        return member.id;
+        return;
     }
 
     var badge = "";
