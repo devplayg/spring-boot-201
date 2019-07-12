@@ -70,19 +70,16 @@ public class RequestInterceptor extends HandlerInterceptorAdapter {
 
     @Override
     public void postHandle(HttpServletRequest req, HttpServletResponse response, Object handler, ModelAndView mv) throws Exception {
-        if (handler instanceof HandlerMethod) {
-            HandlerMethod handlerMethod = (HandlerMethod) handler;
-
-            String controllerName = handlerMethod.getBeanType().getSimpleName().replace("Controller", "").toLowerCase();
-            String methodName = handlerMethod.getMethod().getName();
-
-            log.info("### postHandle from {} ({}, {}/{}): {}?{}", username, req.getMethod(), controllerName, methodName, req.getRequestURI(), req.getQueryString());
-            if (methodName.startsWith("display")) {
-                mv.addObject("ctrl", controllerName);
-                mv.addObject("systemTz",  TimeZone.getDefault().toZoneId().getId());
-                mv.addObject("userTz", userTz);
-            }
+        if (mv == null) {
+            return;
         }
+
+        HandlerMethod handlerMethod = (HandlerMethod) handler;
+        String controllerName = handlerMethod.getBeanType().getSimpleName().replace("Controller", "").toLowerCase();
+        String methodName = handlerMethod.getMethod().getName();
+        mv.addObject("systemTz", TimeZone.getDefault().toZoneId().getId());
+        mv.addObject("ctrl", controllerName);
+        mv.addObject("userTz", userTz);
     }
 
     private void readNews(String username) {
