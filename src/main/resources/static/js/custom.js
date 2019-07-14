@@ -65,3 +65,7 @@ function refineJavaDateWithPaging(filter, param) {
 function convertToUserTime(dt) {
     return moment(dt).tz(userTz).format();
 }
+
+
+// Jquery validations
+

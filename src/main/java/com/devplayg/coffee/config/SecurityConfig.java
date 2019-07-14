@@ -9,8 +9,6 @@ import org.springframework.security.config.annotation.method.configuration.Enabl
 import org.springframework.security.config.annotation.web.builders.HttpSecurity;
 import org.springframework.security.config.annotation.web.configuration.EnableWebSecurity;
 import org.springframework.security.config.annotation.web.configuration.WebSecurityConfigurerAdapter;
-import org.springframework.security.core.session.SessionRegistry;
-import org.springframework.security.core.session.SessionRegistryImpl;
 import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
 import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.security.web.authentication.AuthenticationFailureHandler;
@@ -19,6 +17,7 @@ import org.springframework.security.web.csrf.CsrfFilter;
 import org.springframework.web.filter.CharacterEncodingFilter;
 
 import java.util.Hashtable;
+
 
 @Configuration
 @EnableWebSecurity
@@ -36,7 +35,7 @@ public class SecurityConfig extends WebSecurityConfigurerAdapter {
                 .hasAnyRole(RoleType.Role.ADMIN.getCode(), RoleType.Role.SHERIFF.getCode())
 
                 // 아래 URL 패턴에 매칭되면
-                .antMatchers("/", "/login/**", "/modules/**", "/plugins/**", "/css/**", "/font/**", "/img/**", "/js/**")
+                .antMatchers("/favicon.ico", "/user/**", "/login/**", "/modules/**", "/plugins/**", "/css/**", "/font/**", "/img/**", "/js/**")
                 // 모든 요청을 허용함
                 .permitAll() // 이 URL 패턴들은 인증요구 없이 허용
                 // 그외 요청은
@@ -90,27 +89,27 @@ public class SecurityConfig extends WebSecurityConfigurerAdapter {
                 .and()
 
                 .addFilterBefore(filter, CsrfFilter.class)
-                .csrf().disable()
+                .csrf().disable();
 
-                .sessionManagement().maximumSessions(10).sessionRegistry(sessionRegistry());
+//                .sessionManagement().maximumSessions(10).sessionRegistry(sessionRegistry());
     }
+
+//        @Override
+//        protected void configure(HttpSecurity http) throws Exception {
+//            // 로그인 disabled
+//            http.httpBasic().disable();
+//            http
+//                .cors()
+//                .and()
 //
-//    @Override
-//    protected void configure(HttpSecurity http) throws Exception {
-//        // 로그인 disabled
-//        http.httpBasic().disable();
-//        http
-//            .cors()
-//            .and()
-//
-//            .csrf()
-//                .disable();
+//                .csrf()
+//                    .disable();
+//        }
+
+//    @Bean
+//    public SessionRegistry sessionRegistry() {
+//        return new SessionRegistryImpl();
 //    }
-
-    @Bean
-    public SessionRegistry sessionRegistry() {
-        return new SessionRegistryImpl();
-    }
 
     @Bean
     public PasswordEncoder passwordEncoder() {
@@ -131,5 +130,12 @@ public class SecurityConfig extends WebSecurityConfigurerAdapter {
     public AuthenticationFailureHandler authenticationFailureHandler() {
         return new CustomAuthenticationFailureHandler();
     }
+
+//    @Bean
+//    public HttpFirewall allowUrlEncodedSlashHttpFirewall() {
+//        StrictHttpFirewall firewall = new StrictHttpFirewall();
+//        firewall.setAllowSemicolon(true);
+//        return firewall;
+//    }
 
 }

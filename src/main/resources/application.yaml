@@ -1,8 +1,5 @@
 # Common configuration
 spring:
-    data:
-        rest:
-            basePath: /api
     profiles:
         active: dev
     jpa:
@@ -22,6 +19,8 @@ spring:
         hikari:
             auto-commit: false
         sql-script-encoding: UTF-8
+#    resources:
+#        static-locations: classpath:/static/
 #    jackson:
 #        date-format: yyyy/MM/dd HH:mm:ss
 #        time-zone: America/Sao_Paulo
@@ -45,8 +44,11 @@ logging:
             hibernate:
                 SQL: info
                 type.descriptor.sql.BasicBinder: info
+
 appconfig:
     homeUri: /members/
+
+
 ---
 #
 # Development mode
@@ -56,8 +58,8 @@ spring:
     devtools:
         livereload:
             enabled: true
-        thymeleaf:
-            cache: false
+    thymeleaf:
+        cache: false
 server:
     port: 80
 logging:

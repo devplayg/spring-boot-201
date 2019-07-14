@@ -44,8 +44,6 @@ public class AuditController {
     @GetMapping
     public ResponseEntity<?> findAll(@ModelAttribute AuditFilter filter, Pageable pageable) {
         filter.tune();
-        log.debug("# filter: {}", filter);
-        log.debug("# page: {}", pageable);
         Page<Audit> page = auditRepository.findAll(AuditPredicate.search(filter), pageable);
         return new ResponseEntity<>(page, HttpStatus.OK);
     }

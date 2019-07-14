@@ -29,7 +29,7 @@ public class RequestInterceptor extends HandlerInterceptorAdapter {
     public boolean preHandle(HttpServletRequest req, HttpServletResponse res, Object handler) {
         Authentication auth = SecurityContextHolder.getContext().getAuthentication();
         if (auth instanceof AnonymousAuthenticationToken) {
-            log.debug("### RequestInterceptor-0: not logged in yet");
+            log.debug("### RequestInterceptor-0: not logged in yet, {}", req.getRequestURI());
             return true;
         }
 
@@ -70,13 +70,17 @@ public class RequestInterceptor extends HandlerInterceptorAdapter {
 
     @Override
     public void postHandle(HttpServletRequest req, HttpServletResponse response, Object handler, ModelAndView mv) throws Exception {
+        HandlerMethod handlerMethod = (HandlerMethod) handler;
+        String controllerName = handlerMethod.getBeanType().getSimpleName().replace("Controller", "").toLowerCase();
+        log.debug("## postHandle: Controller: {} {}?{}", controllerName, req.getRequestURI(), req.getQueryString());
+
         if (mv == null) {
             return;
         }
 
-        HandlerMethod handlerMethod = (HandlerMethod) handler;
-        String controllerName = handlerMethod.getBeanType().getSimpleName().replace("Controller", "").toLowerCase();
-        String methodName = handlerMethod.getMethod().getName();
+//        HandlerMethod handlerMethod = (HandlerMethod) handler;
+//        String controllerName = handlerMethod.getBeanType().getSimpleName().replace("Controller", "").toLowerCase();
+        //String methodName = handlerMethod.getMethod().getName();
         mv.addObject("systemTz", TimeZone.getDefault().toZoneId().getId());
         mv.addObject("ctrl", controllerName);
         mv.addObject("userTz", userTz);

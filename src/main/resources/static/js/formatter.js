@@ -14,8 +14,8 @@ function datePrettyFormatter(val, row, idx) {
 
 function commonActionFormatter(val, row, idx) {
     return [
-        '<a class="update" href="javascript:void(0)" title="Update"><i class="fa fa-pencil"></i></a>',
-        '<a class="delete" href="javascript:void(0)" title="Delete"><i class="fa fa-trash-o"></i></a>',
+        '<a class="update s14" href="javascript:void(0)" title="Update"><i class="fa fa-pencil"></i></a>',
+        '<a class="delete s14 txt-color-red" href="javascript:void(0)" title="Delete"><i class="fa fa-times"></i></a>',
     ].join(' ');
 }
 

@@ -7,7 +7,7 @@ import org.springframework.beans.factory.annotation.Autowired;
 
 import java.util.List;
 
-public class SampleRepositoryImpl implements SampleRepositoryCustom {
+public class SampleRepositorySupport implements SampleRepositoryCustom {
     @Autowired
     private JPAQueryFactory queryFactory;
 

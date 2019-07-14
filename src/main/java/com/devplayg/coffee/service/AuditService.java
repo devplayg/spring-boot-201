@@ -53,6 +53,10 @@ public class AuditService {
             return MembershipCenter.getSystemAccount();
         }
 
+        if (auth.getPrincipal() instanceof String) {
+            return MembershipCenter.getSystemAccount();
+        }
+
         return (Member)auth.getPrincipal();
     }
 

@@ -21,7 +21,7 @@ apply plugin: 'io.spring.dependency-management'
 apply plugin: "com.ewerk.gradle.plugins.querydsl"
 
 group = 'com.devplayg'
-version = '1.0.2'
+version = '1.0.3'
 sourceCompatibility = '11'
 
 repositories {

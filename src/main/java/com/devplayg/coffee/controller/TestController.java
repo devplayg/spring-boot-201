@@ -10,6 +10,9 @@ import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
+import org.springframework.http.HttpStatus;
+import org.springframework.http.ResponseEntity;
+import org.springframework.security.core.Authentication;
 import org.springframework.web.bind.annotation.*;
 
 import java.util.List;
@@ -54,6 +57,12 @@ public class TestController {
         log.debug("auditFilter: {}", filter);
         log.debug("page: {}", pageable);
         return auditRepository.findAll(pageable);
+    }
+
+    @GetMapping("info")
+    public ResponseEntity<?> currentUserName(Authentication auth) {
+        log.debug("## auth: {}", auth);
+        return new ResponseEntity<>(auth, HttpStatus.OK);
     }
 
 

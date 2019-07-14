@@ -20,6 +20,7 @@ import org.springframework.security.core.userdetails.UserDetails;
 import javax.persistence.*;
 import javax.validation.constraints.Email;
 import javax.validation.constraints.Pattern;
+import java.io.Serializable;
 import java.time.LocalDateTime;
 import java.util.ArrayList;
 import java.util.Arrays;
@@ -33,7 +34,8 @@ import java.util.stream.Collectors;
 @Setter
 @ToString
 @EqualsAndHashCode(exclude = {"roleList", "updated"})
-public class Member implements UserDetails, CredentialsContainer {
+public class Member implements UserDetails, CredentialsContainer, Serializable {
+    private static final long serialVersionUID = 1L;
 
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
@@ -42,7 +44,7 @@ public class Member implements UserDetails, CredentialsContainer {
     private long id;
 
     @Column(name = "username", length = 32, nullable = false, updatable = false)
-    @Pattern(regexp = "^[A-Za-z0-9_]{4,15}$")
+    @Pattern(regexp = "^[a-zA-Z]{1}[a-zA-Z0-9_]{3,16}$")
     @JsonView({AuditView.Normal.class})
     private String username;
 
@@ -52,7 +54,7 @@ public class Member implements UserDetails, CredentialsContainer {
     private String email;
 
     @Column(name = "name", length = 32, nullable = false)
-    @Length(min = 4, max = 32   )
+    @Length(min = 9, max = 16 )
     @JsonView({AuditView.Normal.class})
     private String name;
 
@@ -79,9 +81,9 @@ public class Member implements UserDetails, CredentialsContainer {
 
     @Column(updatable = false)
     @CreationTimestamp
+    @JsonIgnore
     private LocalDateTime created;
 
-    @Column
     @UpdateTimestamp
     private LocalDateTime updated;
 
@@ -89,49 +91,57 @@ public class Member implements UserDetails, CredentialsContainer {
     @JsonIgnore
     private List<RoleType.Role> roleList = new ArrayList<>();
 
-//    @JsonIgnore
     @Transient
     @JsonProperty("roleList")
-    public List<RoleType.Role> getRolesKeys() {
+    private List<RoleType.Role> getRoleNameList() {
         List<RoleType.Role> roles = Arrays.stream(RoleType.Role.values())
                 .filter(r -> (r.getValue() & this.roles) > 0)
                 .collect(Collectors.toList());
         return roles;
     }
-//    // 사용자 권한
-//    @OneToMany(fetch = FetchType.EAGER,
-//            orphanRemoval = true,
-//            cascade = {
-//                    CascadeType.PERSIST, // Child entities이 삭제 되도록 함
-//                    CascadeType.MERGE // Child entities를 Insert할 때, Parent ID를 기록한 후 Insert 함
-//            },
-//            mappedBy = "member")
-//    private List<MemberRole> roleList = new ArrayList<>();
+
+    // 접속 허용 IP
+    @OneToMany(fetch = FetchType.EAGER,
+            orphanRemoval = true,
+            cascade = {
+                    CascadeType.PERSIST, // Child entities이 삭제 되도록 함
+                    CascadeType.MERGE // Child entities를 Insert할 때, Parent ID를 기록한 후 Insert 함
+            },
+            mappedBy = "member")
+    private List<MemberNetwork> accessibleIpList = new ArrayList<>();
+
+    // 접속 허용 IP 텍스트
+    @Transient
+    private String accessibleIpListText;
 
     @Override
     @JsonIgnore
     public Collection<? extends GrantedAuthority> getAuthorities() {
-        String[] roles = this.getRolesKeys().stream().map(role -> "ROLE_" + role).toArray(String[]::new);
+        String[] roles = this.getRoleNameList().stream().map(role -> "ROLE_" + role).toArray(String[]::new);
         List<GrantedAuthority> authorities = AuthorityUtils.createAuthorityList(roles);
         return authorities;
     }
 
     @Override
+    @JsonIgnore
     public boolean isAccountNonExpired() {
         return true;
     }
 
     @Override
+    @JsonIgnore
     public boolean isAccountNonLocked() {
         return true;
     }
 
     @Override
+    @JsonIgnore
     public boolean isCredentialsNonExpired() {
         return true;
     }
 
     @Override
+    @JsonIgnore
     public void eraseCredentials() {
         password = null;
     }

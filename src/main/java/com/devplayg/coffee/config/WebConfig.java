@@ -39,7 +39,11 @@ public class WebConfig implements WebMvcConfigurer {
 
         // 일부 Request Interceptor 를 적용하는 경우
         registry.addInterceptor(new RequestInterceptor())
-                .addPathPatterns("/audit/**", "/members/**", "/login/**");
+                .addPathPatterns(
+                        "/audit/**",
+                        "/members/**",
+                        "/login/**"
+                );
     }
 
     /*

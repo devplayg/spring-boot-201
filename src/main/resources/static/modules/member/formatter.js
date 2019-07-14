@@ -14,3 +14,19 @@ function memberRoleListFormatter(val, row, idx) {
     });
     return role.join('&nbsp;');
 }
+
+function memberAccessibleIpListFormatter(list, row, idx) {
+    if (list === null || list.length < 1) {
+        return;
+    }
+
+    var arr = [];
+    $.each(list, function(i, ip) {
+        if (ip.ipCidr.endsWith("/32")) {
+            arr.push( ip.ipCidr.substring(0, ip.ipCidr.indexOf("/") ));
+            return true;
+        }
+       arr.push(ip.ipCidr);
+    });
+    return arr.join("<br/>");
+}
