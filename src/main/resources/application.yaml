@@ -1,5 +1,9 @@
 # Common configuration
 spring:
+#    security:
+#        user:
+#            name: user
+#            password: won
     profiles:
         active: dev
     jpa:

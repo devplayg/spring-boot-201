@@ -112,8 +112,8 @@ $(function () {
     $(".modal-form")
         .on("hidden.bs.modal", function () {
             let $form = $(this).closest("form");
-            $form.validate().resetForm();
-            $form.get(0).reset();
+            // $form.validate().resetForm();
+            // $form.get(0).reset();
             $(".alert", $form).addClass("hide").removeClass("in");
             $(".alert .message", $form).empty();
 
@@ -190,10 +190,10 @@ $(function () {
 
     // Test code
     {
-        // let $form = $("#form-member-create");
-        // $("input[name=username]", $form).val("my_name_is");
-        // $("input[name=name]", $form).val("DEV Play G");
-        // $("input[name=email]", $form).val("devplayg@korean.com");
-        // $("input[name=inputPassword]", $form).val("dev123!@#");
+        let $form = $("#form-member-create");
+        $("input[name=username]", $form).val("won1");
+        $("input[name=name]", $form).val("DEV Play G");
+        $("input[name=email]", $form).val("devplayg@korea.com");
+        $("input[name=inputPassword]", $form).val("dev123!@#");
     }
 });

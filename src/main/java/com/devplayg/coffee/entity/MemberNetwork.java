@@ -7,6 +7,7 @@ import lombok.ToString;
 import org.hibernate.annotations.CreationTimestamp;
 
 import javax.persistence.*;
+import java.io.Serializable;
 import java.time.LocalDateTime;
 
 @Entity
@@ -14,11 +15,15 @@ import java.time.LocalDateTime;
 @Table(name="mbr_allowed_ip")
 @ToString(exclude = "member")
 @NoArgsConstructor
-public class MemberNetwork {
+public class MemberNetwork implements Serializable {
+
+    private static final long serialVersionUID = 2L;
 
     public MemberNetwork(String ipCidr) {
         this.ipCidr = ipCidr;
     }
+
+
 
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)

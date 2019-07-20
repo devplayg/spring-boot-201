@@ -5,10 +5,7 @@ import com.devplayg.coffee.entity.view.AuditView;
 import com.fasterxml.jackson.annotation.JsonIgnore;
 import com.fasterxml.jackson.annotation.JsonProperty;
 import com.fasterxml.jackson.annotation.JsonView;
-import lombok.EqualsAndHashCode;
-import lombok.Getter;
-import lombok.Setter;
-import lombok.ToString;
+import lombok.*;
 import org.hibernate.annotations.CreationTimestamp;
 import org.hibernate.annotations.UpdateTimestamp;
 import org.hibernate.validator.constraints.Length;
@@ -22,6 +19,7 @@ import javax.validation.constraints.Email;
 import javax.validation.constraints.Pattern;
 import java.io.Serializable;
 import java.time.LocalDateTime;
+import java.time.ZoneId;
 import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.Collection;
@@ -33,9 +31,12 @@ import java.util.stream.Collectors;
 @Getter
 @Setter
 @ToString
+@Builder
+@AllArgsConstructor
+@NoArgsConstructor
 @EqualsAndHashCode(exclude = {"roleList", "updated"})
 public class Member implements UserDetails, CredentialsContainer, Serializable {
-    private static final long serialVersionUID = 1L;
+    private static final long serialVersionUID = 2L;
 
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
@@ -44,7 +45,7 @@ public class Member implements UserDetails, CredentialsContainer, Serializable {
     private long id;
 
     @Column(name = "username", length = 32, nullable = false, updatable = false)
-    @Pattern(regexp = "^[a-zA-Z]{1}[a-zA-Z0-9_]{3,16}$")
+    @Pattern(regexp = "^[a-zA-Z]{1}[a-zA-Z0-9_]{2,16}$")
     @JsonView({AuditView.Normal.class})
     private String username;
 
@@ -54,7 +55,7 @@ public class Member implements UserDetails, CredentialsContainer, Serializable {
     private String email;
 
     @Column(name = "name", length = 32, nullable = false)
-    @Length(min = 9, max = 16 )
+    @Length(min = 4, max = 16)
     @JsonView({AuditView.Normal.class})
     private String name;
 
@@ -81,11 +82,13 @@ public class Member implements UserDetails, CredentialsContainer, Serializable {
 
     @Column(updatable = false)
     @CreationTimestamp
-    @JsonIgnore
     private LocalDateTime created;
 
     @UpdateTimestamp
     private LocalDateTime updated;
+
+    @Transient
+    private Boolean changed = false;
 
     @Transient
     @JsonIgnore
@@ -143,6 +146,11 @@ public class Member implements UserDetails, CredentialsContainer, Serializable {
     @Override
     @JsonIgnore
     public void eraseCredentials() {
-        password = null;
+//        password = null;
+    }
+
+    @JsonIgnore
+    public ZoneId getTimezoneId() {
+        return ZoneId.of(getTimezone());
     }
 }

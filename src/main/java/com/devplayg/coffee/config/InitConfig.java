@@ -2,6 +2,9 @@ package com.devplayg.coffee.config;
 
 import com.devplayg.coffee.definition.AuditCategory;
 import com.devplayg.coffee.definition.RoleType;
+import com.devplayg.coffee.entity.Member;
+import com.devplayg.coffee.framework.InMemoryMemberManager;
+import com.devplayg.coffee.repository.MemberRepository;
 import com.devplayg.coffee.service.AuditService;
 import com.devplayg.coffee.util.EnumMapper;
 import com.querydsl.jpa.impl.JPAQueryFactory;
@@ -14,6 +17,8 @@ import org.springframework.context.event.EventListener;
 
 import javax.persistence.EntityManager;
 import javax.persistence.PersistenceContext;
+import java.util.List;
+import java.util.TimeZone;
 
 @Configuration
 @Slf4j

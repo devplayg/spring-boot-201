@@ -1,6 +1,6 @@
 package com.devplayg.coffee.entity.filter;
 
-import com.devplayg.coffee.framework.MembershipCenter;
+import com.devplayg.coffee.framework.InMemoryMemberManager;
 import lombok.Getter;
 import lombok.Setter;
 import org.springframework.format.annotation.DateTimeFormat;
@@ -11,6 +11,8 @@ import java.time.ZonedDateTime;
 @Getter
 @Setter
 public class SearchFilter {
+
+
     @DateTimeFormat(pattern = "yyyy-MM-dd HH:mm")
     private LocalDateTime startDate;
 
@@ -18,7 +20,7 @@ public class SearchFilter {
     private LocalDateTime endDate;
 
     public void tune() {
-        LocalDateTime now = ZonedDateTime.now(MembershipCenter.getMemberTimezone()).toLocalDateTime();
+        LocalDateTime now = ZonedDateTime.now(InMemoryMemberManager.getCurrentMemberTimezone()).toLocalDateTime();
         if (this.startDate == null) {
             this.startDate = now.toLocalDate().atStartOfDay();
         }

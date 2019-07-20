@@ -19,7 +19,10 @@ public class CustomAuthenticationFailureHandler implements AuthenticationFailure
 
     @Override
     public void onAuthenticationFailure(HttpServletRequest req, HttpServletResponse res, AuthenticationException exception) throws IOException, ServletException {
-        HashMap<String, Object> m = AuditUtils.getRequestSummary(req);
+        HashMap<String, Object> m  = new HashMap<>();
+        m.put("uri", req.getRequestURI());
+        m.put("method", req.getMethod());
+        m.put("parameter", req.getParameterMap());
         auditService.audit(AuditCategory.LOGIN_FAILED, m);
         res.sendRedirect("/login?error");
     }

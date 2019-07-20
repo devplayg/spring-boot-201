@@ -46,6 +46,12 @@ public class WebConfig implements WebMvcConfigurer {
                 );
     }
 
+//    @Bean
+//    public RequestInterceptor requestInterceptor() {
+//        return new RequestInterceptor();
+//    }
+//
+
     /*
      * Locale interceptor
      */
@@ -71,7 +77,6 @@ public class WebConfig implements WebMvcConfigurer {
         messageSource.setBasename("classpath:i18n/messages");
         messageSource.setDefaultEncoding("UTF-8");
         messageSource.setCacheSeconds(10);
-
         return messageSource;
     }
 

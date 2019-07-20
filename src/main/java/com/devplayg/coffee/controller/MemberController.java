@@ -4,7 +4,7 @@ import com.devplayg.coffee.definition.AuditCategory;
 import com.devplayg.coffee.entity.Member;
 import com.devplayg.coffee.entity.MemberNetwork;
 import com.devplayg.coffee.exception.ResourceNotFoundException;
-import com.devplayg.coffee.framework.MembershipCenter;
+import com.devplayg.coffee.framework.InMemoryMemberManager;
 import com.devplayg.coffee.repository.MemberRepository;
 import com.devplayg.coffee.service.AuditService;
 import com.devplayg.coffee.util.SubnetUtils;
@@ -12,7 +12,7 @@ import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
-import org.springframework.security.crypto.password.PasswordEncoder;
+import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
 import org.springframework.stereotype.Controller;
 import org.springframework.validation.BindingResult;
 import org.springframework.web.bind.annotation.*;
@@ -45,10 +45,13 @@ public class MemberController {
     private MemberRepository memberRepository;
 
     @Autowired
-    private PasswordEncoder passwordEncoder;
+    private BCryptPasswordEncoder passwordEncoder;
 
     @Autowired
     private AuditService auditService;
+
+    @Autowired
+    private InMemoryMemberManager inMemoryMemberManager;
 
     @GetMapping("/")
     public String display() {
@@ -97,6 +100,7 @@ public class MemberController {
         try {
             log.debug("# post member converted: {}", member);
             Member newMember = memberRepository.save(member);
+            inMemoryMemberManager.createUser(member);
             auditService.audit(AuditCategory.MEMBER_CREATE, newMember);
             return new ResponseEntity<>(newMember.getId(), HttpStatus.OK);
         } catch (Exception e) {
@@ -145,12 +149,20 @@ public class MemberController {
         }
         member.setAccessibleIpList(memberNetworks);
 
-        Member changed = memberRepository.save(member);
-        log.debug("## member changed: {}", changed);
-        log.debug("## member     now: {}", member);
-        auditService.audit(AuditCategory.MEMBER_UPDATE, member);
-        MembershipCenter.notifyChanges(changed);
-        return new ResponseEntity<>(changed, HttpStatus.OK);
+        try {
+            log.debug("# update member: {}", member);
+            Member changed = memberRepository.save(member);
+            log.debug("## member changed: {}", changed);
+            log.debug("## member     now: {}", member);
+            inMemoryMemberManager.updateUser(member);
+            auditService.audit(AuditCategory.MEMBER_UPDATE, member);
+            inMemoryMemberManager.informMemberHasChanged(member.getUsername());
+            return new ResponseEntity<>(changed, HttpStatus.OK);
+
+         } catch (Exception e) {
+            log.error(e.getMessage());
+            return new ResponseEntity<>(e.getMessage(), HttpStatus.BAD_REQUEST);
+        }
     }
 
     /*
@@ -161,22 +173,23 @@ public class MemberController {
         Member member = memberRepository.findById(id)
                 .orElseThrow(() -> new ResourceNotFoundException("member", "id", id));
         memberRepository.deleteById(id);
+        inMemoryMemberManager.deleteUser(member.getUsername());
         auditService.audit(AuditCategory.MEMBER_REMOVE, member);
         return new ResponseEntity<>(member, HttpStatus.OK);
     }
 
     // test -------------------------------------------------------------------------
-    @GetMapping("ship")
-    public ResponseEntity<?> ship() {
-        MembershipCenter mc = MembershipCenter.getInstance();
-        return new ResponseEntity<>(mc.getMembership(), HttpStatus.OK);
-    }
-
-    @GetMapping("news")
-    public ResponseEntity<?> news() {
-        MembershipCenter mc = MembershipCenter.getInstance();
-        return new ResponseEntity<>(mc.getMemberNews(), HttpStatus.OK);
-    }
+//    @GetMapping("ship")
+//    public ResponseEntity<?> ship() {
+//        MembershipCenter mc = MembershipCenter.getInstance();
+//        return new ResponseEntity<>(mc.getMembership(), HttpStatus.OK);
+//    }
+//
+//    @GetMapping("news")
+//    public ResponseEntity<?> news() {
+//        MembershipCenter mc = MembershipCenter.getInstance();
+//        return new ResponseEntity<>(mc.getMemberNews(), HttpStatus.OK);
+//    }
 
     private List<MemberNetwork> getValidNetworkList(Member member) throws IllegalArgumentException {
         return Arrays.stream(member.getAccessibleIpListText().split("\\s+|,\\s*|\\,\\s*"))

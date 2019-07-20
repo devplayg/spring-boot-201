@@ -1,28 +1,39 @@
 package com.devplayg.coffee.config;
 
+import com.devplayg.coffee.definition.AuditCategory;
 import com.devplayg.coffee.definition.RoleType;
+import com.devplayg.coffee.entity.Member;
 import com.devplayg.coffee.framework.CustomAuthenticationFailureHandler;
 import com.devplayg.coffee.framework.CustomAuthenticationSuccessHandler;
+import com.devplayg.coffee.framework.InMemoryMemberManager;
+import com.devplayg.coffee.repository.MemberRepository;
+import lombok.extern.slf4j.Slf4j;
+import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
+import org.springframework.security.config.annotation.authentication.builders.AuthenticationManagerBuilder;
 import org.springframework.security.config.annotation.method.configuration.EnableGlobalMethodSecurity;
 import org.springframework.security.config.annotation.web.builders.HttpSecurity;
 import org.springframework.security.config.annotation.web.configuration.EnableWebSecurity;
 import org.springframework.security.config.annotation.web.configuration.WebSecurityConfigurerAdapter;
 import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
-import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.security.web.authentication.AuthenticationFailureHandler;
 import org.springframework.security.web.authentication.AuthenticationSuccessHandler;
 import org.springframework.security.web.csrf.CsrfFilter;
 import org.springframework.web.filter.CharacterEncodingFilter;
 
-import java.util.Hashtable;
+import java.util.List;
+import java.util.TimeZone;
 
 
 @Configuration
 @EnableWebSecurity
 @EnableGlobalMethodSecurity(prePostEnabled = true)
+@Slf4j
 public class SecurityConfig extends WebSecurityConfigurerAdapter {
+
+    @Autowired
+    private MemberRepository memberRepository;
 
     @Override
     protected void configure(HttpSecurity httpSecurity) throws Exception {
@@ -112,13 +123,8 @@ public class SecurityConfig extends WebSecurityConfigurerAdapter {
 //    }
 
     @Bean
-    public PasswordEncoder passwordEncoder() {
+    public BCryptPasswordEncoder passwordEncoder() {
         return new BCryptPasswordEncoder();
-    }
-
-    @Bean
-    public Hashtable<String, Boolean> userWatcher() {
-        return new Hashtable<>();
     }
 
     @Bean
@@ -129,6 +135,31 @@ public class SecurityConfig extends WebSecurityConfigurerAdapter {
     @Bean
     public AuthenticationFailureHandler authenticationFailureHandler() {
         return new CustomAuthenticationFailureHandler();
+    }
+
+    @Override
+    protected void configure(AuthenticationManagerBuilder auth) throws Exception {
+        auth.userDetailsService(inMemoryMemberManager());
+    }
+
+    @Bean
+    public InMemoryMemberManager inMemoryMemberManager() {
+        log.debug("###!!!! bean of inMemoryMemberManager");
+        List members = memberRepository.findAll();
+
+        Member member = Member.builder()
+                .id(InMemoryMemberManager.adminId)
+                .enabled(false)
+                .name("System Administrator")
+                .roles(RoleType.Role.ADMIN.getValue())
+                .timezone(TimeZone.getDefault().toZoneId().getId())
+                .email("admin@admin.com")
+                .password("")
+                .username(InMemoryMemberManager.adminUsername)
+                .build();
+
+        members.add(member);
+        return new InMemoryMemberManager(members);
     }
 
 //    @Bean

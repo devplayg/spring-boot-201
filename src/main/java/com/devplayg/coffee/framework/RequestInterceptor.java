@@ -2,11 +2,14 @@ package com.devplayg.coffee.framework;
 
 import com.devplayg.coffee.entity.Member;
 import lombok.extern.slf4j.Slf4j;
+import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.context.annotation.ComponentScan;
 import org.springframework.security.authentication.AnonymousAuthenticationToken;
 import org.springframework.security.authentication.UsernamePasswordAuthenticationToken;
 import org.springframework.security.core.Authentication;
 import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.security.core.userdetails.UserDetails;
+import org.springframework.security.core.userdetails.UsernameNotFoundException;
 import org.springframework.stereotype.Component;
 import org.springframework.web.method.HandlerMethod;
 import org.springframework.web.servlet.ModelAndView;
@@ -27,11 +30,38 @@ public class RequestInterceptor extends HandlerInterceptorAdapter {
 
     @Override
     public boolean preHandle(HttpServletRequest req, HttpServletResponse res, Object handler) {
+//        log.debug("# prehandle, : {}", handler);
         Authentication auth = SecurityContextHolder.getContext().getAuthentication();
         if (auth instanceof AnonymousAuthenticationToken) {
             log.debug("### RequestInterceptor-0: not logged in yet, {}", req.getRequestURI());
             return true;
         }
+
+//
+        log.debug("# prehandle, : {}", InMemoryMemberManager.getInstance());
+        username = req.getUserPrincipal().getName();
+        InMemoryMemberManager inMemoryMemberManager = InMemoryMemberManager.getInstance();
+        if (inMemoryMemberManager != null) {
+            // 사용자가 삭제된 경우에 대비한 예외처리가 필요함
+            if (inMemoryMemberManager.isChanged(username)) {
+                UserDetails userDetails = inMemoryMemberManager.loadUserByUsername(username);
+                Authentication newAuth = new UsernamePasswordAuthenticationToken(userDetails, auth.getCredentials(), userDetails.getAuthorities());
+                SecurityContextHolder.getContext().setAuthentication(newAuth);
+                inMemoryMemberManager.gotNews(username);
+            }
+//            log.debug("# userDetails: {}", userDetails);
+        }
+//        UserDetails userDetails = null;
+//        try {
+//            userDetails = inMemoryMemberManager.loadUserByUsername(username);
+//        } catch(UsernameNotFoundException e) {
+//            return false;
+//        }
+
+        // 권한 업데이트
+
+//        Authentication newAuth = new UsernamePasswordAuthenticationToken(userDetails, auth.getCredentials(), userDetails.getAuthorities());
+//        SecurityContextHolder.getContext().setAuthentication(newAuth);
 
 //        Principal principal = req.getUserPrincipal();
 //        if (principal == null) {
@@ -45,16 +75,15 @@ public class RequestInterceptor extends HandlerInterceptorAdapter {
         Member member = (Member)SecurityContextHolder.getContext().getAuthentication().getPrincipal();
         log.debug("### RequestInterceptor-4: member={}", member);
 
-        username = req.getUserPrincipal().getName();
         userTz = member.getTimezone();
 //        if ("anonymousUser".equals(username)) {
 //            return true;
 //        }
 //
-        Boolean anyNews = MembershipCenter.anyNews(username);
-        if (!anyNews) {
-            return true;
-        }
+//        Boolean anyNews = MembershipCenter.anyNews(username);
+//        if (!anyNews) {
+//            return true;
+//        }
 
         readNews(username);
         return true;
@@ -70,6 +99,8 @@ public class RequestInterceptor extends HandlerInterceptorAdapter {
 
     @Override
     public void postHandle(HttpServletRequest req, HttpServletResponse response, Object handler, ModelAndView mv) throws Exception {
+//        log.debug("# posthandle, inmemory: {}", inMemoryMemberManager);
+
         HandlerMethod handlerMethod = (HandlerMethod) handler;
         String controllerName = handlerMethod.getBeanType().getSimpleName().replace("Controller", "").toLowerCase();
         log.debug("## postHandle: Controller: {} {}?{}", controllerName, req.getRequestURI(), req.getQueryString());
@@ -87,15 +118,15 @@ public class RequestInterceptor extends HandlerInterceptorAdapter {
     }
 
     private void readNews(String username) {
-        log.debug("==============================");
-        log.debug("Got news to {}", username);
-        log.debug("==============================");
-        UserDetails userDetails = MembershipCenter.readNews(username);
-        if (userDetails != null) {
-            Authentication auth = SecurityContextHolder.getContext().getAuthentication();
-            Authentication newAuth = new UsernamePasswordAuthenticationToken(userDetails, auth.getCredentials(), userDetails.getAuthorities());
-            SecurityContextHolder.getContext().setAuthentication(newAuth);
-        }
+//        log.debug("==============================");
+//        log.debug("Got news to {}", username);
+//        log.debug("==============================");
+//        UserDetails userDetails = MembershipCenter.readNews(username);
+//        if (userDetails != null) {
+//            Authentication auth = SecurityContextHolder.getContext().getAuthentication();
+//            Authentication newAuth = new UsernamePasswordAuthenticationToken(userDetails, auth.getCredentials(), userDetails.getAuthorities());
+//            SecurityContextHolder.getContext().setAuthentication(newAuth);
+//        }
     }
 
 }

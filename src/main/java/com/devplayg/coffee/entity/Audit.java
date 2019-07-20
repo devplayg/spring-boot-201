@@ -9,7 +9,8 @@ import lombok.Builder;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
 import org.hibernate.annotations.CreationTimestamp;
-import org.springframework.security.core.userdetails.UserDetails;
+import org.hibernate.annotations.NotFound;
+import org.hibernate.annotations.NotFoundAction;
 
 import javax.persistence.*;
 import java.io.Serializable;
@@ -32,8 +33,9 @@ public class Audit implements Serializable {
 
     @ManyToOne(targetEntity = Member.class, fetch = FetchType.EAGER)
     @JoinColumn(name = "member_id")
+    @NotFound(action = NotFoundAction.IGNORE)
     @JsonView(AuditView.Normal.class)
-    private UserDetails member;
+    private Member member;
 
     @Column(length = 16, nullable = false)
     @Convert(converter = AuditCategoryConverter.class)
