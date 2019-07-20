@@ -1859,7 +1859,7 @@ var calc_navbar_height = function() {
 			b = a.length;
 	
 		bread_crumb.empty(), 
-		bread_crumb.append($("<li>Home</li>")), a.each(function() {
+		a.each(function() {
 			bread_crumb.append($("<li></li>").html($.trim($(this).clone().children(".badge").remove().end().text()))), --b || (document.title = bread_crumb.find("li:last-child").text())
 		});
 		
