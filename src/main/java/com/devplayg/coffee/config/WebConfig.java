@@ -2,6 +2,8 @@ package com.devplayg.coffee.config;
 
 import com.devplayg.coffee.framework.RequestInterceptor;
 import com.devplayg.coffee.vo.TimeZone;
+import lombok.extern.slf4j.Slf4j;
+import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.context.MessageSource;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
@@ -21,38 +23,26 @@ import java.util.Locale;
 import java.util.stream.Collectors;
 
 @Configuration
+@Slf4j
 public class WebConfig implements WebMvcConfigurer {
 
-//    @Autowired
-//    @Qualifier(value = "requestInterceptor")
-//    private HandlerInterceptor interceptor;
+    @Autowired
+    private AppConfig appConfig;
 
-    /*
+    /**
      * Request interceptor
      */
     @Override
     public void addInterceptors(InterceptorRegistry registry) {
+        log.debug("# interceptor: {}", appConfig.getPathPatternsNotToBeIntercepted().toString());
         registry.addInterceptor(localeChangeInterceptor());
 
-        // 모든 Request 에 대해 Interceptor 를 적용하는 경우
-        // registry.addInterceptor(interceptor);
-
-        // 일부 Request Interceptor 를 적용하는 경우
+        // Add interceptor to registry
         registry.addInterceptor(new RequestInterceptor())
-                .addPathPatterns(
-                        "/audit/**",
-                        "/members/**",
-                        "/login/**"
-                );
+                .excludePathPatterns(appConfig.getPathPatternsNotToBeIntercepted());
     }
 
-//    @Bean
-//    public RequestInterceptor requestInterceptor() {
-//        return new RequestInterceptor();
-//    }
-//
-
-    /*
+    /**
      * Locale interceptor
      */
     @Bean
@@ -80,8 +70,8 @@ public class WebConfig implements WebMvcConfigurer {
         return messageSource;
     }
 
-    /*
-     * Timezone list
+    /**
+     * Timezone
      */
     @Bean
     public List<TimeZone> timezoneList() {

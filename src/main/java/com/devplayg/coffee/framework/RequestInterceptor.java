@@ -30,15 +30,12 @@ public class RequestInterceptor extends HandlerInterceptorAdapter {
 
     @Override
     public boolean preHandle(HttpServletRequest req, HttpServletResponse res, Object handler) {
-//        log.debug("# prehandle, : {}", handler);
         Authentication auth = SecurityContextHolder.getContext().getAuthentication();
         if (auth instanceof AnonymousAuthenticationToken) {
-            log.debug("### RequestInterceptor-0: not logged in yet, {}", req.getRequestURI());
+            log.debug("# RequestInterceptor-0: not logged in yet, {}", req.getRequestURI());
             return true;
         }
 
-//
-        log.debug("# prehandle, : {}", InMemoryMemberManager.getInstance());
         username = req.getUserPrincipal().getName();
         InMemoryMemberManager inMemoryMemberManager = InMemoryMemberManager.getInstance();
         if (inMemoryMemberManager != null) {
@@ -69,23 +66,19 @@ public class RequestInterceptor extends HandlerInterceptorAdapter {
 //            return true;
 //        }
         // Logging
-        log.debug("### RequestInterceptor-1: name={}, isLogged={}, role={}", auth.getName(), auth.isAuthenticated(), auth.getAuthorities());
-        log.debug("### RequestInterceptor-2: username={}, detail={}", auth.getPrincipal(), auth.getDetails());
-        log.debug("### RequestInterceptor-3: object={}", auth.getDetails());
-        Member member = (Member)SecurityContextHolder.getContext().getAuthentication().getPrincipal();
-        log.debug("### RequestInterceptor-4: member={}", member);
+        log.debug("# RequestInterceptor-1: name={}, isLogged={}, role={}", auth.getName(), auth.isAuthenticated(), auth.getAuthorities());
+        log.debug("# RequestInterceptor-2: username={}, detail={}", auth.getPrincipal(), auth.getDetails());
+        log.debug("# RequestInterceptor-3: object={}", auth.getDetails());
 
+        Member member = (Member)SecurityContextHolder.getContext().getAuthentication().getPrincipal();
         userTz = member.getTimezone();
-//        if ("anonymousUser".equals(username)) {
-//            return true;
-//        }
-//
+        log.debug("# RequestInterceptor-4: member={}", member);
 //        Boolean anyNews = MembershipCenter.anyNews(username);
 //        if (!anyNews) {
 //            return true;
 //        }
 
-        readNews(username);
+//        readNews(username);
         return true;
 
         // https://www.leafcats.com/40
@@ -99,11 +92,9 @@ public class RequestInterceptor extends HandlerInterceptorAdapter {
 
     @Override
     public void postHandle(HttpServletRequest req, HttpServletResponse response, Object handler, ModelAndView mv) throws Exception {
-//        log.debug("# posthandle, inmemory: {}", inMemoryMemberManager);
-
         HandlerMethod handlerMethod = (HandlerMethod) handler;
         String controllerName = handlerMethod.getBeanType().getSimpleName().replace("Controller", "").toLowerCase();
-        log.debug("## postHandle: Controller: {} {}?{}", controllerName, req.getRequestURI(), req.getQueryString());
+        log.debug("# postHandle: Controller: {} {}?{}", controllerName, req.getRequestURI(), req.getQueryString());
 
         if (mv == null) {
             return;
@@ -117,7 +108,7 @@ public class RequestInterceptor extends HandlerInterceptorAdapter {
         mv.addObject("userTz", userTz);
     }
 
-    private void readNews(String username) {
+//    private void readNews(String username) {
 //        log.debug("==============================");
 //        log.debug("Got news to {}", username);
 //        log.debug("==============================");
@@ -127,7 +118,7 @@ public class RequestInterceptor extends HandlerInterceptorAdapter {
 //            Authentication newAuth = new UsernamePasswordAuthenticationToken(userDetails, auth.getCredentials(), userDetails.getAuthorities());
 //            SecurityContextHolder.getContext().setAuthentication(newAuth);
 //        }
-    }
+//    }
 
 }
 

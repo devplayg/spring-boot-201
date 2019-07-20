@@ -1,6 +1,5 @@
 package com.devplayg.coffee.config;
 
-import com.devplayg.coffee.definition.AuditCategory;
 import com.devplayg.coffee.definition.RoleType;
 import com.devplayg.coffee.entity.Member;
 import com.devplayg.coffee.framework.CustomAuthenticationFailureHandler;
@@ -17,6 +16,7 @@ import org.springframework.security.config.annotation.web.builders.HttpSecurity;
 import org.springframework.security.config.annotation.web.configuration.EnableWebSecurity;
 import org.springframework.security.config.annotation.web.configuration.WebSecurityConfigurerAdapter;
 import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
+import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.security.web.authentication.AuthenticationFailureHandler;
 import org.springframework.security.web.authentication.AuthenticationSuccessHandler;
 import org.springframework.security.web.csrf.CsrfFilter;
@@ -25,7 +25,9 @@ import org.springframework.web.filter.CharacterEncodingFilter;
 import java.util.List;
 import java.util.TimeZone;
 
-
+/**
+ * Security configuration
+ */
 @Configuration
 @EnableWebSecurity
 @EnableGlobalMethodSecurity(prePostEnabled = true)
@@ -35,79 +37,72 @@ public class SecurityConfig extends WebSecurityConfigurerAdapter {
     @Autowired
     private MemberRepository memberRepository;
 
+    @Autowired
+    private AppConfig appConfig;
+
     @Override
     protected void configure(HttpSecurity httpSecurity) throws Exception {
+        log.debug("# security: {}", appConfig.getPathPatternsNotToBeIntercepted());
         CharacterEncodingFilter filter = new CharacterEncodingFilter();
         httpSecurity
                 .authorizeRequests()
 
-                // 아래 URL 패턴에 매칭되면
-                .antMatchers("/audit/**")
+                // API for Administrators
+                .antMatchers("/audit/**", "/members/**")
                 .hasAnyRole(RoleType.Role.ADMIN.getCode(), RoleType.Role.SHERIFF.getCode())
 
-                // 아래 URL 패턴에 매칭되면
-                .antMatchers("/favicon.ico", "/user/**", "/login/**", "/modules/**", "/plugins/**", "/css/**", "/font/**", "/img/**", "/js/**")
-                // 모든 요청을 허용함
-                .permitAll() // 이 URL 패턴들은 인증요구 없이 허용
-                // 그외 요청은
+                // White APIs
+//                .antMatchers("/favicon.ico", "/assets/**", "/modules/**", "/plugins/**", "/css/**", "/font/**", "/img/**", "/js/**")
+                .antMatchers(appConfig.getPathPatternsNotToBeIntercepted().stream().toArray(String[]::new))
+                .permitAll()
+//                .antMatchers("/favicon.ico", "/css/**")
+//                .permitAll()
+
+                // Others need to be authenticated
                 .anyRequest()
-                // 인증을 요구
                 .authenticated()
                 .and()
 
-                // 로그인
+                // Login
                 .formLogin()
                 // https://docs.spring.io/spring-security/site/docs/current/guides/html5/form-javaconfig.html
-                // 로그인 페이지
+                // Login plage
                 .loginPage("/login")
-
-                // 로그인 절차 진행
                 .loginProcessingUrl("/app-login")
-
-                // 사용자 아이디 파라메터
                 .usernameParameter("app_username")
-
-                // 사용자 비밀번호 파라메터
                 .passwordParameter("app_password")
 
-                // 로그인 성공 시
+                // Logged in successfully
                 //.successForwardUrl("/app/articles")
                 //.defaultSuccessUrl(appConfig.getHomeUri())
+                //.successForwardUrl("/members")
                 .successHandler(authenticationSuccessHandler())
-
-                // 로그인 실패 시
+                // Login failed
                 .failureHandler(authenticationFailureHandler())
                 //.failureUrl("/login?error")
-//                .failureForwardUrl()
-                //.successForwardUrl("/members")
+                //.failureForwardUrl()
+
                 .permitAll()
                 .and()
 
+                // Logout
                 .logout()
-                // 로그아웃 URL
                 .logoutUrl("/logout")
-
-                // 로그아웃 성공 시 리다이렉트 될 URL
                 .logoutSuccessUrl("/login")
-
-                // 쿠키 삭제
                 .deleteCookies("JSESSIONID")
-
-                // 세션 제거
                 .invalidateHttpSession(true)
-
                 .permitAll()
                 .and()
 
                 .addFilterBefore(filter, CsrfFilter.class)
                 .csrf().disable();
 
-//                .sessionManagement().maximumSessions(10).sessionRegistry(sessionRegistry());
+        // .sessionManagement().maximumSessions(10).sessionRegistry(sessionRegistry());
     }
 
 //        @Override
 //        protected void configure(HttpSecurity http) throws Exception {
-//            // 로그인 disabled
+//            // Spring security off
 //            http.httpBasic().disable();
 //            http
 //                .cors()
@@ -122,21 +117,34 @@ public class SecurityConfig extends WebSecurityConfigurerAdapter {
 //        return new SessionRegistryImpl();
 //    }
 
+
+    /**
+     * Default password encoder is BCrypt
+     */
     @Bean
-    public BCryptPasswordEncoder passwordEncoder() {
+    public PasswordEncoder passwordEncoder() {
         return new BCryptPasswordEncoder();
     }
 
+    /**
+     * Handle a successful user authentication
+     */
     @Bean
     public AuthenticationSuccessHandler authenticationSuccessHandler() {
         return new CustomAuthenticationSuccessHandler();
     }
 
+    /**
+     * Handle a failed authentication attempt
+     */
     @Bean
     public AuthenticationFailureHandler authenticationFailureHandler() {
         return new CustomAuthenticationFailureHandler();
     }
 
+    /**
+     * Use InMemory authentication
+     */
     @Override
     protected void configure(AuthenticationManagerBuilder auth) throws Exception {
         auth.userDetailsService(inMemoryMemberManager());
@@ -144,20 +152,17 @@ public class SecurityConfig extends WebSecurityConfigurerAdapter {
 
     @Bean
     public InMemoryMemberManager inMemoryMemberManager() {
-        log.debug("###!!!! bean of inMemoryMemberManager");
         List members = memberRepository.findAll();
-
         Member member = Member.builder()
                 .id(InMemoryMemberManager.adminId)
+                .username(InMemoryMemberManager.adminUsername)
                 .enabled(false)
                 .name("System Administrator")
                 .roles(RoleType.Role.ADMIN.getValue())
                 .timezone(TimeZone.getDefault().toZoneId().getId())
                 .email("admin@admin.com")
                 .password("")
-                .username(InMemoryMemberManager.adminUsername)
                 .build();
-
         members.add(member);
         return new InMemoryMemberManager(members);
     }

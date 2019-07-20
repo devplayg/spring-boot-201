@@ -26,6 +26,9 @@ import java.util.Collection;
 import java.util.List;
 import java.util.stream.Collectors;
 
+/**
+ * Member entity which implements UserDetails, CredentialsContainer.
+ */
 @Entity
 @Table(name = "mbr_member")
 @Getter
@@ -103,7 +106,7 @@ public class Member implements UserDetails, CredentialsContainer, Serializable {
         return roles;
     }
 
-    // 접속 허용 IP
+    // Accessible IP list
     @OneToMany(fetch = FetchType.EAGER,
             orphanRemoval = true,
             cascade = {
@@ -113,7 +116,7 @@ public class Member implements UserDetails, CredentialsContainer, Serializable {
             mappedBy = "member")
     private List<MemberNetwork> accessibleIpList = new ArrayList<>();
 
-    // 접속 허용 IP 텍스트
+    // Text to accessible IP list
     @Transient
     private String accessibleIpListText;
 
@@ -146,7 +149,7 @@ public class Member implements UserDetails, CredentialsContainer, Serializable {
     @Override
     @JsonIgnore
     public void eraseCredentials() {
-//        password = null;
+        // password = null;
     }
 
     @JsonIgnore

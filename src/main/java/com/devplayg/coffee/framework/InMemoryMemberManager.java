@@ -17,24 +17,25 @@ import java.time.ZoneId;
 import java.util.*;
 
 
-@Slf4j
+/**
+ * In-memory member manager
+ */
 @NoArgsConstructor
+@Slf4j
 public class InMemoryMemberManager implements UserDetailsManager, UserDetailsPasswordService, Serializable {
-    private static InMemoryMemberManager imm;
     private static final long serialVersionUID = 2L;
 
+    private static InMemoryMemberManager imm;
+    private final Map<String, Member> users = new HashMap<>();
     public static final String adminUsername = "admin";
     public static final long adminId = 1;
-
-    private final Map<String, Member> users = new HashMap<>();
-
 
     public InMemoryMemberManager(List<Member> members) {
         for (Member member : members) {
             createUser(member);
-            log.debug("# added user {} to memory", member.getUsername());
         }
         imm = this;
+        log.info("Loaded {} users and stored in memory", members.size());
     }
 
     public static InMemoryMemberManager getInstance() {
@@ -114,10 +115,12 @@ public class InMemoryMemberManager implements UserDetailsManager, UserDetailsPas
     @Override
     public UserDetails updatePassword(UserDetails user, String newPassword) {
         String username = user.getUsername();
-        UserDetails userDetails = users.get(username.toLowerCase());
-        Member member = (Member) userDetails;
+//        UserDetails userDetails = users.get(username.toLowerCase());
+//        Member member = (Member) userDetails;
+//        member.setPassword(newPassword);
+        Member member = users.get(username.toLowerCase());
         member.setPassword(newPassword);
-        return userDetails;
+        return member;
     }
 
     public static ZoneId getCurrentMemberTimezone() {
@@ -129,7 +132,7 @@ public class InMemoryMemberManager implements UserDetailsManager, UserDetailsPas
         return member.getTimezoneId();
     }
 
-    public Collection<Member> getUsers() {
+    public Collection<Member> getAllMembers() {
         return users.values();
     }
 

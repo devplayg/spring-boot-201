@@ -1,9 +1,5 @@
 # Common configuration
 spring:
-#    security:
-#        user:
-#            name: user
-#            password: won
     profiles:
         active: dev
     jpa:
@@ -12,10 +8,7 @@ spring:
             ddl-auto: validate
         open-in-view: false
     datasource: # DB 설정
-        url: jdbc:mysql://127.0.0.1:3306/sb201?useUnicode=yes&characterEncoding=UTF-8
         driver-class-name: com.mysql.cj.jdbc.Driver
-        username: root
-        password: Uniiot12!@
         tomcat:
             max-active: 50
             max-idle: 20
@@ -23,8 +16,8 @@ spring:
         hikari:
             auto-commit: false
         sql-script-encoding: UTF-8
-#    resources:
-#        static-locations: classpath:/static/
+    resources:
+        static-locations: classpath:/static/
 #    jackson:
 #        date-format: yyyy/MM/dd HH:mm:ss
 #        time-zone: America/Sao_Paulo
@@ -49,10 +42,19 @@ logging:
                 SQL: info
                 type.descriptor.sql.BasicBinder: info
 
-appconfig:
-    homeUri: /members/
-
-
+app:
+    home-uri: /members/
+    name: Spring Boot 201
+    path-patterns-not-to-be-intercepted:
+        - /test/**
+        - /favicon.ico
+        - /assets/**
+        - /modules/**
+        - /plugins/**
+        - /css/**
+        - /font/**
+        - /img/**
+        - /js/**
 ---
 #
 # Development mode
@@ -62,6 +64,10 @@ spring:
     devtools:
         livereload:
             enabled: true
+    datasource:
+        url: jdbc:mysql://127.0.0.1:3306/sb201?useUnicode=yes&characterEncoding=UTF-8
+        username: root
+        password: Uniiot12!@
     thymeleaf:
         cache: false
 server:
@@ -75,6 +81,13 @@ logging:
 #
 spring:
     profiles: prod
+    devtools:
+        livereload:
+            enabled: false
+    datasource:
+        url: jdbc:mysql://127.0.0.1:3306/sb201?useUnicode=yes&characterEncoding=UTF-8
+        username: root
+        password: Uniiot12!@
 server:
     port: 8080
 logging:

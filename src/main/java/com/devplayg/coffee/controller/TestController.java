@@ -1,8 +1,10 @@
 package com.devplayg.coffee.controller;
 
+import com.devplayg.coffee.config.AppConfig;
 import com.devplayg.coffee.entity.Audit;
 import com.devplayg.coffee.entity.Member;
 import com.devplayg.coffee.entity.filter.AuditFilter;
+import com.devplayg.coffee.framework.InMemoryMemberManager;
 import com.devplayg.coffee.repository.AuditRepository;
 import com.devplayg.coffee.repository.MemberRepository;
 import com.devplayg.coffee.repository.SampleRepository;
@@ -23,6 +25,9 @@ import java.util.List;
 public class TestController {
 
     @Autowired
+    private AppConfig appConfig;
+
+    @Autowired
     private MemberRepository memberRepository;
 
     @Autowired
@@ -30,6 +35,9 @@ public class TestController {
 
     @Autowired
     private SampleRepository sampleRepository;
+
+    @Autowired
+    public InMemoryMemberManager inMemoryMemberManager ;
 
     @GetMapping("/users/{id}")
     public Member findUserById(@PathVariable("id") Member member) {
@@ -63,6 +71,16 @@ public class TestController {
     public ResponseEntity<?> currentUserName(Authentication auth) {
         log.debug("## auth: {}", auth);
         return new ResponseEntity<>(auth, HttpStatus.OK);
+    }
+
+    @GetMapping("memusers")
+    public ResponseEntity getUsers() {
+        return new ResponseEntity(inMemoryMemberManager, HttpStatus.OK);
+    }
+
+    @GetMapping("app")
+    public ResponseEntity app() {
+        return new ResponseEntity(appConfig, HttpStatus.OK);
     }
 
 

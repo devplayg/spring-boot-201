@@ -11,8 +11,6 @@ import java.time.ZonedDateTime;
 @Getter
 @Setter
 public class SearchFilter {
-
-
     @DateTimeFormat(pattern = "yyyy-MM-dd HH:mm")
     private LocalDateTime startDate;
 
