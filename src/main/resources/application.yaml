@@ -9,10 +9,6 @@ spring:
         open-in-view: false
     datasource: # DB 설정
         driver-class-name: com.mysql.cj.jdbc.Driver
-        tomcat:
-            max-active: 50
-            max-idle: 20
-            min-idle: 15
         hikari:
             auto-commit: false
         sql-script-encoding: UTF-8
@@ -68,6 +64,10 @@ spring:
         url: jdbc:mysql://127.0.0.1:3306/sb201?useUnicode=yes&characterEncoding=UTF-8
         username: root
         password: Uniiot12!@
+        tomcat:
+            max-active: 3
+            max-idle: 3
+            min-idle: 3
     thymeleaf:
         cache: false
 server:
@@ -88,6 +88,10 @@ spring:
         url: jdbc:mysql://127.0.0.1:3306/sb201?useUnicode=yes&characterEncoding=UTF-8
         username: root
         password: Uniiot12!@
+        tomcat:
+            max-active: 50
+            max-idle: 20
+            min-idle: 1
 server:
     port: 8080
 logging:

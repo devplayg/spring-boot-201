@@ -1,17 +1,25 @@
 package com.devplayg.coffee.service;
 
+import com.devplayg.coffee.definition.AuditCategory;
 import com.devplayg.coffee.entity.Member;
+import com.devplayg.coffee.entity.MemberNetwork;
 import com.devplayg.coffee.exception.ResourceNotFoundException;
+import com.devplayg.coffee.framework.InMemoryMemberManager;
 import com.devplayg.coffee.repository.MemberRepository;
+import com.devplayg.coffee.util.NetworkUtils;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.security.core.userdetails.UserDetails;
 import org.springframework.security.core.userdetails.UserDetailsService;
 import org.springframework.security.core.userdetails.UsernameNotFoundException;
+import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Service;
 
+import java.util.List;
+import java.util.stream.Collectors;
+
 /**
- * 사용자 서비스
+ * Member service
  */
 @Service
 @Slf4j
@@ -20,42 +28,14 @@ public class MemberService implements UserDetailsService {
     @Autowired
     private MemberRepository memberRepository;
 
-//    @Autowired
-//    private InMemoryUserDetailsManager inMemoryUserDetailsManager;
+    @Autowired
+    private PasswordEncoder passwordEncoder;
 
-//    @PostConstruct
-//    public void initUsers() {
-//        log.debug("### initUsers in InMemoryUserDetailsManager");
-//        List<Member> members = memberRepository.findAll();
-//        for (Member m : members) {
-//            inMemoryUserDetailsManager.createUser(m);
-//        }
+    @Autowired
+    private AuditService auditService;
 
-//        inMemoryUserDetailsManager.
-//        Set<GrantedAuthority> authorities = new HashSet<>();
-//        BCryptPasswordEncoder passwordEncoder = new BCryptPasswordEncoder();
-//        users = Stream.of(new User("user3", passwordEncoder.encode("pass3"), authorities)).collect(Collectors.toSet());
-//    }
-
-//    @Override
-//    public UserDetails loadUserByUsername(String username) throws UsernameNotFoundException {
-//        log.debug("# loadUserByUsername");
-//        UserDetails userDetails = inMemoryUserDetailsManager.loadUserByUsername(username);
-//        if (userDetails == null) {
-//            throw new ResourceNotFoundException("member", "member.username", username);
-//        }
-//        return userDetails;
-//    }
-//
-//    @Override
-//    public UserDetails loadUserByUsername(String username) throws UsernameNotFoundException {
-//        UserDetails userDetails = inMemoryUserDetailsManager.loadUserByUsername(username);
-//        if (userDetails == null) {
-//            throw new ResourceNotFoundException("member", "member.username", username);
-//        }
-//        return userDetails;
-//    }
-
+    @Autowired
+    private InMemoryMemberManager inMemoryMemberManager;
 
     public UserDetails loadUserByUsername(String username) throws UsernameNotFoundException {
         Member member = memberRepository.findByUsername(username)
@@ -63,17 +43,48 @@ public class MemberService implements UserDetailsService {
         return member;
     }
 
-//    public UserDetails loadUserByUsername(String username) throws UsernameNotFoundException {
-//        log.info("member: {}", member.toString());
-//        String[] roles = member.getRoleEnumList().stream().map(role -> role.getKey()).toArray(String[]::new);
-//        List<GrantedAuthority> authorities = AuthorityUtils.createAuthorityList(roles);
-//        UserDetails userDetails = (UserDetails) new User(member.getUsername(), member.getPassword(), getAuthorities(member));
+    public Member create(Member member) throws IllegalArgumentException {
+        member.setRoles(member.getRoleList().stream().mapToInt(i -> i.getValue()).sum());
+        member.setPassword(passwordEncoder.encode(member.getInputPassword()));
+        member.setAccessibleIpList(this.getAccessibleIpList(member, member.getAccessibleIpListText()));
+        log.debug("# post member converted: {}", member);
 
-//    private List<? extends GrantedAuthority> getAuthorities(Member member) {
-//        String[] roles = member.getRolesKeys().stream().map(role -> "ROLE_" + role).toArray(String[]::new);
-//        List<GrantedAuthority> authorities = AuthorityUtils.createAuthorityList(roles);
-//        return authorities;
-//    }
+        Member newMember = memberRepository.save(member);
+        inMemoryMemberManager.createUser(member);
+        auditService.audit(AuditCategory.MEMBER_CREATE, newMember);
+        return newMember;
+    }
+
+    private List<MemberNetwork> getAccessibleIpList(Member member, String text) {
+        List<String> networks = NetworkUtils.splitNetworks(text, "\\s+|,\\s*|\\,\\s*");
+        return networks.stream()
+                .map(net -> {
+                    MemberNetwork memberNetwork = new MemberNetwork(net);
+                    memberNetwork.setMember(member);
+                    return memberNetwork;
+                })
+                .collect(Collectors.toList());
+    }
+
+    public Member update(long id, Member input) throws IllegalArgumentException {
+        Member member = memberRepository.findById(id)
+                .orElseThrow(() -> new ResourceNotFoundException("member", "id", id));
+        member.setName(input.getName());
+        member.setEmail(input.getEmail());
+        member.setEnabled(input.isEnabled());
+        member.setTimezone(input.getTimezone());
+        member.setRoles(input.getRoleList().stream().mapToInt(i -> i.getValue()).sum());
+        member.setAccessibleIpList(this.getAccessibleIpList(member, input.getAccessibleIpListText()));
+
+        Member changed = memberRepository.save(member);
+        log.debug("## member changed: {}", changed);
+        log.debug("## member     now: {}", member);
+        inMemoryMemberManager.updateUser(member);
+        auditService.audit(AuditCategory.MEMBER_UPDATE, member);
+        inMemoryMemberManager.informMemberHasChanged(member.getUsername());
+
+        return changed;
+    }
 }
 
 

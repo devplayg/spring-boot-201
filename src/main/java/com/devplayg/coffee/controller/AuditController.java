@@ -4,7 +4,6 @@ import com.devplayg.coffee.entity.Audit;
 import com.devplayg.coffee.entity.filter.AuditFilter;
 import com.devplayg.coffee.repository.AuditRepository;
 import com.devplayg.coffee.repository.support.AuditPredicate;
-import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;

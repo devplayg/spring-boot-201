@@ -25,29 +25,27 @@ import java.util.TimeZone;
 @Component
 @Slf4j
 public class RequestInterceptor extends HandlerInterceptorAdapter {
-    private String username = "";
-    private String userTz = TimeZone.getDefault().toZoneId().getId();
 
     @Override
     public boolean preHandle(HttpServletRequest req, HttpServletResponse res, Object handler) {
         Authentication auth = SecurityContextHolder.getContext().getAuthentication();
         if (auth instanceof AnonymousAuthenticationToken) {
-            log.debug("# RequestInterceptor-0: not logged in yet, {}", req.getRequestURI());
+            log.debug("# RequestInterceptor-preHandle: not logged in yet, {}", req.getRequestURI());
             return true;
         }
 
-        username = req.getUserPrincipal().getName();
+        // Need exception handler when member is deleted
+        // If member information is changed
         InMemoryMemberManager inMemoryMemberManager = InMemoryMemberManager.getInstance();
-        if (inMemoryMemberManager != null) {
-            // 사용자가 삭제된 경우에 대비한 예외처리가 필요함
-            if (inMemoryMemberManager.isChanged(username)) {
-                UserDetails userDetails = inMemoryMemberManager.loadUserByUsername(username);
-                Authentication newAuth = new UsernamePasswordAuthenticationToken(userDetails, auth.getCredentials(), userDetails.getAuthorities());
-                SecurityContextHolder.getContext().setAuthentication(newAuth);
-                inMemoryMemberManager.gotNews(username);
-            }
-//            log.debug("# userDetails: {}", userDetails);
+        String username = req.getUserPrincipal().getName();
+        if (inMemoryMemberManager.isChanged(username)) {
+            UserDetails userDetails = inMemoryMemberManager.loadUserByUsername(username);
+            Authentication newAuth = new UsernamePasswordAuthenticationToken(userDetails, auth.getCredentials(), userDetails.getAuthorities());
+            // Update member information
+            SecurityContextHolder.getContext().setAuthentication(newAuth);
+            inMemoryMemberManager.gotNews(username);
         }
+//        }
 //        UserDetails userDetails = null;
 //        try {
 //            userDetails = inMemoryMemberManager.loadUserByUsername(username);
@@ -55,58 +53,45 @@ public class RequestInterceptor extends HandlerInterceptorAdapter {
 //            return false;
 //        }
 
-        // 권한 업데이트
-
-//        Authentication newAuth = new UsernamePasswordAuthenticationToken(userDetails, auth.getCredentials(), userDetails.getAuthorities());
-//        SecurityContextHolder.getContext().setAuthentication(newAuth);
-
-//        Principal principal = req.getUserPrincipal();
-//        if (principal == null) {
-//            log.debug("### RequestInterceptor: WHAAAAAAAAAAAAAAAAAAAAAAA!");
-//            return true;
-//        }
-        // Logging
-        log.debug("# RequestInterceptor-1: name={}, isLogged={}, role={}", auth.getName(), auth.isAuthenticated(), auth.getAuthorities());
-        log.debug("# RequestInterceptor-2: username={}, detail={}", auth.getPrincipal(), auth.getDetails());
-        log.debug("# RequestInterceptor-3: object={}", auth.getDetails());
-
-        Member member = (Member)SecurityContextHolder.getContext().getAuthentication().getPrincipal();
-        userTz = member.getTimezone();
-        log.debug("# RequestInterceptor-4: member={}", member);
-//        Boolean anyNews = MembershipCenter.anyNews(username);
-//        if (!anyNews) {
-//            return true;
-//        }
-
-//        readNews(username);
+        if (log.isDebugEnabled()) {
+            log.debug("----------------- REQUEST ---------------------------------------");
+            log.debug("# RequestInterceptor-1: name={}, isLogged={}, role={}", auth.getName(), auth.isAuthenticated(), auth.getAuthorities());
+            log.debug("# RequestInterceptor-2: username={}, detail={}", auth.getPrincipal(), auth.getDetails());
+            log.debug("# RequestInterceptor-3: object={}", auth.getDetails());
+            Member member = (Member) SecurityContextHolder.getContext().getAuthentication().getPrincipal();
+            log.debug("# RequestInterceptor-4: member={}", member);
+            log.debug("# RequestInterceptor-5: Url={}?{}", req.getRequestURI(), req.getQueryString());
+        }
         return true;
-
-        // https://www.leafcats.com/40
-//        HttpSession session = request.getSession();
-//        UserVO loginVO = (UserVO) session.getAttribute("loginUser");
-//        if(ObjectUtils.isEmpty(loginVO)){
-//            response.sendRedirect("/moveLogin.go");
-//            return false;
-//        }
     }
 
     @Override
     public void postHandle(HttpServletRequest req, HttpServletResponse response, Object handler, ModelAndView mv) throws Exception {
-        HandlerMethod handlerMethod = (HandlerMethod) handler;
-        String controllerName = handlerMethod.getBeanType().getSimpleName().replace("Controller", "").toLowerCase();
-        log.debug("# postHandle: Controller: {} {}?{}", controllerName, req.getRequestURI(), req.getQueryString());
-
+        // if not model and view request
         if (mv == null) {
             return;
         }
 
-//        HandlerMethod handlerMethod = (HandlerMethod) handler;
-//        String controllerName = handlerMethod.getBeanType().getSimpleName().replace("Controller", "").toLowerCase();
-        //String methodName = handlerMethod.getMethod().getName();
-        mv.addObject("systemTz", TimeZone.getDefault().toZoneId().getId());
-        mv.addObject("ctrl", controllerName);
-        mv.addObject("userTz", userTz);
+        if (handler instanceof  HandlerMethod) {
+            HandlerMethod handlerMethod = (HandlerMethod) handler;
+            String controllerName = handlerMethod.getBeanType().getSimpleName().replace("Controller", "").toLowerCase();
+            //String methodName = handlerMethod.getMethod().getName();
+            mv.addObject("systemTz", TimeZone.getDefault().toZoneId().getId());
+            mv.addObject("ctrl", controllerName);
+
+            // Get member'ㄴ timezone and set it to view object
+            Authentication auth = SecurityContextHolder.getContext().getAuthentication();
+            if (auth instanceof AnonymousAuthenticationToken) {
+                return;
+            }
+            Member member = (Member) SecurityContextHolder.getContext().getAuthentication().getPrincipal();
+            mv.addObject("userTz", member.getTimezone());
+        }
     }
+
+}
+
+
 
 //    private void readNews(String username) {
 //        log.debug("==============================");
@@ -119,13 +104,6 @@ public class RequestInterceptor extends HandlerInterceptorAdapter {
 //            SecurityContextHolder.getContext().setAuthentication(newAuth);
 //        }
 //    }
-
-}
-
-
-
-
-
 //
 //        Boolean anyNews = mc.anyNews(req.getUserPrincipal().getName());
 //        log.debug("### anyNews to {}: {}", req.getUserPrincipal().getName(), anyNews);

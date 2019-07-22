@@ -23,8 +23,6 @@ public class MemberNetwork implements Serializable {
         this.ipCidr = ipCidr;
     }
 
-
-
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     @Column(name = "network_id")

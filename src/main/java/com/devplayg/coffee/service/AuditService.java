@@ -10,6 +10,7 @@ import com.fasterxml.jackson.core.JsonProcessingException;
 import com.fasterxml.jackson.databind.ObjectMapper;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.security.authentication.AnonymousAuthenticationToken;
 import org.springframework.security.core.Authentication;
 import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.stereotype.Service;
@@ -49,15 +50,19 @@ public class AuditService {
         auditRepository.save(audit);
     }
 
-    public Member getCurrentMember() {
+    private Member getCurrentMember() {
         Authentication auth = SecurityContextHolder.getContext().getAuthentication();
         if (auth == null) {
             return (Member)inMemoryMemberManager.loadUserByUsername(InMemoryMemberManager.adminUsername);
         }
 
-        if (auth.getPrincipal() instanceof String) {
+        if (auth instanceof AnonymousAuthenticationToken) {
             return (Member)inMemoryMemberManager.loadUserByUsername(InMemoryMemberManager.adminUsername);
         }
+
+//        if (auth.getPrincipal() instanceof String) {
+//            return (Member)inMemoryMemberManager.loadUserByUsername(InMemoryMemberManager.adminUsername);
+//        }
 
         if (auth.getPrincipal() instanceof Member) {
             return (Member)auth.getPrincipal();
@@ -66,7 +71,7 @@ public class AuditService {
         return (Member)inMemoryMemberManager.loadUserByUsername(InMemoryMemberManager.adminUsername);
     }
 
-    public int getCurrentIp() {
+    private int getCurrentIp() {
         String currentIp = this.getRequestIp();
         SubnetUtils net = new SubnetUtils(currentIp+"/32");
         return net.getInfo().asInteger(currentIp);
@@ -100,5 +105,4 @@ public class AuditService {
 
         return json;
     }
-
 }

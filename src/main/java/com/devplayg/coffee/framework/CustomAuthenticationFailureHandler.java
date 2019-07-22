@@ -2,7 +2,6 @@ package com.devplayg.coffee.framework;
 
 import com.devplayg.coffee.definition.AuditCategory;
 import com.devplayg.coffee.service.AuditService;
-import com.devplayg.coffee.util.AuditUtils;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.security.core.AuthenticationException;
 import org.springframework.security.web.authentication.AuthenticationFailureHandler;
