@@ -4,7 +4,7 @@ import com.devplayg.coffee.definition.AuditCategory;
 import com.devplayg.coffee.entity.Member;
 import com.devplayg.coffee.exception.ResourceNotFoundException;
 import com.devplayg.coffee.framework.InMemoryMemberManager;
-import com.devplayg.coffee.repository.MemberRepository;
+import com.devplayg.coffee.repository.support.member.MemberRepository;
 import com.devplayg.coffee.service.AuditService;
 import com.devplayg.coffee.service.MemberService;
 import lombok.extern.slf4j.Slf4j;

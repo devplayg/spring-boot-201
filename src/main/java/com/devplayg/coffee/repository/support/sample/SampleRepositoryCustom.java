@@ -1,4 +1,4 @@
-package com.devplayg.coffee.repository.support;
+package com.devplayg.coffee.repository.support.sample;
 
 import com.devplayg.coffee.entity.Audit;
 

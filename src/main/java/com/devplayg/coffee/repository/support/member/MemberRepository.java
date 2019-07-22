@@ -1,4 +1,4 @@
-package com.devplayg.coffee.repository;
+package com.devplayg.coffee.repository.support.member;
 
 import com.devplayg.coffee.entity.Member;
 import org.springframework.data.jpa.repository.JpaRepository;

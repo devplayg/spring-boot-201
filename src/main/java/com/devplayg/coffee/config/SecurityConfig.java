@@ -5,7 +5,7 @@ import com.devplayg.coffee.entity.Member;
 import com.devplayg.coffee.framework.CustomAuthenticationFailureHandler;
 import com.devplayg.coffee.framework.CustomAuthenticationSuccessHandler;
 import com.devplayg.coffee.framework.InMemoryMemberManager;
-import com.devplayg.coffee.repository.MemberRepository;
+import com.devplayg.coffee.repository.support.member.MemberRepository;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.context.annotation.Bean;

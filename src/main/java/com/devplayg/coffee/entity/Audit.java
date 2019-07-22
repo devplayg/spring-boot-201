@@ -40,6 +40,7 @@ public class Audit implements Serializable {
     @Column(length = 16, nullable = false)
     @Convert(converter = AuditCategoryConverter.class)
     @JsonView(AuditView.Normal.class)
+    @NotFound(action = NotFoundAction.IGNORE)
     private AuditCategory category;
 
     @Column(nullable = false)

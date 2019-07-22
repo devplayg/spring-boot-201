@@ -1,4 +1,4 @@
-package com.devplayg.coffee.repository.support;
+package com.devplayg.coffee.repository.support.audit;
 
 import com.devplayg.coffee.entity.QAudit;
 import com.devplayg.coffee.entity.filter.AuditFilter;

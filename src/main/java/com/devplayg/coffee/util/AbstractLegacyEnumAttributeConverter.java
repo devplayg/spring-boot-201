@@ -36,10 +36,11 @@ public class AbstractLegacyEnumAttributeConverter<E extends Enum<E> & EnumModel>
         return EnumSet.allOf(this.enumClass).stream()
                 .filter(v -> v.getCode().equals(code))
                 .findAny()
-                .orElseThrow(() -> new ResourceNotFoundException(this.enumClass.getName(), enumName, code));
+                .orElse(null);
+//                .orElseThrow(() -> new ResourceNotFoundException(this.enumClass.getName(), enumName, code));
     }
 
-    static Supplier<ResourceNotFoundException> notFound(String msg) {
-        return () -> new ResourceNotFoundException(msg, "a", "bbb");
-    }
+//    static Supplier<ResourceNotFoundException> notFound(String msg) {
+//        return () -> new ResourceNotFoundException(msg, "a", "bbb");
+//    }
 }

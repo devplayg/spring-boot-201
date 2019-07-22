@@ -2,8 +2,8 @@ package com.devplayg.coffee.controller;
 
 import com.devplayg.coffee.entity.Audit;
 import com.devplayg.coffee.entity.filter.AuditFilter;
-import com.devplayg.coffee.repository.AuditRepository;
-import com.devplayg.coffee.repository.support.AuditPredicate;
+import com.devplayg.coffee.repository.support.audit.AuditRepository;
+import com.devplayg.coffee.repository.support.audit.AuditPredicate;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;

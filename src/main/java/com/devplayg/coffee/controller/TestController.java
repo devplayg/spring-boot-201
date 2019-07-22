@@ -5,9 +5,10 @@ import com.devplayg.coffee.entity.Audit;
 import com.devplayg.coffee.entity.Member;
 import com.devplayg.coffee.entity.filter.AuditFilter;
 import com.devplayg.coffee.framework.InMemoryMemberManager;
-import com.devplayg.coffee.repository.AuditRepository;
-import com.devplayg.coffee.repository.MemberRepository;
-import com.devplayg.coffee.repository.SampleRepository;
+import com.devplayg.coffee.repository.support.audit.AuditRepository;
+import com.devplayg.coffee.repository.support.member.MemberRepository;
+import com.devplayg.coffee.repository.support.sample.SampleRepository;
+import com.devplayg.coffee.repository.support.sample.SampleRepositorySupport;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.domain.Page;
@@ -25,63 +26,78 @@ import java.util.List;
 public class TestController {
 
     @Autowired
-    private AppConfig appConfig;
-
-    @Autowired
-    private MemberRepository memberRepository;
-
-    @Autowired
-    private AuditRepository auditRepository;
-
-    @Autowired
     private SampleRepository sampleRepository;
 
     @Autowired
-    public InMemoryMemberManager inMemoryMemberManager ;
+    private SampleRepositorySupport sampleRepositorySupport;
 
-    @GetMapping("/users/{id}")
-    public Member findUserById(@PathVariable("id") Member member) {
-        return member;
-    }
-
-    @GetMapping("users")
-    public Page<Member> findAllUsers(Pageable pageable) {
-        log.debug("page: {}", pageable);
-        return memberRepository.findAll(pageable);
-    }
-
-    @GetMapping("audit")
-    public List<Audit> findAllAudits() {
+//    @Autowired
+//    private AppConfig appConfig;
+//
+//    @Autowired
+//    private MemberRepository memberRepository;
+//
+//    @Autowired
+//    private AuditRepository auditRepository;
+//
+//
+//
+//    @Autowired
+//    public InMemoryMemberManager inMemoryMemberManager ;
+//
+//    @GetMapping("/users/{id}")
+//    public Member findUserById(@PathVariable("id") Member member) {
+//        return member;
+//    }
+//
+//    @GetMapping("users")
+//    public Page<Member> findAllUsers(Pageable pageable) {
+//        log.debug("page: {}", pageable);
+//        return memberRepository.findAll(pageable);
+//    }
+//
+    @GetMapping("jpa")
+    public List<Audit> findAllWithJPA() {
         return sampleRepository.findAll();
     }
 
-    @GetMapping("/test/{id}")
-    public Audit findAuditById(@PathVariable("id") Audit audit) {
-        return audit;
+    @GetMapping("custom")
+    public List<Audit> findAllWithCustom() {
+        return sampleRepositorySupport.findAll();
     }
 
-    @GetMapping("/test")
-    public Page<Audit> findAllAudits(Pageable pageable, @ModelAttribute AuditFilter filter) {
-        log.debug("auditFilter: {}", filter);
-        log.debug("page: {}", pageable);
-        return auditRepository.findAll(pageable);
-    }
-
-    @GetMapping("info")
-    public ResponseEntity<?> currentUserName(Authentication auth) {
-        log.debug("## auth: {}", auth);
-        return new ResponseEntity<>(auth, HttpStatus.OK);
-    }
-
-    @GetMapping("memusers")
-    public ResponseEntity getUsers() {
-        return new ResponseEntity(inMemoryMemberManager, HttpStatus.OK);
-    }
-
-    @GetMapping("app")
-    public ResponseEntity app() {
-        return new ResponseEntity(appConfig, HttpStatus.OK);
-    }
+//    @GetMapping("audit")
+//    public List<Audit> findAllAudits() {
+//        return sampleRepository.findAll();
+//    }
+//
+//    @GetMapping("/test/{id}")
+//    public Audit findAuditById(@PathVariable("id") Audit audit) {
+//        return audit;
+//    }
+//
+//    @GetMapping("/test")
+//    public Page<Audit> findAllAudits(Pageable pageable, @ModelAttribute AuditFilter filter) {
+//        log.debug("auditFilter: {}", filter);
+//        log.debug("page: {}", pageable);
+//        return auditRepository.findAll(pageable);
+//    }
+//
+//    @GetMapping("info")
+//    public ResponseEntity<?> currentUserName(Authentication auth) {
+//        log.debug("## auth: {}", auth);
+//        return new ResponseEntity<>(auth, HttpStatus.OK);
+//    }
+//
+//    @GetMapping("memusers")
+//    public ResponseEntity getUsers() {
+//        return new ResponseEntity(inMemoryMemberManager, HttpStatus.OK);
+//    }
+//
+//    @GetMapping("app")
+//    public ResponseEntity app() {
+//        return new ResponseEntity(appConfig, HttpStatus.OK);
+//    }
 
 
 //    @GetMapping("/filteredusers")

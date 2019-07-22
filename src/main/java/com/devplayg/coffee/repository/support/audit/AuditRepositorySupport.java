@@ -1,4 +1,4 @@
-package com.devplayg.coffee.repository.support;
+package com.devplayg.coffee.repository.support.audit;
 
 // 추후 변경될 방식: https://adrenal.tistory.com/25
 
