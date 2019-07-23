@@ -15,8 +15,11 @@ import org.springframework.web.servlet.ModelAndView;
 @RequestMapping("/")
 public class RootController {
 
-    @Autowired
-    public AppConfig appConfig;
+    private final AppConfig appConfig;
+
+    public RootController(AppConfig appConfig) {
+        this.appConfig = appConfig;
+    }
 
     @GetMapping
     public ModelAndView redirectToLogin(ModelAndView mv) {

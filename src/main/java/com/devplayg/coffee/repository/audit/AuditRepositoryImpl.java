@@ -1,6 +1,7 @@
 package com.devplayg.coffee.repository.audit;
 
 // 추후 변경될 방식: https://adrenal.tistory.com/25
+// 참고: https://nhnent.dooray.com/share/posts/9YbTE52ER2m9A0sEP881hg
 
 import com.devplayg.coffee.entity.Audit;
 import com.devplayg.coffee.entity.QAudit;
@@ -9,22 +10,26 @@ import com.querydsl.core.types.OrderSpecifier;
 import com.querydsl.core.types.Predicate;
 import com.querydsl.core.types.dsl.PathBuilder;
 import com.querydsl.jpa.impl.JPAQueryFactory;
-import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.domain.Pageable;
 import org.springframework.data.domain.Sort;
+import org.springframework.data.jpa.repository.support.QuerydslRepositorySupport;
 import org.springframework.stereotype.Repository;
 
 import java.util.List;
 import java.util.stream.Collectors;
 
 @Repository
-public class AuditRepositorySupport implements AuditRepositoryCustom {
+public class AuditRepositoryImpl extends QuerydslRepositorySupport implements AuditRepositoryCustom {
 
-    @Autowired
-    private JPAQueryFactory query;
+    private final JPAQueryFactory query;
+
+    public AuditRepositoryImpl(JPAQueryFactory query) {
+        super(Audit.class);
+        this.query = query;
+    }
 
     @Override
-    public List<Audit> findAll(Predicate builder, Pageable pageable) {
+    public List<Audit> find(Predicate builder, Pageable pageable) {
         QAudit audit = QAudit.audit;
 
         PathBuilder<Audit> entityPath = new PathBuilder<>(Audit.class, "audit");
@@ -50,6 +55,42 @@ public class AuditRepositorySupport implements AuditRepositoryCustom {
                 .fetch();
     }
 }
+
+//public class AuditRepositoryImpl extends QuerydslRepositorySupport implements AuditRepositoryCustom {
+//
+//}
+
+//public class AuditRepositoryImpl extends QuerydslRepositorySupport implements AuditRepositoryCustom {
+//    @Autowired
+//    private JPAQueryFactory query;
+//
+////    @Override
+//    public List<Audit> findAll(Predicate builder, Pageable pageable) {
+//        QAudit audit = QAudit.audit;
+//
+//        PathBuilder<Audit> entityPath = new PathBuilder<>(Audit.class, "audit");
+//        OrderSpecifier order;
+//        if (pageable.getSort() == Sort.unsorted()) {
+//            order = new OrderSpecifier(Order.DESC, audit.id);
+//        } else {
+//            List<OrderSpecifier> orders = pageable.getSort().stream()
+//                    .map(o -> {
+//                        PathBuilder<Object> path = entityPath.get(o.getProperty());
+//                        return new OrderSpecifier(Order.valueOf(o.getDirection().name()), path);
+//                    })
+//                    .collect(Collectors.toList());
+//            order = orders.get(0);
+//
+//        }
+//
+//        return query.selectFrom(audit)
+//                .where(builder)
+//                .orderBy(order)
+//                .offset(pageable.getPageNumber() * pageable.getPageSize())
+//                .limit(pageable.getPageSize())
+//                .fetch();
+//    }
+//}
 
 //    public AuditRepositorySupport(JPAQueryFactory queryFactory) {
 //        super(Audit.class);

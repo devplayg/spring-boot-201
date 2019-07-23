@@ -30,7 +30,6 @@ let defaultDatetimeOption = {
 
 // Default settings
 $.extend($.fn.bootstrapTable.defaults, {
-    pagination: true,
     showRefresh: true,
     showColumns: true,
     pageSize: 15,
@@ -38,7 +37,7 @@ $.extend($.fn.bootstrapTable.defaults, {
 
 // Generate table key
 function getTableKey($table) {
-    return 'tk_' + $table.attr("id");
+    return 'tk-' + $table.attr("id");
 }
 
 // Render data to table

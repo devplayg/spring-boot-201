@@ -7,11 +7,12 @@ $(function () {
         logs = [];
 
     $(".datetime").datetimepicker(defaultDatetimeOption);
-    $table.bootstrapTable();
-    console.log($table.bootstrapTable("getOptions"));
+    // $table.bootstrapTable();
+    // console.log($table.bootstrapTable("getOptions"));
 
     $table.bootstrapTable({
         sidePagination: "client", // Client-side pagination
+
     }).on("column-switch.bs.table", function (e, field, checked) { // Memorize columns state
         captureTableColumnsState($(this));
     }).on("refresh.bs.table", function () { // Refresh

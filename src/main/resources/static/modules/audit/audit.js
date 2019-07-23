@@ -11,7 +11,7 @@ $(function () {
         url: "/" + ctrl,
         method: "get",
         queryParamsType: "", // DO NOT REMOVE. LEAVE BLANK
-        pagination: (filter.fastPaging !== true),
+        pagination: true,
         sidePagination: "server",
         queryParams: function (p) {
             tuneDateAndPaging(filter, p);

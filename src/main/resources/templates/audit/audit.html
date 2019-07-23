@@ -4,49 +4,51 @@
 <div layout:fragment="content">
     <div th:id="|toolbar-${ctrl}|">
         <form th:id="|form-${ctrl}|" role="form" method="post" th:action="@{/audit/}" th:object="${filter}">
+
+            <!-- External filter -->
             <div class="form-inline">
-                <fieldset>
-                    <div class="form-group">
-                        <div class="input-group date datetime">
-                            <input class="form-control mask-yyyymmddhhii" type="text" name="startDate" th:value="*{#temporals.format(startDate, 'yyyy-MM-dd HH:mm')}" autocomplete="off">
-                            <span class="input-group-addon"><i class="glyphicon glyphicon-th"></i></span>
-                        </div>
+                <div class="form-group">
+                    <div class="input-group date datetime">
+                        <input class="form-control mask-yyyymmddhhii" type="text" name="startDate" th:value="*{#temporals.format(startDate, 'yyyy-MM-dd HH:mm')}" autocomplete="off" />
+                        <span class="input-group-addon"><i class="glyphicon glyphicon-th"></i></span>
                     </div>
-                    <div class="form-group">
-                        <div class="input-group date datetime">
-                            <input class="form-control mask-yyyymmddhhii" type="text" name="endDate" th:value="*{#temporals.format(endDate, 'yyyy-MM-dd HH:mm')}" autocomplete="off">
-                            <span class="input-group-addon"><i class="glyphicon glyphicon-th"></i></span>
-                        </div>
+                </div>
+                <div class="form-group">
+                    <div class="input-group date datetime">
+                        <input class="form-control mask-yyyymmddhhii" type="text" name="endDate" th:value="*{#temporals.format(endDate, 'yyyy-MM-dd HH:mm')}" autocomplete="off" />
+                        <span class="input-group-addon"><i class="glyphicon glyphicon-th"></i></span>
                     </div>
-                    <div class="form-group">
-                        <select name="categoryList" class="form-control selectpicker" multiple th:title="#{category}">
-                            <option th:each="category, stat : ${T(com.devplayg.coffee.definition.AuditCategory).values()}"
-                                    th:value="${category}"
-                                    th:text="${category.description}"
-                                    th:selected="${#lists.contains(#object.categoryList, category)}"
-                            ></option>
-                        </select>
-                        <div class="btn-group" th:if="${#object.fastPaging == true}">
-                            <button type="button" class="btn btn-success btn-move-page btn-page-prev" data-direction="-1">
-                                &lt;
-                            </button>
-                            <button type="button" class="btn btn-default btn-move-page btn-page-text" data-direction="0" disabled>
-                                1
-                            </button>
-                            <button type="button" class="btn btn-success btn-move-page btn-page-next" data-direction="1">
-                                &gt;
-                            </button>
-                        </div>
-                        <button type="submit" class="btn btn-primary" th:text="#{search}"></button>
-                        <a class="btn btn-default" href="" th:text="#{cancel}"></a>
+                </div>
+                <div class="form-group">
+                    <select name="categoryList" class="form-control selectpicker" multiple th:title="#{category}">
+                        <option th:each="category, stat : ${T(com.devplayg.coffee.definition.AuditCategory).values()}"
+                                th:value="${category}"
+                                th:text="${category.description}"
+                                th:selected="${#lists.contains(#object.categoryList, category)}"
+                        ></option>
+                    </select>
+                    <div class="btn-group" th:if="*{fastPaging == true}">
+                        <button type="button" class="btn btn-success btn-move-page btn-page-prev" data-direction="-1">
+                            &lt;
+                        </button>
+                        <button type="button" class="btn btn-default btn-move-page btn-page-text" data-direction="0" disabled>
+                            1
+                        </button>
+                        <button type="button" class="btn btn-success btn-move-page btn-page-next" data-direction="1">
+                            &gt;
+                        </button>
                     </div>
-                    <div class="form-group">
-                        <a href="#" data-toggle="modal" th:data-target="|#modal-${ctrl}-filter|">
-                            <span  th:text="#{filter}"></span>
-                        </a>
-                    </div>
-                </fieldset>
+                    <button type="submit" class="btn btn-primary" th:text="#{search}"></button>
+                    <a class="btn btn-default" href="" th:text="#{cancel}"></a>
+                </div>
+                <div class="form-group">
+                    <a href="#" data-toggle="modal" th:data-target="|#modal-${ctrl}-filter|">
+                        <span  th:text="#{filter}"></span>
+                    </a>
+                </div>
             </div>
+
+            <!-- Internal filter -->
             <div class="modal fade" th:id="|modal-${ctrl}-filter|" tabindex="-1" role="dialog">
                 <div class="modal-dialog modal-sm" role="document">
                     <div class="modal-content">
@@ -59,11 +61,16 @@
                         <div class="modal-body">
                             <div class="form-group">
                                 <label th:text="#{message}"></label>
-                                <input type="text" class="form-control" th:name="message" th:value="*{message}">
+                                <input type="text" class="form-control" th:name="message" th:value="*{message}" />
                             </div>
                             <div class="form-group">
-                                <label th:text="#{fastPaging}"></label>
-                                <input type="checkbox" class="form-control" th:name="fastPaging" th:checked="*{fastPaging}"/>
+                                <div class="checkbox">
+                                    <label>
+                                        <input type="checkbox" class="checkbox style-0" checked="checked" th:name="fastPaging" th:checked="*{fastPaging}" />
+                                        <span th:text="#{fast-paging}"></span>
+                                    </label>
+                                </div>
+
                             </div>
                         </div>
                         <div class="modal-footer">
@@ -109,8 +116,7 @@
         let filter = [[ ${filter} ]];
         /*]]>*/
     </script>
-    <script th:if="${filter.fastPaging == true}" th:src="@{|/modules/${ctrl}/${ctrl}_fastpaging.js|}"></script>
-    <script th:if="${filter.fastPaging == false}" th:src="@{|/modules/${ctrl}/${ctrl}.js|}"></script>
+    <script th:src="${filter.fastPaging}? @{|/modules/${ctrl}/${ctrl}_fastpaging.js|} : @{|/modules/${ctrl}/${ctrl}.js|}"></script>
     <script th:src="@{|/modules/${ctrl}/formatter.js|}"></script>
 </th:block>
 

@@ -2,11 +2,9 @@ package com.devplayg.coffee.controller;
 
 import com.devplayg.coffee.entity.Audit;
 import com.devplayg.coffee.entity.filter.AuditFilter;
-import com.devplayg.coffee.repository.audit.AuditRepository;
 import com.devplayg.coffee.repository.audit.AuditPredicate;
-import com.devplayg.coffee.repository.audit.AuditRepositorySupport;
-import com.querydsl.core.QueryResults;
-import org.springframework.beans.factory.annotation.Autowired;
+import com.devplayg.coffee.repository.audit.AuditRepository;
+import com.devplayg.coffee.repository.audit.AuditRepositoryImpl;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
 import org.springframework.http.HttpStatus;
@@ -29,11 +27,11 @@ public class AuditController {
 
     private final AuditRepository auditRepository;
 
-    private final AuditRepositorySupport auditRepositorySupport;
+    private final AuditRepositoryImpl auditRepositoryImpl;
 
-    public AuditController(AuditRepository auditRepository, AuditRepositorySupport auditRepositorySupport) {
+    public AuditController(AuditRepository auditRepository, AuditRepositoryImpl auditRepositoryImpl) {
         this.auditRepository = auditRepository;
-        this.auditRepositorySupport = auditRepositorySupport;
+        this.auditRepositoryImpl = auditRepositoryImpl;
     }
 
     @RequestMapping(value = "/", method = {RequestMethod.GET, RequestMethod.POST})
@@ -48,7 +46,7 @@ public class AuditController {
         filter.tune();
 
         if (filter.getFastPaging()) {
-            List<Audit> list = auditRepositorySupport.findAll(AuditPredicate.find(filter), pageable);
+            List<Audit> list = auditRepositoryImpl.find(AuditPredicate.find(filter), pageable);
             return new ResponseEntity<>(list, HttpStatus.OK);
         }
 

@@ -6,6 +6,6 @@ import org.springframework.data.domain.Pageable;
 
 import java.util.List;
 
-interface AuditRepositoryCustom {
-    List<Audit> findAll(Predicate builder, Pageable pageable);
+public interface AuditRepositoryCustom {
+    List<Audit> find(Predicate builder, Pageable pageable);
 }

@@ -36,17 +36,20 @@ import java.util.List;
 @Slf4j
 public class MemberController {
 
-    @Autowired
-    private MemberRepository memberRepository;
+    private final MemberRepository memberRepository;
 
-    @Autowired
-    private MemberService memberService;
+    private final MemberService memberService;
 
-    @Autowired
-    private AuditService auditService;
+    private final AuditService auditService;
 
-    @Autowired
-    private InMemoryMemberManager inMemoryMemberManager;
+    private final InMemoryMemberManager inMemoryMemberManager;
+
+    public MemberController(MemberRepository memberRepository, MemberService memberService, AuditService auditService, InMemoryMemberManager inMemoryMemberManager) {
+        this.memberRepository = memberRepository;
+        this.memberService = memberService;
+        this.auditService = auditService;
+        this.inMemoryMemberManager = inMemoryMemberManager;
+    }
 
     /**
      * Display
