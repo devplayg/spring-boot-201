@@ -64,9 +64,9 @@ $(function () {
                 size: paging.size * paging.blockSize,
                 sort: $table.bootstrapTable("getOptions").sortName + "," + $table.bootstrapTable("getOptions").sortOrder,
             };
-            tuneDate(filter);
 
-            let url = "/" + ctrl + "?" + $.param(filter, true) + "&" + $.param(pageable, true);
+            let _filter = tuneDate(filter);
+            let url = "/" + ctrl + "?" + $.param(_filter, true) + "&" + $.param(pageable, true);
             $.ajax({
                 type: "GET",
                 async: true,

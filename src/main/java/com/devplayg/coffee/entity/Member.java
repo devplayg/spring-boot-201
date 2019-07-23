@@ -74,7 +74,7 @@ public class Member implements UserDetails, CredentialsContainer, Serializable {
     private String password;
 
     @Column(nullable = false)
-    private boolean enabled = false;
+    private boolean enabled ;
 
     @Column(nullable = false)
     @JsonIgnore
@@ -91,7 +91,7 @@ public class Member implements UserDetails, CredentialsContainer, Serializable {
     private LocalDateTime updated;
 
     @Transient
-    private Boolean changed = false;
+    private Boolean changed;
 
     @Transient
     @JsonIgnore

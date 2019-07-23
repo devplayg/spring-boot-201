@@ -95,22 +95,27 @@ function intToip(ipInt) {
 }
 
 function tuneDate(filter) {
-    if (filter.hasOwnProperty("startDate")) {
-        filter.startDate = filter.startDate.replace("T", " ").substring(0, 16);
+    // Deep copy
+    let _filter = $.extend({}, filter);
+    if (_filter.hasOwnProperty("startDate")) {
+        _filter.startDate = _filter.startDate.replace("T", " ").substring(0, 16);
     }
-    if (filter.hasOwnProperty("endDate")) {
-        filter.endDate = filter.endDate.replace("T", " ").substring(0, 16);
+    if (_filter.hasOwnProperty("endDate")) {
+        _filter.endDate = _filter.endDate.replace("T", " ").substring(0, 16);
     }
+    return _filter;
 }
 
 function tuneDateAndPaging(filter, param) {
-    tuneDate(filter);
+    let _filter = tuneDate(filter);
 
-    Object.assign(filter, {
+    Object.assign(_filter, {
         size: param.pageSize,
         page: param.pageNumber - 1,
         sort: param.sortName + "," + param.sortOrder,
     });
+
+    return _filter;
 }
 
 function convertToUserTime(dt) {

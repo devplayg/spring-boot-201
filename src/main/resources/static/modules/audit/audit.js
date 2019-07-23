@@ -13,9 +13,9 @@ $(function () {
         queryParamsType: "", // DO NOT REMOVE. LEAVE BLANK
         pagination: true,
         sidePagination: "server",
-        queryParams: function (p) {
-            tuneDateAndPaging(filter, p);
-            return $.param(filter, true);
+        queryParams: function (params) {
+            let _filter = tuneDateAndPaging(filter, params);
+            return $.param(_filter, true);
         },
         responseHandler: function (res) {
             if (filter.fastPaging) {

@@ -143,6 +143,9 @@ public class InMemoryMemberManager implements UserDetailsManager, UserDetailsPas
 
     public Boolean isChanged(String username) {
         Member member = users.get(username.toLowerCase());
+        if (member.getChanged() == null) {
+            return false;
+        }
         return member.getChanged();
     }
 
