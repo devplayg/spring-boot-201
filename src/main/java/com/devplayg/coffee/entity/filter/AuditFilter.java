@@ -24,6 +24,6 @@ public class AuditFilter extends SearchFilter{
     public void tune() {
         super.tune();
 
-        this.setStartDate(LocalDateTime.now().toLocalDate().minusDays(100).atStartOfDay());
+//        this.setStartDate(LocalDateTime.now().toLocalDate().minusDays(100).atStartOfDay());
     }
 }

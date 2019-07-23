@@ -91,8 +91,6 @@ public class MemberController {
             return new ResponseEntity<>(memberCreated, HttpStatus.OK);
         } catch(DataIntegrityViolationException e) {
             return new ResponseEntity<>(e.getMessage(), HttpStatus.BAD_REQUEST);
-        } catch(IllegalArgumentException e) {
-            return new ResponseEntity<>(e.getMessage(), HttpStatus.BAD_REQUEST);
         }
     }
 

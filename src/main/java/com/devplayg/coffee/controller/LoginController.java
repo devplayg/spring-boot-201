@@ -15,8 +15,11 @@ import org.springframework.web.servlet.ModelAndView;
 @RequestMapping("login")
 public class LoginController {
 
-    @Autowired
-    public AppConfig appConfig;
+    private final AppConfig appConfig;
+
+    public LoginController(AppConfig appConfig) {
+        this.appConfig = appConfig;
+    }
 
     @GetMapping({"", "/"})
     public ModelAndView login(ModelAndView mv) {

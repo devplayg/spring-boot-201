@@ -51,6 +51,7 @@ public class AuditController {
             List<Audit> list = auditRepositorySupport.findAll(AuditPredicate.find(filter), pageable);
             return new ResponseEntity<>(list, HttpStatus.OK);
         }
+
         Page<Audit> page = auditRepository.findAll(AuditPredicate.find(filter), pageable);
         return new ResponseEntity<>(page, HttpStatus.OK);
     }
