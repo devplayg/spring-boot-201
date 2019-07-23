@@ -628,23 +628,23 @@
 	});
 
 	/**
-	 * Bootstrap Table Vietnamese translation
-	 * Author: Duc N. PHAM <pngduc@gmail.com>
+	 * Bootstrap Table Russian translation
+	 * Author: Dunaevsky Maxim <dunmaksim@yandex.ru>
 	 */
 
-	$.fn.bootstrapTable.locales['vi-VN'] = {
+	$.fn.bootstrapTable.locales['ru-RU'] = {
 	  formatLoadingMessage: function formatLoadingMessage() {
-	    return 'Đang tải';
+	    return 'Пожалуйста, подождите, идёт загрузка';
 	  },
 	  formatRecordsPerPage: function formatRecordsPerPage(pageNumber) {
-	    return "".concat(pageNumber, " b\u1EA3n ghi m\u1ED7i trang");
+	    return "".concat(pageNumber, " \u0437\u0430\u043F\u0438\u0441\u0435\u0439 \u043D\u0430 \u0441\u0442\u0440\u0430\u043D\u0438\u0446\u0443");
 	  },
 	  formatShowingRows: function formatShowingRows(pageFrom, pageTo, totalRows, totalNotFiltered) {
 	    if (totalNotFiltered !== undefined && totalNotFiltered > 0 && totalNotFiltered > totalRows) {
-	      return "Hi\u1EC3n th\u1ECB t\u1EEB trang ".concat(pageFrom, " \u0111\u1EBFn ").concat(pageTo, " c\u1EE7a ").concat(totalRows, " b\u1EA3ng ghi (filtered from ").concat(totalNotFiltered, " total rows)");
+	      return "\u0417\u0430\u043F\u0438\u0441\u0438 \u0441 ".concat(pageFrom, " \u043F\u043E ").concat(pageTo, " \u0438\u0437 ").concat(totalRows, " (filtered from ").concat(totalNotFiltered, " total rows)");
 	    }
 
-	    return "Hi\u1EC3n th\u1ECB t\u1EEB trang ".concat(pageFrom, " \u0111\u1EBFn ").concat(pageTo, " c\u1EE7a ").concat(totalRows, " b\u1EA3ng ghi");
+	    return "\u0417\u0430\u043F\u0438\u0441\u0438 \u0441 ".concat(pageFrom, " \u043F\u043E ").concat(pageTo, " \u0438\u0437 ").concat(totalRows);
 	  },
 	  formatSRPaginationPreText: function formatSRPaginationPreText() {
 	    return 'previous page';
@@ -659,13 +659,13 @@
 	    return "Showing ".concat(totalRows, " rows");
 	  },
 	  formatClearSearch: function formatClearSearch() {
-	    return 'Clear Search';
+	    return 'Очистить фильтры';
 	  },
 	  formatSearch: function formatSearch() {
-	    return 'Tìm kiếm';
+	    return 'Поиск';
 	  },
 	  formatNoMatches: function formatNoMatches() {
-	    return 'Không có dữ liệu';
+	    return 'Ничего не найдено';
 	  },
 	  formatPaginationSwitch: function formatPaginationSwitch() {
 	    return 'Hide/Show pagination';
@@ -677,10 +677,10 @@
 	    return 'Hide pagination';
 	  },
 	  formatRefresh: function formatRefresh() {
-	    return 'Refresh';
+	    return 'Обновить';
 	  },
 	  formatToggle: function formatToggle() {
-	    return 'Toggle';
+	    return 'Переключить';
 	  },
 	  formatToggleOn: function formatToggleOn() {
 	    return 'Show card view';
@@ -689,7 +689,7 @@
 	    return 'Hide card view';
 	  },
 	  formatColumns: function formatColumns() {
-	    return 'Columns';
+	    return 'Колонки';
 	  },
 	  formatColumnsToggleAll: function formatColumnsToggleAll() {
 	    return 'Toggle all';
@@ -716,6 +716,6 @@
 	    return 'Close';
 	  }
 	};
-	$.extend($.fn.bootstrapTable.defaults, $.fn.bootstrapTable.locales['vi-VN']);
+	$.extend($.fn.bootstrapTable.defaults, $.fn.bootstrapTable.locales['ru-RU']);
 
 }));

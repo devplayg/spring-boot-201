@@ -1,35 +1,87 @@
-package com.devplayg.coffee.repository.support.audit;
+package com.devplayg.coffee.repository.audit;
 
 // 추후 변경될 방식: https://adrenal.tistory.com/25
 
+import com.devplayg.coffee.entity.Audit;
+import com.devplayg.coffee.entity.QAudit;
+import com.querydsl.core.types.Order;
+import com.querydsl.core.types.OrderSpecifier;
+import com.querydsl.core.types.Predicate;
+import com.querydsl.core.types.dsl.PathBuilder;
+import com.querydsl.jpa.impl.JPAQueryFactory;
+import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.data.domain.Pageable;
+import org.springframework.data.domain.Sort;
+import org.springframework.stereotype.Repository;
 
-//import com.devplayg.coffee.entity.Audit;
-//import com.devplayg.coffee.entity.QAudit;
-//import com.devplayg.coffee.entity.QMember;
-//import com.devplayg.coffee.filter.AuditFilter;
-//import com.devplayg.coffee.util.StringUtils;
-//import com.querydsl.core.BooleanBuilder;
-//import com.querydsl.core.QueryResults;
-//import com.querydsl.core.types.Order;
-//import com.querydsl.core.types.OrderSpecifier;
-//import com.querydsl.core.types.Path;
-//import com.querydsl.core.types.dsl.Expressions;
-//import com.querydsl.jpa.impl.JPAQueryFactory;
-//import org.springframework.data.jpa.repository.support.QuerydslRepositorySupport;
-//import org.springframework.stereotype.Repository;
-//
-//import java.util.List;
-//
-//@Repository
-//public class AuditRepositorySupport extends QuerydslRepositorySupport {
-//
-//    private final JPAQueryFactory query;
-//
+import java.util.List;
+import java.util.stream.Collectors;
+
+@Repository
+public class AuditRepositorySupport implements AuditRepositoryCustom {
+
+    @Autowired
+    private JPAQueryFactory query;
+
+    @Override
+    public List<Audit> findAll(Predicate builder, Pageable pageable) {
+        QAudit audit = QAudit.audit;
+
+        PathBuilder<Audit> entityPath = new PathBuilder<>(Audit.class, "audit");
+        OrderSpecifier order;
+        if (pageable.getSort() == Sort.unsorted()) {
+            order = new OrderSpecifier(Order.DESC, audit.id);
+        } else {
+            List<OrderSpecifier> orders = pageable.getSort().stream()
+                    .map(o -> {
+                        PathBuilder<Object> path = entityPath.get(o.getProperty());
+                        return new OrderSpecifier(Order.valueOf(o.getDirection().name()), path);
+                    })
+                    .collect(Collectors.toList());
+            order = orders.get(0);
+
+        }
+
+        return query.selectFrom(audit)
+                .where(builder)
+                .orderBy(order)
+                .offset(pageable.getPageNumber() * pageable.getPageSize())
+                .limit(pageable.getPageSize())
+                .fetch();
+    }
+}
+
 //    public AuditRepositorySupport(JPAQueryFactory queryFactory) {
 //        super(Audit.class);
 //        this.query = queryFactory;
 //    }
+
+//    public List<Audit> search(Predicate builder, Pageable pageable) {
+//        QAudit audit = QAudit.audit;
+//        QMember member = QMember.member;
 //
+//        PathBuilder<Audit> entityPath = new PathBuilder<>(Audit.class, "audit");
+//        List<OrderSpecifier> orders = pageable.getSort().stream()
+//                .map(o -> {
+//                    PathBuilder<Object> path = entityPath.get(o.getProperty());
+//                    return new OrderSpecifier(Order.valueOf(o.getDirection().name()), path);
+//                })
+//                .collect(Collectors.toList());
+//
+//
+//        QueryResults<Audit> result = query.select(audit)
+//                .from(audit)
+//                .leftJoin(member)
+//                .on(audit.member.eq(member))
+//                .where(builder);
+////                .orderBy(this.getSortedColumn(Order.DESC, filter.getSort()))
+////                .offset(filter.getOffset())
+////                .limit(filter.getLimit())
+////                .fetchResults();
+//
+//
+//    }
+
 //    public QueryResults<Audit> search(AuditFilter filter) {
 //        QAudit audit = QAudit.audit;
 //        QMember member = QMember.member;

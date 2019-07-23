@@ -40,7 +40,7 @@
 <body class="desktop-detected pace-done smart-style-1">
 
 <!-- #HEADER -->
-<header id="header">
+<header id="header" class="hidden">
     <div id="logo-group">
 
         <!-- PLACE YOUR LOGO HERE -->
@@ -167,7 +167,7 @@
 <!-- #NAVIGATION -->
 <!-- Left panel : Navigation area -->
 <!-- Note: This width of the aside area can be adjusted through LESS variables -->
-<aside id="left-panel">
+<aside id="left-panel" class="hidden">
 
     <!-- User info -->
     <div class="login-info">
@@ -330,12 +330,13 @@
 <script th:src="@{/plugins/moment/moment.min.js}"></script>
 <script th:src="@{/plugins/moment/moment-timezone-with-data.min.js}"></script>
 
-<script th:src="@{/plugins/bootstrap-table/bootstrap-table.min.js}"></script>
+<script th:src="@{/plugins/bootstrap-table/bootstrap-table.js}"></script>
 <script th:src="@{/plugins/bootstrap-select/js/bootstrap-select.min.js}"></script>
 <script th:src="@{/plugins/jquery-validation/jquery.validate.min.js}"></script>
 <script th:src="@{/plugins/jquery-mask/jquery.mask.min.js}"></script>
 <script th:src="@{/plugins/bootstrap-datetimepicker/bootstrap-datetimepicker.min.js}"></script>
 <script th:src="@{/plugins/sweetalert2/sweetalert2.min.js}"></script>
+<script th:src="@{/plugins/js.cookie.min.js}"></script>
 <script th:inline="javascript">
 /*<![CDATA[*/
     let userRoles = {/*[# th:each="n : ${T(com.devplayg.coffee.definition.RoleType.Role).values()}"]*/"[(${n})]": "[(${n.description})]",/*[/]*/};

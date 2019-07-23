@@ -1,48 +1,41 @@
 $(function () {
 
     /*
-     * 1. Definition
+     * 1. Define and initialize
      */
     let $table = $("#table-" + ctrl);
 
-
-    /*
-     * 2. Initialize
-     */
     $(".datetime").datetimepicker(defaultDatetimeOption);
+
     $table.bootstrapTable({
         url: "/" + ctrl,
         method: "get",
+        queryParamsType: "", // DO NOT REMOVE. LEAVE BLANK
+        pagination: (filter.fastPaging !== true),
         sidePagination: "server",
-        queryParams: function(p) {
-            refineJavaDateWithPaging(filter, p);
+        queryParams: function (p) {
+            tuneDateAndPaging(filter, p);
             return $.param(filter, true);
         },
-        responseHandler: function(res) {
+        responseHandler: function (res) {
+            if (filter.fastPaging) {
+                return res;
+            }
             return {
                 total: res.totalElements,
                 rows: res.content
             };
         }
+    }).on("column-switch.bs.table", function (e, field, checked) {
+        captureTableColumnsState($(this));
     });
 
-
     /*
-     * 3. Event
+     * 2. Event
      */
 
 
     /*
-     * 4. Function
+     * 3. Function
      */
-
-
-    // Test code
-    // {
-        // let $form = $("#form-member-insert");
-        // $("input[name=username]", $form).val("msgxxx");
-        // $("input[name=name]", $form).val("WON SEOK AHN");
-        // $("input[name=email]", $form).val("wsan@korea.com");
-        // $("input[name=inputPassword]", $form).val("wsan123!@#");
-    // }
 });

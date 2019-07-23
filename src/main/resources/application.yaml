@@ -39,7 +39,7 @@ logging:
                 type.descriptor.sql.BasicBinder: info
 
 app:
-    home-uri: /members/
+    home-uri: /audit/
     name: Spring Boot 201
     path-patterns-not-to-be-intercepted:
         - /test/**

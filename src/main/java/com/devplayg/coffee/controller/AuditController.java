@@ -2,8 +2,10 @@ package com.devplayg.coffee.controller;
 
 import com.devplayg.coffee.entity.Audit;
 import com.devplayg.coffee.entity.filter.AuditFilter;
-import com.devplayg.coffee.repository.support.audit.AuditRepository;
-import com.devplayg.coffee.repository.support.audit.AuditPredicate;
+import com.devplayg.coffee.repository.audit.AuditRepository;
+import com.devplayg.coffee.repository.audit.AuditPredicate;
+import com.devplayg.coffee.repository.audit.AuditRepositorySupport;
+import com.querydsl.core.QueryResults;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
@@ -16,6 +18,8 @@ import org.springframework.web.bind.annotation.ModelAttribute;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestMethod;
 
+import java.util.List;
+
 /**
  * Audit controller audits system events.
  */
@@ -23,8 +27,14 @@ import org.springframework.web.bind.annotation.RequestMethod;
 @RequestMapping("audit")
 public class AuditController {
 
-    @Autowired
-    private AuditRepository auditRepository;
+    private final AuditRepository auditRepository;
+
+    private final AuditRepositorySupport auditRepositorySupport;
+
+    public AuditController(AuditRepository auditRepository, AuditRepositorySupport auditRepositorySupport) {
+        this.auditRepository = auditRepository;
+        this.auditRepositorySupport = auditRepositorySupport;
+    }
 
     @RequestMapping(value = "/", method = {RequestMethod.GET, RequestMethod.POST})
     public String display(@ModelAttribute AuditFilter filter, Model model) {
@@ -36,7 +46,12 @@ public class AuditController {
     @GetMapping
     public ResponseEntity<?> findAll(@ModelAttribute AuditFilter filter, Pageable pageable) {
         filter.tune();
-        Page<Audit> page = auditRepository.findAll(AuditPredicate.search(filter), pageable);
+
+        if (filter.getFastPaging()) {
+            List<Audit> list = auditRepositorySupport.findAll(AuditPredicate.find(filter), pageable);
+            return new ResponseEntity<>(list, HttpStatus.OK);
+        }
+        Page<Audit> page = auditRepository.findAll(AuditPredicate.find(filter), pageable);
         return new ResponseEntity<>(page, HttpStatus.OK);
     }
 }

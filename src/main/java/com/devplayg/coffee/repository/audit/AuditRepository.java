@@ -1,4 +1,4 @@
-package com.devplayg.coffee.repository.support.audit;
+package com.devplayg.coffee.repository.audit;
 
 import com.devplayg.coffee.entity.Audit;
 import org.springframework.data.jpa.repository.JpaRepository;

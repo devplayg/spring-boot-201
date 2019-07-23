@@ -113,11 +113,13 @@ public class Member implements UserDetails, CredentialsContainer, Serializable {
                     CascadeType.PERSIST, // Child entities이 삭제 되도록 함
                     CascadeType.MERGE // Child entities를 Insert할 때, Parent ID를 기록한 후 Insert 함
             },
+
             mappedBy = "member")
     private List<MemberNetwork> accessibleIpList = new ArrayList<>();
 
     // Text to accessible IP list
     @Transient
+    @JsonIgnore
     private String accessibleIpListText;
 
     @Override

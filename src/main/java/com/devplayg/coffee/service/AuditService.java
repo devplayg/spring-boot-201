@@ -4,7 +4,7 @@ import com.devplayg.coffee.definition.AuditCategory;
 import com.devplayg.coffee.entity.Audit;
 import com.devplayg.coffee.entity.Member;
 import com.devplayg.coffee.framework.InMemoryMemberManager;
-import com.devplayg.coffee.repository.support.audit.AuditRepository;
+import com.devplayg.coffee.repository.audit.AuditRepository;
 import com.devplayg.coffee.util.SubnetUtils;
 import com.fasterxml.jackson.core.JsonProcessingException;
 import com.fasterxml.jackson.databind.ObjectMapper;

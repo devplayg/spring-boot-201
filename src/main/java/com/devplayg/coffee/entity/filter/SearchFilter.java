@@ -17,6 +17,8 @@ public class SearchFilter {
     @DateTimeFormat(pattern = "yyyy-MM-dd HH:mm")
     private LocalDateTime endDate;
 
+    private Boolean fastPaging;
+
     public void tune() {
         LocalDateTime now = ZonedDateTime.now(InMemoryMemberManager.getCurrentMemberTimezone()).toLocalDateTime();
         if (this.startDate == null) {
@@ -24,6 +26,10 @@ public class SearchFilter {
         }
         if (this.endDate == null) {
             this.endDate = this.startDate.plusSeconds(86400 - 1);
+        }
+
+        if (fastPaging == null) {
+            fastPaging = false;
         }
     }
 }

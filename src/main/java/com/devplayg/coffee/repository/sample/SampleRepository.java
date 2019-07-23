@@ -1,4 +1,4 @@
-package com.devplayg.coffee.repository.support.sample;
+package com.devplayg.coffee.repository.sample;
 
 import com.devplayg.coffee.entity.Audit;
 import org.springframework.data.jpa.repository.JpaRepository;

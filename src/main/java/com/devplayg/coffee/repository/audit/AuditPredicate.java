@@ -1,4 +1,4 @@
-package com.devplayg.coffee.repository.support.audit;
+package com.devplayg.coffee.repository.audit;
 
 import com.devplayg.coffee.entity.QAudit;
 import com.devplayg.coffee.entity.filter.AuditFilter;
@@ -7,7 +7,7 @@ import com.querydsl.core.BooleanBuilder;
 import com.querydsl.core.types.Predicate;
 
 public class AuditPredicate {
-    public static Predicate search(AuditFilter filter) {
+    public static Predicate find(AuditFilter filter) {
         QAudit audit = QAudit.audit;
 
         BooleanBuilder builder = new BooleanBuilder();

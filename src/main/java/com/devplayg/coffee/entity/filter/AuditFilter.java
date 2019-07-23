@@ -4,7 +4,11 @@ import com.devplayg.coffee.definition.AuditCategory;
 import lombok.Getter;
 import lombok.Setter;
 import lombok.ToString;
+import org.springframework.data.domain.Page;
+import org.springframework.data.domain.Pageable;
+import org.springframework.data.domain.Sort;
 
+import java.time.LocalDateTime;
 import java.util.ArrayList;
 import java.util.List;
 
@@ -17,5 +21,9 @@ public class AuditFilter extends SearchFilter{
 
     private List<AuditCategory> categoryList = new ArrayList<>();
 
-    private Boolean fastPaging;
+    public void tune() {
+        super.tune();
+
+        this.setStartDate(LocalDateTime.now().toLocalDate().minusDays(100).atStartOfDay());
+    }
 }

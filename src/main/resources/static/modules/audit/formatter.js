@@ -3,10 +3,9 @@ function auditMemberFormatter(member, row, idx) {
         return;
     }
 
-    var badge = "";
+    let badge = "";
     $.each(member.roleList, function(i, r) {
         badge = '<button class="btn btn-default btn-xs">' + r + '</button>';
-        console.log(r);
     });
     return member.username; // + '<span class="pull-right">' + badge + '</span>';
 }
