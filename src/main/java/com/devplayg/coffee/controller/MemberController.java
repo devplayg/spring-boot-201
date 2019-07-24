@@ -7,6 +7,7 @@ import com.devplayg.coffee.framework.InMemoryMemberManager;
 import com.devplayg.coffee.repository.member.MemberRepository;
 import com.devplayg.coffee.service.AuditService;
 import com.devplayg.coffee.service.MemberService;
+import com.devplayg.coffee.vo.MemberPassword;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.dao.DataIntegrityViolationException;
@@ -59,6 +60,7 @@ public class MemberController {
         return "member/member";
     }
 
+
     /**
      * Get member list
      */
@@ -67,6 +69,7 @@ public class MemberController {
         List<Member> list = memberRepository.findAll();
         return new ResponseEntity<>(list, HttpStatus.OK);
     }
+
 
     /**
      * Get member
@@ -77,6 +80,7 @@ public class MemberController {
                 .orElseThrow(() -> new ResourceNotFoundException("member", "id", id));
         return new ResponseEntity<>(member, HttpStatus.OK);
     }
+
 
     /**
      * Create member
@@ -96,6 +100,7 @@ public class MemberController {
             return new ResponseEntity<>(e.getMessage(), HttpStatus.BAD_REQUEST);
         }
     }
+
 
     /**
      * Update member
@@ -138,6 +143,17 @@ public class MemberController {
         auditService.audit(AuditCategory.MEMBER_REMOVE, member);
 
         return new ResponseEntity<>(member, HttpStatus.OK);
+    }
+
+
+    /**
+     * Update password
+     */
+    @PatchMapping("{id}/password")
+    public ResponseEntity<?> patch(@ModelAttribute MemberPassword memberPassword, @PathVariable("id") long id, BindingResult bindingResult) {
+//        log.debug("pw: {}", input);
+        memberService.updatePassword(id, memberPassword);
+        return new ResponseEntity<>(memberPassword, HttpStatus.OK);
     }
 
 //    private List<MemberNetwork> getValidNetworkList(Member member) throws IllegalArgumentException {

@@ -157,4 +157,7 @@ public class Member implements UserDetails, CredentialsContainer, Serializable {
     public ZoneId getTimezoneId() {
         return ZoneId.of(getTimezone());
     }
+
+
+    private LocalDateTime lastPasswordChange;
 }

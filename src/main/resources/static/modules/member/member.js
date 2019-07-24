@@ -7,6 +7,7 @@ $(function () {
     class Member {
 
         create(form) {
+            console.log(form);
             $.ajax({
                 method: "POST",
                 url: "/members",
@@ -20,10 +21,11 @@ $(function () {
         }
 
         show(row) {
+            member.id = row.id;
+
             $.ajax({
-                url: "/members/" + row.id,
+                url: "/members/" + member.id,
             }).done(function (data) {
-                member.id = data.id;
                 $("input[name=username]", $updateForm).val(data.username);
                 $("input[name=email]", $updateForm).val(data.email);
                 $("input[name=name]", $updateForm).val(data.name);
@@ -45,7 +47,7 @@ $(function () {
 
                 $updateForm.find(".modal").modal("show");
             }).fail(function (jqXHR, textStatus, errorThrown) {
-                Swal.fire(jqXHR.message, row.username, 'warning');
+                Swal.fire(jqXHR.responseJSON.message, row.username, "warning");
             });
         }
 
@@ -58,15 +60,30 @@ $(function () {
                 console.log(data);
                 $(form).find(".modal").modal("hide");
             }).fail(function (jqXHR, textStatus) {
-                Swal.fire(jqXHR.message, username, 'warning');
+                console.log(jqXHR);
+                Swal.fire("Error", jqXHR.responseJSON.message, "error");
+            });
+        }
+
+        updatePassword(form) {
+            $.ajax({
+                method: "PATCH",
+                url: "/members/" + member.id + "/password",
+                data: $(form).serialize()
+            }).done(function (data) {
+                console.log(data);
+                $(form).find(".modal").modal("hide");
+            }).fail(function (jqXHR, textStatus) {
+                console.log(jqXHR);
+                Swal.fire("Error", jqXHR.responseJSON.message, "error");
             });
         }
 
         delete(row) {
             Swal.fire({
-                title: 'Are you sure?',
+                title: "Are you sure?",
                 text: "You won't be able to revert this!",
-                type: 'warning',
+                type: "warning",
                 showCancelButton: true,
                 confirmButtonColor: '#3085d6',
                 cancelButtonColor: '#d33',
@@ -80,20 +97,27 @@ $(function () {
                         console.log(data);
                         $table.bootstrapTable("refresh");
                     }).fail(function (jqXHR, textStatus) {
-                        Swal.fire('failed to delete', row.username, 'warning');
+                        Swal.fire('failed to delete', row.username, "warning");
                     });
                 }
             })
+        }
+
+        showPasswordChangeForm(row) {
+            member.id = row.id;
+
+            $("#modal-" + ctrl + "-password").modal("show");
         }
     }
 
 
     /*
-     * 2. Define
+     * 2. Define and initialize
      */
-    let $table = $("#table-member"),
-        $createForm = $("#form-member-create"),
-        $updateForm = $("#form-member-update"),
+    let $table = $("#table-" + ctrl),
+        $createForm = $("#form-" + ctrl + "-create"),
+        $updateForm = $("#form-" + ctrl + "-update"),
+        $passwordForm = $("#form-" + ctrl + "-password"),
         member = new Member();
 
 
@@ -106,7 +130,11 @@ $(function () {
         },
         "click .delete": function (e, val, row, idx) {
             member.delete(row);
+        },
+        "click .password": function (e, val, row, idx) {
+            member.showPasswordChangeForm(row);
         }
+
     };
 
     $(".modal-form")
@@ -118,15 +146,19 @@ $(function () {
             $(".alert .message", $form).empty();
 
             $table.bootstrapTable("refresh");
+        })
+        .on("shown.bs.modal", function () {
+            let $form = $(this).closest("form");
+            $form.find("input:not(readonly)[type=text],textarea").filter(":visible:first").focus().select();
         });
 
     $createForm.validate({
         submitHandler: function (form, e) {
             e.preventDefault();
+            console.log(333);
+            console.log(member);
             member.create(form);
         },
-        ignore: 'input[type="hidden"]',
-        errorClass: "help-block",
         rules: {
             username: {
                 required: true,
@@ -151,21 +183,14 @@ $(function () {
                 required: true,
             },
         },
-        highlight: function (element) {
-            $(element).closest(".form-group").addClass("has-error");
-        },
-        unhighlight: function (element) {
-            $(element).closest(".form-group").removeClass("has-error");
-        },
+
     });
 
     $updateForm.validate({
         submitHandler: function (form, e) {
             e.preventDefault();
-            new Member().update(form);
-
+            member.update(form);
         },
-        ignore: 'input[type="hidden"]',
         rules: {
             name: {
                 minlength: 4,
@@ -181,12 +206,29 @@ $(function () {
         }
     });
 
+    $passwordForm.validate({
+        submitHandler: function (form, e) {
+            e.preventDefault();
+            console.log(444);
+            member.updatePassword(form);
+        },
+        rules: {
+            password: {
+                required: true,
+                password: true
+            },
+            passwordConfirm: {
+                equalTo: "#" + $passwordForm.attr("id") + " input[name=password]"
+            },
+        }
+    });
+
 
     /*
      * 4. Main
      */
     $table.bootstrapTable();
-
+    console.log();
 
     // Test code
     {

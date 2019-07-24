@@ -42,7 +42,7 @@ public class SecurityConfig extends WebSecurityConfigurerAdapter {
 
     @Override
     protected void configure(HttpSecurity httpSecurity) throws Exception {
-        log.debug("# security: {}", appConfig.getPathPatternsNotToBeIntercepted());
+//        log.debug("# security: {}", appConfig.getPathPatternsNotToBeIntercepted());
         CharacterEncodingFilter filter = new CharacterEncodingFilter();
         httpSecurity
                 .authorizeRequests()
@@ -77,6 +77,7 @@ public class SecurityConfig extends WebSecurityConfigurerAdapter {
                 //.defaultSuccessUrl(appConfig.getHomeUri())
                 //.successForwardUrl("/members")
                 .successHandler(authenticationSuccessHandler())
+
                 // Login failed
                 .failureHandler(authenticationFailureHandler())
                 //.failureUrl("/login?error")

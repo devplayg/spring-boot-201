@@ -7,7 +7,9 @@ import com.devplayg.coffee.exception.ResourceNotFoundException;
 import com.devplayg.coffee.framework.InMemoryMemberManager;
 import com.devplayg.coffee.repository.member.MemberRepository;
 import com.devplayg.coffee.util.NetworkUtils;
+import com.devplayg.coffee.vo.MemberPassword;
 import lombok.extern.slf4j.Slf4j;
+import org.apache.tomcat.jni.Local;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.security.core.userdetails.UserDetails;
 import org.springframework.security.core.userdetails.UserDetailsService;
@@ -15,6 +17,7 @@ import org.springframework.security.core.userdetails.UsernameNotFoundException;
 import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Service;
 
+import java.time.LocalDateTime;
 import java.util.List;
 import java.util.stream.Collectors;
 
@@ -84,6 +87,23 @@ public class MemberService implements UserDetailsService {
         inMemoryMemberManager.informMemberHasChanged(member.getUsername());
 
         return changed;
+    }
+
+    public void updatePassword(long id, MemberPassword memberPassword) {
+        Member member = memberRepository.findById(id)
+                .orElseThrow(() -> new ResourceNotFoundException("member", "id", id));
+
+        member.setPassword(passwordEncoder.encode(memberPassword.getPassword()));
+        member.setLastPasswordChange(LocalDateTime.now());
+        memberRepository.save(member);
+
+//        memberR
+
+        // Update in-memory
+        inMemoryMemberManager.updateUser(member);
+
+        // Write audit log
+
     }
 }
 

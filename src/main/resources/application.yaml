@@ -46,6 +46,7 @@ app:
     name: Spring Boot 201
     path-patterns-not-to-be-intercepted:
         - /test/**
+        - /login/**
         - /favicon.ico
         - /assets/**
         - /modules/**

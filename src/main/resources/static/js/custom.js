@@ -1,9 +1,9 @@
-
 const PageCurrent = 0;
 
 /**
  * jquery-mask default settings
  */
+
 $(".mask-yyyymmddhhii").mask("0000-00-00 00:00");
 $(".mask-ipv4-cidr").mask("099.099.099.099/09");
 $(".mask-09999").mask("09999");
@@ -14,6 +14,7 @@ $(".mask-099").mask("099");
 /**
  * Bootstrap-datetimepicker default settings
  */
+
 let defaultDatetimeOption = {
     format: "yyyy-mm-dd hh:ii",
     pickerPosition: "bottom-left",
@@ -22,6 +23,21 @@ let defaultDatetimeOption = {
     maxView: 4,
     autoclose: true
 };
+
+/**
+ * jquery-validation default settings
+ */
+
+jQuery.validator.setDefaults({
+    // debug: true,
+    errorClass: "help-block",
+    highlight: function (element) {
+        $(element).closest(".form-group").addClass("has-error");
+    },
+    unhighlight: function (element) {
+        $(element).closest(".form-group").removeClass("has-error");
+    },
+});
 
 
 /**
@@ -80,10 +96,10 @@ function restoreTableColumnsState($table) {
     }
 }
 
-
 /**
- * Functions
+ * Network functions
  */
+
 function ipToint(ip) {
     return ip.split('.').reduce(function (ipInt, octet) {
         return (ipInt << 8) + parseInt(octet, 10)
@@ -94,9 +110,19 @@ function intToip(ipInt) {
     return ((ipInt >>> 24) + '.' + (ipInt >> 16 & 255) + '.' + (ipInt >> 8 & 255) + '.' + (ipInt & 255));
 }
 
+
+/**
+ * Date and paging function
+ */
+
+function convertToUserTime(dt) {
+    return moment(dt).tz(userTz).format();
+}
+
 function tuneDate(filter) {
     // Deep copy
     let _filter = $.extend({}, filter);
+
     if (_filter.hasOwnProperty("startDate")) {
         _filter.startDate = _filter.startDate.replace("T", " ").substring(0, 16);
     }
@@ -118,6 +144,4 @@ function tuneDateAndPaging(filter, param) {
     return _filter;
 }
 
-function convertToUserTime(dt) {
-    return moment(dt).tz(userTz).format();
-}
+
