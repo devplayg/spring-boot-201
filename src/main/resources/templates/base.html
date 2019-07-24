@@ -40,7 +40,7 @@
 <body class="desktop-detected pace-done smart-style-1">
 
 <!-- #HEADER -->
-<header id="header" class="hidden">
+<header id="header" class="">
     <div id="logo-group">
 
         <!-- PLACE YOUR LOGO HERE -->
@@ -93,8 +93,8 @@
 
     <!-- #PROJECTS: projects dropdown -->
     <div class="project-context hidden-xs">
-        <span class="label" >User Timezone</span>
-        <span class="project-selector " th:text="|${userTz}|">Timezone</span>
+        <span class="label">User Timezone</span>
+        <span class="project-selector"><span th:text="|${userTz}|">Timezone</span> <small th:text="|${remoteAddr}|"></span></span>
 <!--        <span class="project-selector dropdown-toggle" data-toggle="dropdown">Recent projects <i class="fa fa-angle-down"></i></span>-->
 
         <!-- Suggestion: populate this list with fetch and push technique -->
@@ -167,7 +167,7 @@
 <!-- #NAVIGATION -->
 <!-- Left panel : Navigation area -->
 <!-- Note: This width of the aside area can be adjusted through LESS variables -->
-<aside id="left-panel" class="hidden">
+<aside id="left-panel" class="">
 
     <!-- User info -->
     <div class="login-info">

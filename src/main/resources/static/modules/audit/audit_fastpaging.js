@@ -7,8 +7,6 @@ $(function () {
         logs = [];
 
     $(".datetime").datetimepicker(defaultDatetimeOption);
-    // $table.bootstrapTable();
-    // console.log($table.bootstrapTable("getOptions"));
 
     $table.bootstrapTable({
         sidePagination: "client", // Client-side pagination
@@ -27,7 +25,7 @@ $(function () {
         size: $table.bootstrapTable("getOptions").pageSize, // Page size
         blockIndex: 0, // Block index
         blockIndex_before: -1, // Previous block index
-        blockSize: 3 // block size
+        blockSize: 20 // block size
     };
 
 

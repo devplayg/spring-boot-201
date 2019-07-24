@@ -45,6 +45,7 @@ public class RequestInterceptor extends HandlerInterceptorAdapter {
             SecurityContextHolder.getContext().setAuthentication(newAuth);
             inMemoryMemberManager.gotNews(username);
         }
+
 //        }
 //        UserDetails userDetails = null;
 //        try {
@@ -78,6 +79,7 @@ public class RequestInterceptor extends HandlerInterceptorAdapter {
             //String methodName = handlerMethod.getMethod().getName();
             mv.addObject("systemTz", TimeZone.getDefault().toZoneId().getId());
             mv.addObject("ctrl", controllerName);
+            mv.addObject("remoteAddr", req.getRemoteAddr());
 
             // Get member'ㄴ timezone and set it to view object
             Authentication auth = SecurityContextHolder.getContext().getAuthentication();

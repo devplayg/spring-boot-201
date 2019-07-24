@@ -5,6 +5,10 @@ import com.devplayg.coffee.repository.sample.SampleRepository;
 import com.devplayg.coffee.repository.sample.SampleRepositorySupport;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.security.authentication.AnonymousAuthenticationToken;
+import org.springframework.security.authentication.UsernamePasswordAuthenticationToken;
+import org.springframework.security.core.Authentication;
+import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.web.bind.annotation.*;
 
 import java.util.List;
@@ -19,6 +23,16 @@ public class TestController {
 
     @Autowired
     private SampleRepositorySupport sampleRepositorySupport;
+
+    @GetMapping("auth")
+    public Object getAuth() {
+        Authentication auth = SecurityContextHolder.getContext().getAuthentication();
+        if (auth instanceof AnonymousAuthenticationToken) {
+            return "";
+        }
+
+        return auth;
+    }
 
 //    @Autowired
 //    private AppConfig appConfig;

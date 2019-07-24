@@ -34,7 +34,6 @@ import java.util.stream.Collectors;
 @Getter
 @Setter
 @ToString
-@Builder
 @AllArgsConstructor
 @NoArgsConstructor
 @EqualsAndHashCode(exclude = {"roleList", "updated"})

@@ -39,6 +39,9 @@ logging:
                 type.descriptor.sql.BasicBinder: info
 
 app:
+    admin-info:
+        name: Administrator
+        email: admin@admin.com
     home-uri: /audit/
     name: Spring Boot 201
     path-patterns-not-to-be-intercepted:

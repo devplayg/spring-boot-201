@@ -153,16 +153,25 @@ public class SecurityConfig extends WebSecurityConfigurerAdapter {
     @Bean
     public InMemoryMemberManager inMemoryMemberManager() {
         List members = memberRepository.findAll();
-        Member member = Member.builder()
-                .id(InMemoryMemberManager.adminId)
-                .username(InMemoryMemberManager.adminUsername)
-                .enabled(false)
-                .name("System Administrator")
-                .roles(RoleType.Role.ADMIN.getValue())
-                .timezone(TimeZone.getDefault().toZoneId().getId())
-                .email("admin@admin.com")
-                .password("")
-                .build();
+//        Member member = Member.builder()
+//                .id(InMemoryMemberManager.adminId)
+//                .username(InMemoryMemberManager.adminUsername)
+//                .enabled(false)
+//                .name("System Administrator")
+//                .roles(RoleType.Role.ADMIN.getValue())
+//                .timezone(TimeZone.getDefault().toZoneId().getId())
+//                .email("admin@admin.com")
+//                .password("")
+//                .build();
+        Member member = new Member();
+        member.setId(InMemoryMemberManager.adminId);
+        member.setUsername(InMemoryMemberManager.adminUsername);
+        member.setEnabled(false);
+        member.setName(appConfig.getAdminInfo().getName());
+        member.setRoles(RoleType.Role.ADMIN.getValue());
+        member.setTimezone(TimeZone.getDefault().toZoneId().getId());
+        member.setEmail(appConfig.getAdminInfo().getEmail());
+        member.setPassword("");
         members.add(member);
         return new InMemoryMemberManager(members);
     }
