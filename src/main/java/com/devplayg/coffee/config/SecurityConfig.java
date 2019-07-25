@@ -34,11 +34,14 @@ import java.util.TimeZone;
 @Slf4j
 public class SecurityConfig extends WebSecurityConfigurerAdapter {
 
-    @Autowired
-    private MemberRepository memberRepository;
+    private final MemberRepository memberRepository;
 
-    @Autowired
-    private AppConfig appConfig;
+    private final AppConfig appConfig;
+
+    public SecurityConfig(MemberRepository memberRepository, AppConfig appConfig) {
+        this.memberRepository = memberRepository;
+        this.appConfig = appConfig;
+    }
 
     @Override
     protected void configure(HttpSecurity httpSecurity) throws Exception {

@@ -18,11 +18,14 @@ import java.util.List;
 @RequestMapping("test")
 public class TestController {
 
-    @Autowired
-    private SampleRepository sampleRepository;
+    private final SampleRepository sampleRepository;
 
-    @Autowired
-    private SampleRepositorySupport sampleRepositorySupport;
+    private final SampleRepositorySupport sampleRepositorySupport;
+
+    public TestController(SampleRepository sampleRepository, SampleRepositorySupport sampleRepositorySupport) {
+        this.sampleRepository = sampleRepository;
+        this.sampleRepositorySupport = sampleRepositorySupport;
+    }
 
     @GetMapping("auth")
     public Object getAuth() {

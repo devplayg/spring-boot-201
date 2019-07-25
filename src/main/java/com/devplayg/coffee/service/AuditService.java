@@ -9,7 +9,6 @@ import com.devplayg.coffee.util.SubnetUtils;
 import com.fasterxml.jackson.core.JsonProcessingException;
 import com.fasterxml.jackson.databind.ObjectMapper;
 import lombok.extern.slf4j.Slf4j;
-import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.security.authentication.AnonymousAuthenticationToken;
 import org.springframework.security.core.Authentication;
 import org.springframework.security.core.context.SecurityContextHolder;
@@ -22,14 +21,19 @@ import javax.servlet.http.HttpServletRequest;
 /**
  * 감사로그 서비스
  */
-@Service
-@Slf4j
-public class AuditService {
-    @Autowired
-    private AuditRepository auditRepository;
 
-    @Autowired
-    private InMemoryMemberManager inMemoryMemberManager;
+@Slf4j
+@Service
+public class AuditService {
+
+    private final AuditRepository auditRepository;
+
+    private final InMemoryMemberManager inMemoryMemberManager;
+
+    public AuditService(AuditRepository auditRepository, InMemoryMemberManager inMemoryMemberManager) {
+        this.auditRepository = auditRepository;
+        this.inMemoryMemberManager = inMemoryMemberManager;
+    }
 
     public void audit(AuditCategory category, Object message) {
         Audit audit = Audit.builder()

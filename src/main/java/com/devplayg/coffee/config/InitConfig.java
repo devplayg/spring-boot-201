@@ -20,20 +20,6 @@ import javax.persistence.PersistenceContext;
 public class InitConfig {
 
     /**
-     * Audit service
-     */
-    @Autowired
-    private AuditService auditService;
-
-    /**
-     * Audit program start
-     */
-    @EventListener(ApplicationReadyEvent.class)
-    public void onApplicationStart() {
-        auditService.audit(AuditCategory.APPLICATION_STARTED);
-    }
-
-    /**
      * Enum mapper
      */
     @Bean

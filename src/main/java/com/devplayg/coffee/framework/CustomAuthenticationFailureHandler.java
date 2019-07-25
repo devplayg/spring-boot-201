@@ -13,6 +13,7 @@ import java.io.IOException;
 import java.util.HashMap;
 
 public class CustomAuthenticationFailureHandler implements AuthenticationFailureHandler {
+
     @Autowired
     private AuditService auditService;
 

@@ -26,8 +26,11 @@ import java.util.stream.Collectors;
 @Slf4j
 public class WebConfig implements WebMvcConfigurer {
 
-    @Autowired
-    private AppConfig appConfig;
+    private final AppConfig appConfig;
+
+    public WebConfig(AppConfig appConfig) {
+        this.appConfig = appConfig;
+    }
 
     /**
      * Request interceptor
