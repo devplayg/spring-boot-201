@@ -2,6 +2,7 @@ package com.devplayg.coffee.entity;
 
 import com.devplayg.coffee.definition.RoleType;
 import com.devplayg.coffee.entity.view.AuditView;
+import com.devplayg.coffee.util.SubnetUtils;
 import com.fasterxml.jackson.annotation.JsonIgnore;
 import com.fasterxml.jackson.annotation.JsonProperty;
 import com.fasterxml.jackson.annotation.JsonView;
@@ -35,10 +36,14 @@ import java.util.stream.Collectors;
 @Setter
 @ToString
 @AllArgsConstructor
-@NoArgsConstructor
 @EqualsAndHashCode(exclude = {"roleList", "updated"})
 public class Member implements UserDetails, CredentialsContainer, Serializable {
     private static final long serialVersionUID = 2L;
+
+    public Member() {
+        roleList = new ArrayList<>();
+        accessibleIpList = new ArrayList<>();
+    }
 
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
@@ -73,7 +78,7 @@ public class Member implements UserDetails, CredentialsContainer, Serializable {
     private String password;
 
     @Column(nullable = false)
-    private boolean enabled ;
+    private boolean enabled;
 
     @Column(nullable = false)
     @JsonIgnore
@@ -94,7 +99,7 @@ public class Member implements UserDetails, CredentialsContainer, Serializable {
 
     @Transient
     @JsonIgnore
-    private List<RoleType.Role> roleList = new ArrayList<>();
+    private List<RoleType.Role> roleList;
 
     @Transient
     @JsonProperty("roleList")
@@ -114,7 +119,11 @@ public class Member implements UserDetails, CredentialsContainer, Serializable {
             },
 
             mappedBy = "member")
-    private List<MemberNetwork> accessibleIpList = new ArrayList<>();
+    private List<MemberNetwork> accessibleIpList;
+
+    @Transient
+    @JsonIgnore
+    private List<SubnetUtils> subnetUtils;
 
     // Text to accessible IP list
     @Transient

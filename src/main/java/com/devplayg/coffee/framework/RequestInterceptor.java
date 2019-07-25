@@ -1,15 +1,14 @@
 package com.devplayg.coffee.framework;
 
 import com.devplayg.coffee.entity.Member;
+import com.devplayg.coffee.exception.ForbiddenException;
+import com.devplayg.coffee.util.SubnetUtils;
 import lombok.extern.slf4j.Slf4j;
-import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.context.annotation.ComponentScan;
 import org.springframework.security.authentication.AnonymousAuthenticationToken;
 import org.springframework.security.authentication.UsernamePasswordAuthenticationToken;
 import org.springframework.security.core.Authentication;
 import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.security.core.userdetails.UserDetails;
-import org.springframework.security.core.userdetails.UsernameNotFoundException;
 import org.springframework.stereotype.Component;
 import org.springframework.web.method.HandlerMethod;
 import org.springframework.web.servlet.ModelAndView;
@@ -30,7 +29,7 @@ public class RequestInterceptor extends HandlerInterceptorAdapter {
     public boolean preHandle(HttpServletRequest req, HttpServletResponse res, Object handler) {
         Authentication auth = SecurityContextHolder.getContext().getAuthentication();
         if (auth instanceof AnonymousAuthenticationToken) {
-            log.debug("# RequestInterceptor-preHandle: [{}] not logged in yet, {}",req.getMethod(), req.getRequestURI());
+            log.debug("# RequestInterceptor-preHandle: [{}] not logged in yet, {}", req.getMethod(), req.getRequestURI());
             return true;
         }
 
@@ -46,7 +45,23 @@ public class RequestInterceptor extends HandlerInterceptorAdapter {
             inMemoryMemberManager.gotNews(username);
         }
 
-//        }
+        // IP Filtering
+        Member member = (Member) SecurityContextHolder.getContext().getAuthentication().getPrincipal();
+        log.debug("# member networks: {}", member.getSubnetUtils());
+        if (member.getSubnetUtils().size() > 0) {
+            boolean allowed = false;
+
+            for (SubnetUtils s : member.getSubnetUtils()) {
+                if (s.getInfo().isInRange(req.getRemoteAddr())) {
+                    allowed = true;
+                }
+            }
+
+            if (!allowed) {
+                throw new ForbiddenException();
+            }
+        }
+
 //        UserDetails userDetails = null;
 //        try {
 //            userDetails = inMemoryMemberManager.loadUserByUsername(username);
@@ -56,11 +71,11 @@ public class RequestInterceptor extends HandlerInterceptorAdapter {
 
         if (log.isDebugEnabled()) {
             log.debug("----------------- REQUEST ---------------------------------------");
-            log.debug("# RequestInterceptor-1: [{}] {}?{}",req.getMethod(), req.getRequestURI(), req.getQueryString());
+            log.debug("# RequestInterceptor-1: [{}] {}?{}", req.getMethod(), req.getRequestURI(), req.getQueryString());
             log.debug("# RequestInterceptor-2: name={}, isLogged={}, role={}", auth.getName(), auth.isAuthenticated(), auth.getAuthorities());
 //            log.debug("# RequestInterceptor-3: username={}, detail={}", auth.getPrincipal(), auth.getDetails());
 //            log.debug("# RequestInterceptor-4: object={}", auth.getDetails());
-            Member member = (Member) SecurityContextHolder.getContext().getAuthentication().getPrincipal();
+//            Member member = (Member) SecurityContextHolder.getContext().getAuthentication().getPrincipal();
 //            log.debug("# RequestInterceptor-5: member={}", member);
         }
         return true;
@@ -73,7 +88,8 @@ public class RequestInterceptor extends HandlerInterceptorAdapter {
             return;
         }
 
-        if (handler instanceof  HandlerMethod) {
+        // Set view's variables
+        if (handler instanceof HandlerMethod) {
             HandlerMethod handlerMethod = (HandlerMethod) handler;
             String controllerName = handlerMethod.getBeanType().getSimpleName().replace("Controller", "").toLowerCase();
             //String methodName = handlerMethod.getMethod().getName();
@@ -92,7 +108,6 @@ public class RequestInterceptor extends HandlerInterceptorAdapter {
     }
 
 }
-
 
 
 //    private void readNews(String username) {

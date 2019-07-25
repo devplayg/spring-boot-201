@@ -1,6 +1,7 @@
 package com.devplayg.coffee.framework;
 
 import com.devplayg.coffee.entity.Member;
+import com.devplayg.coffee.util.SubnetUtils;
 import com.mysema.commons.lang.Assert;
 import lombok.NoArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
@@ -15,6 +16,7 @@ import org.springframework.security.provisioning.UserDetailsManager;
 import java.io.Serializable;
 import java.time.ZoneId;
 import java.util.*;
+import java.util.stream.Collectors;
 
 
 /**
@@ -46,14 +48,30 @@ public class InMemoryMemberManager implements UserDetailsManager, UserDetailsPas
     public void createUser(UserDetails user) {
         Assert.isTrue(!userExists(user.getUsername()), "user should not exist");
 
-        users.put(user.getUsername().toLowerCase(), (Member)user);
+        Member member = (Member)user;
+
+        // Set Member accessible networks
+        member.setSubnetUtils(
+            member.getAccessibleIpList().stream()
+                    .map(ip -> new SubnetUtils(ip.getIpCidr()))
+                    .collect(Collectors.toList())
+        );
+        users.put(user.getUsername().toLowerCase(), member);
     }
 
     @Override
     public void updateUser(UserDetails user) {
         Assert.isTrue(userExists(user.getUsername()), "user should exist");
 
-        users.put(user.getUsername().toLowerCase(), (Member)user);
+        Member member = (Member)user;
+
+        // Set Member accessible networks
+        member.setSubnetUtils(
+                member.getAccessibleIpList().stream()
+                        .map(ip -> new SubnetUtils(ip.getIpCidr()))
+                        .collect(Collectors.toList())
+        );
+        users.put(user.getUsername().toLowerCase(), member);
     }
 
     @Override
