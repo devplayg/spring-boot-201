@@ -37,6 +37,18 @@ public class TestController {
         return auth;
     }
 
+	//    WebSocket 테스트
+//    @GetMapping("/test/chat")
+//    public String chat() {
+//        return "test/test";
+//    }
+//    @MessageMapping("hello")
+//    @SendTo("/topic/greetings")
+//    public Greeting greeting(HelloMessage message) throws Exception {
+//        Thread.sleep(100); // delay
+//        return new Greeting("Hello, " + HtmlUtils.htmlEscape(message.getName()) + "!");
+//    }
+
 //    @Autowired
 //    private AppConfig appConfig;
 //

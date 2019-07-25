@@ -45,7 +45,7 @@ public class Audit implements Serializable {
 
     @Column(nullable = false)
     @JsonView(AuditView.Normal.class)
-    private int ip;
+    private long ip;
 
     @Column(length = 4096)
     @JsonView(AuditView.Normal.class)

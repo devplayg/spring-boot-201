@@ -2927,7 +2927,7 @@ CREATE TABLE IF NOT EXISTS `mbr_allowed_ip` (
   PRIMARY KEY (`network_id`),
   KEY `fk_mbrAllowedIp_netId` (`member_id`),
   CONSTRAINT `fk_mbrAllowedIp_netId` FOREIGN KEY (`member_id`) REFERENCES `mbr_member` (`member_id`) ON DELETE CASCADE ON UPDATE CASCADE
-) ENGINE=InnoDB AUTO_INCREMENT=133 DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_unicode_ci;
+) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_unicode_ci;
 
 -- 테이블 데이터 sb201.mbr_allowed_ip:~19 rows (대략적) 내보내기
 /*!40000 ALTER TABLE `mbr_allowed_ip` DISABLE KEYS */;
