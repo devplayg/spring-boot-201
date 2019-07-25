@@ -25,7 +25,6 @@ public class Starter {
      */
     @PostConstruct
     public void postConstruct() {
-        log.info("### PostConstruct");
         auditService.audit(AuditCategory.APPLICATION_STARTED);
     }
 }

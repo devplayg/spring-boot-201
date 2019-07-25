@@ -39,7 +39,7 @@ logging:
                 type.descriptor.sql.BasicBinder: info
 
 app:
-    adminInfo:
+    admin-info:
         name: Administrator
         email: admin@admin.com
     home-uri: /audit/
