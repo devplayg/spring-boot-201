@@ -9,5 +9,5 @@ import java.util.List;
 
 @NoRepositoryBean
 public interface AuditRepositoryCustom {
-    List<Audit> find(Predicate builder, Pageable pageable);
+    List<Audit> find(Predicate predicate, Pageable pageable);
 }

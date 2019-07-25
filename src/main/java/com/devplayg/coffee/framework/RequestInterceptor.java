@@ -1,5 +1,6 @@
 package com.devplayg.coffee.framework;
 
+import com.devplayg.coffee.config.AppConfig;
 import com.devplayg.coffee.entity.Member;
 import com.devplayg.coffee.exception.ForbiddenException;
 import com.devplayg.coffee.util.SubnetUtils;
@@ -25,6 +26,12 @@ import java.util.TimeZone;
 @Slf4j
 public class RequestInterceptor extends HandlerInterceptorAdapter {
 
+    private final AppConfig appConfig;
+
+    public RequestInterceptor(AppConfig appConfig) {
+        this.appConfig = appConfig;
+    }
+
     @Override
     public boolean preHandle(HttpServletRequest req, HttpServletResponse res, Object handler) {
         Authentication auth = SecurityContextHolder.getContext().getAuthentication();
@@ -46,19 +53,21 @@ public class RequestInterceptor extends HandlerInterceptorAdapter {
         }
 
         // IP Filtering
-        Member member = (Member) SecurityContextHolder.getContext().getAuthentication().getPrincipal();
-        log.debug("# member networks: {}", member.getSubnetUtils());
-        if (member.getSubnetUtils().size() > 0) {
-            boolean allowed = false;
+        if (appConfig.getUseIpBlocking()) {
+            Member member = (Member) SecurityContextHolder.getContext().getAuthentication().getPrincipal();
+            log.debug("# member networks: {}", member.getSubnetUtils());
+            if (member.getSubnetUtils().size() > 0) {
+                boolean allowed = false;
 
-            for (SubnetUtils s : member.getSubnetUtils()) {
-                if (s.getInfo().isInRange(req.getRemoteAddr())) {
-                    allowed = true;
+                for (SubnetUtils s : member.getSubnetUtils()) {
+                    if (s.getInfo().isInRange(req.getRemoteAddr())) {
+                        allowed = true;
+                    }
                 }
-            }
 
-            if (!allowed) {
-                throw new ForbiddenException();
+                if (!allowed) {
+                    throw new ForbiddenException();
+                }
             }
         }
 

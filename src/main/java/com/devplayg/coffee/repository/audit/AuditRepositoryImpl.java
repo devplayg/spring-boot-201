@@ -5,18 +5,16 @@ package com.devplayg.coffee.repository.audit;
 
 import com.devplayg.coffee.entity.Audit;
 import com.devplayg.coffee.entity.QAudit;
-import com.querydsl.core.types.Order;
+import com.devplayg.coffee.util.WebHelper;
 import com.querydsl.core.types.OrderSpecifier;
 import com.querydsl.core.types.Predicate;
 import com.querydsl.core.types.dsl.PathBuilder;
 import com.querydsl.jpa.impl.JPAQueryFactory;
 import org.springframework.data.domain.Pageable;
-import org.springframework.data.domain.Sort;
 import org.springframework.data.jpa.repository.support.QuerydslRepositorySupport;
 import org.springframework.stereotype.Repository;
 
 import java.util.List;
-import java.util.stream.Collectors;
 
 @Repository
 public class AuditRepositoryImpl extends QuerydslRepositorySupport implements AuditRepositoryCustom {
@@ -29,36 +27,24 @@ public class AuditRepositoryImpl extends QuerydslRepositorySupport implements Au
     }
 
     @Override
-    public List<Audit> find(Predicate builder, Pageable pageable) {
+    public List<Audit> find(Predicate predicate, Pageable pageable) {
         QAudit audit = QAudit.audit;
 
-        PathBuilder<Audit> entityPath = new PathBuilder<>(Audit.class, "audit");
-        OrderSpecifier order;
-        if (pageable.getSort() == Sort.unsorted()) {
-            order = new OrderSpecifier(Order.DESC, audit.id);
-        } else {
-            List<OrderSpecifier> orders = pageable.getSort().stream()
-                    .map(o -> {
-                        PathBuilder<Object> path = entityPath.get(o.getProperty());
-                        return new OrderSpecifier(Order.valueOf(o.getDirection().name()), path);
-                    })
-                    .collect(Collectors.toList());
-            order = orders.get(0);
-
-        }
+        // Generate orders
+        List<OrderSpecifier> orders = WebHelper.getOrders(
+                new PathBuilder<>(Audit.class, "audit"),
+                pageable,
+                audit.id.desc()
+        );
 
         return query.selectFrom(audit)
-                .where(builder)
-                .orderBy(order)
+                .where(predicate)
+                .orderBy(orders.toArray(new OrderSpecifier[orders.size()]))
                 .offset(pageable.getPageNumber() * pageable.getPageSize())
                 .limit(pageable.getPageSize())
                 .fetch();
     }
 }
-
-//public class AuditRepositoryImpl extends QuerydslRepositorySupport implements AuditRepositoryCustom {
-//
-//}
 
 //public class AuditRepositoryImpl extends QuerydslRepositorySupport implements AuditRepositoryCustom {
 //    @Autowired

@@ -1,5 +1,3 @@
-const PageCurrent = 0;
-
 /**
  * jquery-mask default settings
  */

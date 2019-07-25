@@ -41,7 +41,7 @@ public class WebConfig implements WebMvcConfigurer {
         registry.addInterceptor(localeChangeInterceptor());
 
         // Add interceptor to registry
-        registry.addInterceptor(new RequestInterceptor())
+        registry.addInterceptor(new RequestInterceptor(appConfig))
                 .excludePathPatterns(appConfig.getPathPatternsNotToBeIntercepted());
     }
 

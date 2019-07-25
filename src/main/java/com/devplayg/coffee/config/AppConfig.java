@@ -18,6 +18,7 @@ public class AppConfig {
     private String name;
     private List<String> pathPatternsNotToBeIntercepted;
     private AdminInfo adminInfo;
+    private Boolean useIpBlocking;
 
     public AppConfig() {
         adminInfo = new AdminInfo();

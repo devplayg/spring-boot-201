@@ -42,6 +42,7 @@ app:
     admin-info:
         name: Administrator
         email: admin@admin.com
+    use-ip-blocking: false
     home-uri: /audit/
     name: Spring Boot 201
     path-patterns-not-to-be-intercepted:

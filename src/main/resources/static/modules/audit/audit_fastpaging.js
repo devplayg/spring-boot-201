@@ -6,6 +6,16 @@ $(function () {
     let $table = $("#table-" + ctrl),
         logs = [];
 
+    // Page information
+    let paging = {
+        no: 1, // Page number
+        size: $table.bootstrapTable("getOptions").pageSize, // Page size
+        blockIndex: 0, // Block index
+        blockIndex_before: -1, // Previous block index
+        blockSize: 20 // fetch N pages of data at a time
+    };
+
+
     $(".datetime").datetimepicker(defaultDatetimeOption);
 
     $table.bootstrapTable({
@@ -13,20 +23,16 @@ $(function () {
 
     }).on("column-switch.bs.table", function (e, field, checked) { // Memorize columns state
         captureTableColumnsState($(this));
-    }).on("refresh.bs.table", function () { // Refresh
-        movePage(PageCurrent, true);
-    });
 
+    }).on("refresh.bs.table", function () { // Refresh
+        movePage(0, true);
+
+    }).on("sort.bs.table", function (e, name, order) { // Refresh
+        movePage(0, true);
+    });
     restoreTableColumnsState($table);
 
-    // Page information
-    let paging = {
-        no: 1, // Page number
-        size: $table.bootstrapTable("getOptions").pageSize, // Page size
-        blockIndex: 0, // Block index
-        blockIndex_before: -1, // Previous block index
-        blockSize: 20 // block size
-    };
+
 
 
     /*
@@ -62,20 +68,20 @@ $(function () {
                 size: paging.size * paging.blockSize,
                 sort: $table.bootstrapTable("getOptions").sortName + "," + $table.bootstrapTable("getOptions").sortOrder,
             };
+            console.log(pageable);
 
             let _filter = tuneDate(filter);
             let url = "/" + ctrl + "?" + $.param(_filter, true) + "&" + $.param(pageable, true);
+            // console.log(url);
+            // console.log(pageable);
             $.ajax({
-                type: "GET",
-                async: true,
                 url: url
             }).done(function (data) {
                 logs = data;
                 renderDataToTable($table, logs, paging);
                 updatePagingNavButtons();
             }).fail(function (jqXHR, textStatus, errorThrown) {
-                console.log(jqXHR);
-                // Swal.fire(jqXHR.message, "", 'warning');
+                Swal.fire("Error", jqXHR.message, 'warning');
             });
         } else {
             renderDataToTable($table, logs, paging);
@@ -88,11 +94,11 @@ $(function () {
     function updatePagingNavButtons() {
         let offset = ((paging.no - 1) % paging.blockSize) * paging.size;
         $(".btn-page-next").prop("disabled", (logs.length - offset < paging.size));
-        $(".btn-page-prev").prop("disabled", paging.no == 1)
+        $(".btn-page-prev").prop("disabled", paging.no === 1)
     }
 
 
 
     // 테이블 이벤트
-    movePage(PageCurrent, true);
+    movePage(0, true);
 });
