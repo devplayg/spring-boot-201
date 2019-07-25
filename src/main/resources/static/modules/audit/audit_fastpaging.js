@@ -4,32 +4,30 @@ $(function () {
      * 1. Define and initialize
      */
     let $table = $("#table-" + ctrl),
-        logs = [];
 
-    // Page information
-    let paging = {
-        no: 1, // Page number
-        size: $table.bootstrapTable("getOptions").pageSize, // Page size
-        blockIndex: 0, // Block index
-        blockIndex_before: -1, // Previous block index
-        blockSize: 20 // fetch N pages of data at a time
-    };
+        // Log queue
+        logs = [],
 
-
+        paging = {
+            no: 1, // Page number
+            size: 0, // Page size
+            blockIndex: 0, // Block index
+            blockIndex_before: -1, // Previous block index
+            blockSize: 20 // fetch N pages of data at a time
+        };
     $(".datetime").datetimepicker(defaultDatetimeOption);
 
     $table.bootstrapTable({
         sidePagination: "client", // Client-side pagination
-
     }).on("column-switch.bs.table", function (e, field, checked) { // Memorize columns state
         captureTableColumnsState($(this));
-
     }).on("refresh.bs.table", function () { // Refresh
         movePage(0, true);
-
     }).on("sort.bs.table", function (e, name, order) { // Refresh
         movePage(0, true);
     });
+    paging.size = $table.bootstrapTable("getOptions").pageSize;
+
     restoreTableColumnsState($table);
 
 

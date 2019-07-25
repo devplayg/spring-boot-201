@@ -9,7 +9,6 @@ $(function () {
 
     $table.bootstrapTable({
         url: "/" + ctrl,
-        method: "get",
         queryParamsType: "", // DO NOT REMOVE. LEAVE BLANK
         pagination: true,
         sidePagination: "server",
@@ -18,6 +17,7 @@ $(function () {
             return $.param(_filter, true);
         },
         responseHandler: function (res) {
+            console.log(res);
             if (filter.fastPaging) {
                 return res;
             }
@@ -38,4 +38,8 @@ $(function () {
     /*
      * 3. Function
      */
+
+
+    // $('table').bootstrapTable({locale:'en-US'});
+    // $.extend($.fn.bootstrapTable.defaults, $.fn.bootstrapTable.locales['en-US']);
 });
