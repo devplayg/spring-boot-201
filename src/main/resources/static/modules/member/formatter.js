@@ -1,7 +1,7 @@
 function memberRoleListFormatter(val, row, idx) {
     let role = [];
     $.each(val, function(i, r) {
-        var tag = "";
+        let tag = "";
         if (r === "ADMIN") {
             tag = '<button type="bntton" class="btn btn-danger btn-xs"><i class="fa fa-star"></i> ' + userRoles[r] + '</button>';
             role.push(tag);
@@ -20,7 +20,7 @@ function memberAccessibleIpListFormatter(list, row, idx) {
         return;
     }
 
-    var arr = [];
+    let arr = [];
     $.each(list, function(i, ip) {
         if (ip.ipCidr.endsWith("/32")) {
             arr.push( ip.ipCidr.substring(0, ip.ipCidr.indexOf("/") ));

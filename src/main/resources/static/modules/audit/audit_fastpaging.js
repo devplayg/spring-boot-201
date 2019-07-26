@@ -1,13 +1,16 @@
 $(function () {
 
-    /*
+    /**
      * 1. Define and initialize
      */
+
+    // Variables
     let $table = $("#table-" + ctrl),
 
         // Log queue
         logs = [],
 
+        // Paging
         paging = {
             no: 1, // Page number
             size: 0, // Page size
@@ -15,8 +18,11 @@ $(function () {
             blockIndex_before: -1, // Previous block index
             blockSize: 20 // fetch N pages of data at a time
         };
+
+    // Datetime
     $(".datetime").datetimepicker(defaultDatetimeOption);
 
+    // Bootstra-table
     $table.bootstrapTable({
         sidePagination: "client", // Client-side pagination
     }).on("column-switch.bs.table", function (e, field, checked) { // Memorize columns state
@@ -27,13 +33,10 @@ $(function () {
         movePage(0, true);
     });
     paging.size = $table.bootstrapTable("getOptions").pageSize;
-
     restoreTableColumnsState($table);
 
 
-
-
-    /*
+    /**
      * 2. Event
      */
 
@@ -44,7 +47,7 @@ $(function () {
     });
 
 
-    /*
+    /**
      * 3. Function
      */
 
@@ -94,8 +97,6 @@ $(function () {
         $(".btn-page-next").prop("disabled", (logs.length - offset < paging.size));
         $(".btn-page-prev").prop("disabled", paging.no === 1)
     }
-
-
 
     // 테이블 이벤트
     movePage(0, true);

@@ -209,7 +209,6 @@ $(function () {
     $passwordForm.validate({
         submitHandler: function (form, e) {
             e.preventDefault();
-            console.log(444);
             member.updatePassword(form);
         },
         rules: {
@@ -232,10 +231,10 @@ $(function () {
 
     // Test code
     {
-        let $form = $("#form-member-create");
-        $("input[name=username]", $form).val("won1");
-        $("input[name=name]", $form).val("DEV Play G");
-        $("input[name=email]", $form).val("devplayg@korea.com");
-        $("input[name=inputPassword]", $form).val("dev123!@#");
+        //let $form = $("#form-member-create");
+        //$("input[name=username]", $form).val("won1");
+        //$("input[name=name]", $form).val("DEV Play G");
+        //$("input[name=email]", $form).val("devplayg@korea.com");
+        //$("input[name=inputPassword]", $form).val("dev123!@#");
     }
 });

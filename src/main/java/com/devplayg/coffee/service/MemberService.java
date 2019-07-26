@@ -97,13 +97,11 @@ public class MemberService implements UserDetailsService {
         member.setLastPasswordChange(LocalDateTime.now());
         memberRepository.save(member);
 
-//        memberR
-
         // Update in-memory
         inMemoryMemberManager.updateUser(member);
 
         // Write audit log
-
+		//
     }
 }
 
