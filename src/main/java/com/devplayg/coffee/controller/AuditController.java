@@ -41,16 +41,16 @@ public class AuditController {
     public String display(@ModelAttribute AuditFilter filter, Pageable pageable, Model model) {
         filter.tune(pageable);
         model.addAttribute("filter", filter);
-        log.debug("# filter: {}", filter);
-        log.debug("# pageable: {}", pageable);
+//        log.debug("# filter: {}", filter);
+//        log.debug("# pageable: {}", pageable);
         return "audit/audit";
     }
 
     // Fetch
     @GetMapping
     public ResponseEntity<?> findAll(@ModelAttribute AuditFilter filter, Pageable pageable) {
-        log.debug("# filter: {}", filter);
-        log.debug("# pageable: {}", pageable);
+//        log.debug("# filter: {}", filter);
+//        log.debug("# pageable: {}", pageable);
         filter.tune(pageable);
 
         if (filter.getFastPaging()) {

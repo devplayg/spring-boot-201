@@ -31,6 +31,20 @@ let Pager = function (id, _filter) {
     // Paging variables (Fast paging only)
     this.paging = null;
 
+
+    // Check filtering
+    this.isFiltered = function() {
+        let isFiltered = false;
+        $(".modal-body input[type=text]", this.form).each(function (i, elm) {
+            if ($(elm).val().trim().length > 0) {
+                isFiltered = true;
+                return false;
+            }
+        });
+        return isFiltered;
+    }
+
+
     // Set sorting options (Fast paging only)
     this.setSort = function (name, order) {
         this.paging.sort = name + "," + order;
@@ -94,12 +108,19 @@ let Pager = function (id, _filter) {
         this.paging.blockIndex_before = this.paging.blockIndex;
     }
 
+
     this.initForm = function () {
         this.form = $("#form-" + id);
 
         $(".datetime", this.form).datetimepicker(defaultDatetimeOption);
+
+        if (this.isFiltered()) {
+            $(".filter", this.form).html('<i class="fa fa-filter txt-color-red"></i>');
+        }
     }
 
+
+    // Initialize paging variables
     this.initPaging = function () {
         this.paging = {
             no: 1, // Page number
@@ -127,7 +148,7 @@ let Pager = function (id, _filter) {
     };
 
 
-    // Initialize bootstrap-table
+    // Initialize bootstrap-table for fast paging
     this.initTableForFastPaging = function () {
         let c = this;
         this.table = $("#table-" + id).bootstrapTable({
@@ -150,6 +171,8 @@ let Pager = function (id, _filter) {
         restoreTableColumnsState(this.table);
     };
 
+
+    // Initialize bootstrap-table for normal paging
     this.initTableForNormalPaging = function () {
         let c = this;
         this.table = $("#table-" + id).bootstrapTable({
@@ -173,10 +196,17 @@ let Pager = function (id, _filter) {
             }
         }).on("column-switch.bs.table", function () {
             captureTableColumnsState($(this));
+        }).on("sort.bs.table", function (e, name, order) { // Refresh
+            // for Post request
+            $("input[name=sort]", c.form).val(name + "," + order);
         });
+
+        // Initialize columns
+        restoreTableColumnsState(this.table);
 
     };
 
+    // Initialize
     this.init = function () {
 
         // Fast paging

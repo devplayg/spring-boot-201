@@ -5,8 +5,8 @@ $.validator.addMethod('username', function (value) {
     }
 }, 'invalid username');
 
-$.validator.addMethod('ipv4_cidr', function (value) {
-    if (value.length == 0) {
+$.validator.addMethod('ipv4_cidr', function (value, element) {
+    if (this.optional(element)) {
         return true;
     }
 

@@ -34,6 +34,14 @@ public class RequestInterceptor extends HandlerInterceptorAdapter {
 
     @Override
     public boolean preHandle(HttpServletRequest req, HttpServletResponse res, Object handler) {
+        if (log.isDebugEnabled()) {
+            log.debug("----------------- REQUEST ---------------------------------------");
+            log.debug("# RequestInterceptor-1: [{}] {}{}", req.getMethod(), req.getRequestURI(), (req.getQueryString() == null) ? "" : "?" + req.getQueryString());
+            for (String key : req.getParameterMap().keySet()) {
+                log.debug("     - {} = {}", key, req.getParameterMap().get(key));
+            }
+        }
+
         Authentication auth = SecurityContextHolder.getContext().getAuthentication();
         if (auth instanceof AnonymousAuthenticationToken) {
             log.debug("# RequestInterceptor-preHandle: [{}] not logged in yet, {}", req.getMethod(), req.getRequestURI());
@@ -79,13 +87,8 @@ public class RequestInterceptor extends HandlerInterceptorAdapter {
 //            return false;
 //        }
 
-        if (log.isDebugEnabled()) {
-            log.debug("----------------- REQUEST ---------------------------------------");
-            log.debug("# RequestInterceptor-1: [{}] {}{}", req.getMethod(), req.getRequestURI(), (req.getQueryString() == null) ? "" : "?" + req.getQueryString());
-            for (String key : req.getParameterMap().keySet()) {
-                log.debug("     - {} = {}", key, req.getParameterMap().get(key));
-            }
 
+        if (log.isDebugEnabled()) {
             log.debug("# RequestInterceptor-2: name={}, isLogged={}, role={}", auth.getName(), auth.isAuthenticated(), auth.getAuthorities());
 //            log.debug("# RequestInterceptor-3: username={}, detail={}", auth.getPrincipal(), auth.getDetails());
 //            log.debug("# RequestInterceptor-4: object={}", auth.getDetails());

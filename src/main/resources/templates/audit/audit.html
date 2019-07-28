@@ -2,12 +2,11 @@
       layout:decorate="~{base}">
 
 <div layout:fragment="content">
-
     <div th:id="|toolbar-${ctrl}|">
         <form th:id="|form-${ctrl}|" role="form" method="post" th:action="@{/audit/}" th:object="${filter}">
             <input type="hidden" name="sort" th:value="|${filter.pageable.sortName},${filter.pageable.sortOrder}|" />
 
-            <!-- External filter -->
+            <!-- Exposed filter -->
             <div class="form-inline">
                 <div class="form-group">
                     <div class="input-group date datetime">
@@ -44,7 +43,7 @@
                 </div>
             </div>
 
-            <!-- Internal filter -->
+            <!-- Unexposed filter -->
             <div class="modal fade" th:id="|modal-${ctrl}-filter|" tabindex="-1" role="dialog">
                 <div class="modal-dialog modal-sm" role="document">
                     <div class="modal-content">
@@ -58,29 +57,30 @@
                         </div>
                         <div class="modal-body">
                             <div class="form-group">
+                                <label>IP</label>
+                                <input type="text" class="form-control mask-ipv4-cidr" name="ip" th:value="*{ip}"/>
+                                <p class="note">IP or IP/CIDR</p>
+                            </div>
+                            <div class="form-group">
                                 <label th:text="#{message}"></label>
                                 <input type="text" class="form-control" th:name="message" th:value="*{message}"/>
                             </div>
                             <div class="form-group">
                                 <div class="checkbox">
                                     <label>
-                                        <input type="checkbox" class="checkbox style-0" checked="checked"
-                                               th:name="fastPaging" th:checked="*{fastPaging}"/>
+                                        <input type="checkbox" class="checkbox style-0" checked="checked" th:name="fastPaging" th:checked="*{fastPaging}"/>
                                         <span th:text="#{fast-paging}"></span>
                                     </label>
                                 </div>
                             </div>
                         </div>
                         <div class="modal-footer">
-                            <button type="submit" class="btn btn-primary" th:text="#{search}"></button>
+                            <button type="submit    " class="btn btn-primary" th:text="#{search}"></button>
                             <button type="button" class="btn btn-default" data-dismiss="modal" th:text="#{cancel}"></button>
                         </div>
                     </div>
                 </div>
             </div>
-
-            <!-- Buttons -->
-
         </form>
     </div>
 
@@ -115,7 +115,9 @@
         console.log(filter);
         /*]]>*/
     </script>
-    <script th:src="@{|/js/dpg-pager.js|}"></script>
+    <script th:src="@{|/js/custom-validate-methods.js|}"></script>
+    <script th:src="@{|/js/pager.js|}"></script>
+
     <script th:src="@{|/modules/${ctrl}/${ctrl}.js|}"></script>
     <script th:src="@{|/modules/${ctrl}/formatter.js|}"></script>
 </th:block>

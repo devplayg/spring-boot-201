@@ -1,6 +1,7 @@
 package com.devplayg.coffee.entity.filter;
 
 import com.devplayg.coffee.definition.AuditCategory;
+import com.devplayg.coffee.framework.CustomPageRequest;
 import lombok.Getter;
 import lombok.Setter;
 import lombok.ToString;
@@ -15,7 +16,7 @@ import java.util.List;
 @Setter
 @ToString(callSuper = true)
 @Slf4j
-public class AuditFilter extends SearchFilter{
+public class AuditFilter extends SearchFilter {
     private final static String defaultSortName = "id";
     private final static Sort.Direction defaultSortOrder = Sort.Direction.DESC;
 
@@ -33,8 +34,6 @@ public class AuditFilter extends SearchFilter{
     }
 
     public void tune(Pageable pageable) {
-        super.tune(pageable, defaultSortName, defaultSortOrder);
+        super.tune(new CustomPageRequest(pageable, defaultSortName, defaultSortOrder));
     }
-
-
 }
