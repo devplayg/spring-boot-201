@@ -36,9 +36,9 @@ public class SearchFilter {
             this.endDate = this.startDate.plusSeconds(86400 - 1);
         }
 
-//        if (fastPaging == null) {
-//            fastPaging = false;
-//        }
+        if (fastPaging == null) {
+            fastPaging = false;
+        }
 
         this.pageable = new CustomPageRequest(pageable, defaultSortName, defaultSortOrder);
     }
