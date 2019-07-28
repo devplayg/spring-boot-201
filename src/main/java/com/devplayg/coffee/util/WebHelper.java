@@ -33,41 +33,4 @@ public class WebHelper {
                 })
                 .collect(Collectors.toList());
     }
-
-
-//    public static List<OrderSpecifier> getOrders(PathBuilder<?> pathBuilder, Pageable pageable) {
-//        return pageable.getSort().stream()
-//                .map(o -> {
-//                    PathBuilder<?> path;
-//                    path = pathBuilder.get(o.getProperty());
-//                    return new OrderSpecifier(Order.valueOf(o.getDirection().name()), path);
-//                })
-//                .collect(Collectors.toList());
-//    }
-//
-//    public static List<OrderSpecifier> getOrders(Class pageableClass, Pageable pageable) {
-//        PathBuilder<pageableClass> entityPath = new PathBuilder<>(pageableClass, pageableClass.getName());
-//        List<OrderSpecifier> orders = pageable.getSort().stream()
-//                .map(o -> {
-//                    PathBuilder<Object> path = entityPath.get(o.getProperty());
-//                    return new OrderSpecifier(Order.valueOf(o.getDirection().name()), path);
-//                })
-//                .collect(Collectors.toList());
-//
-//        return orders;
-//
-//    }
-//
-//    public static HashMap<String, Object> getRequestSummary(HttpServletRequest req) {
-//        HashMap<String, Object> m  = new HashMap<>();
-//        m.put("uri", req.getRequestURI());
-//        m.put("method", req.getMethod());
-//        try {
-//            m.put("body", CharStreams.toString(req.getReader()));
-//        } catch (IOException e) {
-//            e.printStackTrace();
-//        }
-//
-//        return m;
-//    }
 }

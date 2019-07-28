@@ -16,6 +16,7 @@ package com.devplayg.coffee.util;
  * See the License for the specific language governing permissions and
  * limitations under the License.
  */
+import java.io.Serializable;
 import java.util.regex.Matcher;
 import java.util.regex.Pattern;
 
@@ -24,7 +25,9 @@ import java.util.regex.Pattern;
  * @see "http://www.faqs.org/rfcs/rfc1519.html"
  * @since 2.0
  */
-public class SubnetUtils {
+public class SubnetUtils implements Serializable {
+
+    private static final long serialVersionUID = 1L;
 
     private static final String IP_ADDRESS = "(\\d{1,3})\\.(\\d{1,3})\\.(\\d{1,3})\\.(\\d{1,3})";
     private static final String SLASH_FORMAT = IP_ADDRESS + "/(\\d{1,3})";

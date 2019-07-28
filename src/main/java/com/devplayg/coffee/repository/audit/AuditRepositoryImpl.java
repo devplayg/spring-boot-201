@@ -34,7 +34,7 @@ public class AuditRepositoryImpl extends QuerydslRepositorySupport implements Au
         List<OrderSpecifier> orders = WebHelper.getOrders(
                 new PathBuilder<>(Audit.class, "audit"),
                 pageable,
-                audit.id.desc()
+                audit.id.desc() // default sort and order
         );
 
         return query.selectFrom(audit)

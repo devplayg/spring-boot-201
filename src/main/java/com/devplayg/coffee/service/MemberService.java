@@ -1,6 +1,7 @@
 package com.devplayg.coffee.service;
 
 import com.devplayg.coffee.definition.AuditCategory;
+import com.devplayg.coffee.definition.RoleType;
 import com.devplayg.coffee.entity.Member;
 import com.devplayg.coffee.entity.MemberNetwork;
 import com.devplayg.coffee.exception.ResourceNotFoundException;
@@ -9,8 +10,6 @@ import com.devplayg.coffee.repository.member.MemberRepository;
 import com.devplayg.coffee.util.NetworkUtils;
 import com.devplayg.coffee.vo.MemberPassword;
 import lombok.extern.slf4j.Slf4j;
-import org.apache.tomcat.jni.Local;
-import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.security.core.userdetails.UserDetails;
 import org.springframework.security.core.userdetails.UserDetailsService;
 import org.springframework.security.core.userdetails.UsernameNotFoundException;
@@ -28,26 +27,28 @@ import java.util.stream.Collectors;
 @Slf4j
 public class MemberService implements UserDetailsService {
 
-    @Autowired
-    private MemberRepository memberRepository;
+    private final MemberRepository memberRepository;
 
-    @Autowired
-    private PasswordEncoder passwordEncoder;
+    private final PasswordEncoder passwordEncoder;
 
-    @Autowired
-    private AuditService auditService;
+    private final AuditService auditService;
 
-    @Autowired
-    private InMemoryMemberManager inMemoryMemberManager;
+    private final InMemoryMemberManager inMemoryMemberManager;
+
+    public MemberService(MemberRepository memberRepository, PasswordEncoder passwordEncoder, AuditService auditService, InMemoryMemberManager inMemoryMemberManager) {
+        this.memberRepository = memberRepository;
+        this.passwordEncoder = passwordEncoder;
+        this.auditService = auditService;
+        this.inMemoryMemberManager = inMemoryMemberManager;
+    }
 
     public UserDetails loadUserByUsername(String username) throws UsernameNotFoundException {
-        Member member = memberRepository.findByUsername(username)
+        return memberRepository.findByUsername(username)
                 .orElseThrow(() -> new ResourceNotFoundException("member", "member.username", username));
-        return member;
     }
 
     public Member create(Member member) throws IllegalArgumentException {
-        member.setRoles(member.getRoleList().stream().mapToInt(i -> i.getValue()).sum());
+        member.setRoles(member.getRoleList().stream().mapToInt(RoleType.Role::getValue).sum());
         member.setPassword(passwordEncoder.encode(member.getInputPassword()));
         member.setAccessibleIpList(this.getAccessibleIpList(member, member.getAccessibleIpListText()));
         log.debug("# post member converted: {}", member);

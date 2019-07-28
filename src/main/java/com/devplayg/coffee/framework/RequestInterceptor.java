@@ -43,6 +43,7 @@ public class RequestInterceptor extends HandlerInterceptorAdapter {
         // Need exception handler when member is deleted
         // If member information is changed
         InMemoryMemberManager inMemoryMemberManager = InMemoryMemberManager.getInstance();
+        if (req.getUserPrincipal() == null) return true;
         String username = req.getUserPrincipal().getName();
         if (inMemoryMemberManager.isChanged(username)) {
             UserDetails userDetails = inMemoryMemberManager.loadUserByUsername(username);
@@ -80,7 +81,11 @@ public class RequestInterceptor extends HandlerInterceptorAdapter {
 
         if (log.isDebugEnabled()) {
             log.debug("----------------- REQUEST ---------------------------------------");
-            log.debug("# RequestInterceptor-1: [{}] {}?{}", req.getMethod(), req.getRequestURI(), req.getQueryString());
+            log.debug("# RequestInterceptor-1: [{}] {}{}", req.getMethod(), req.getRequestURI(), (req.getQueryString() == null) ? "" : "?" + req.getQueryString());
+            for (String key : req.getParameterMap().keySet()) {
+                log.debug("     - {} = {}", key, req.getParameterMap().get(key));
+            }
+
             log.debug("# RequestInterceptor-2: name={}, isLogged={}, role={}", auth.getName(), auth.isAuthenticated(), auth.getAuthorities());
 //            log.debug("# RequestInterceptor-3: username={}, detail={}", auth.getPrincipal(), auth.getDetails());
 //            log.debug("# RequestInterceptor-4: object={}", auth.getDetails());

@@ -94,6 +94,13 @@ function restoreTableColumnsState($table) {
     }
 }
 
+// Update paging buttons
+function updatePagingNavButtons(paging, navigationButtonGroup) {
+    let offset = ((paging.no - 1) % paging.blockSize) * paging.size;
+    navigationButtonGroup.prev.prop("disabled", paging.no === 1)
+    navigationButtonGroup.next.prop("disabled", (paging.dataLength - offset < paging.size));
+}
+
 /**
  * Network functions
  */
@@ -117,29 +124,25 @@ function convertToUserTime(dt) {
     return moment(dt).tz(userTz).format();
 }
 
-function tuneDate(filter) {
-    // Deep copy
-    let _filter = $.extend({}, filter);
-
-    if (_filter.hasOwnProperty("startDate")) {
-        _filter.startDate = _filter.startDate.replace("T", " ").substring(0, 16);
+function tuneFilterAndPageable(filter, normalPagingParam) {
+    if (filter.hasOwnProperty("startDate")) {
+        filter.startDate = filter.startDate.replace("T", " ").substring(0, 16);
     }
-    if (_filter.hasOwnProperty("endDate")) {
-        _filter.endDate = _filter.endDate.replace("T", " ").substring(0, 16);
+    if (filter.hasOwnProperty("endDate")) {
+        filter.endDate = filter.endDate.replace("T", " ").substring(0, 16);
     }
-    return _filter;
-}
 
-function tuneDateAndPaging(filter, param) {
-    let _filter = tuneDate(filter);
+    delete filter.pageable;
 
-    Object.assign(_filter, {
-        size: param.pageSize,
-        page: param.pageNumber - 1,
-        sort: param.sortName + "," + param.sortOrder,
+    // Fast paging
+    if (filter.fastPaging) {
+        return filter;
+    }
+
+    // Normal paging
+    return Object.assign(filter, {
+        size: normalPagingParam.pageSize,
+        page: normalPagingParam.pageNumber - 1,
+        sort: normalPagingParam.sortName + "," + normalPagingParam.sortOrder,
     });
-
-    return _filter;
 }
-
-

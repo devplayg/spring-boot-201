@@ -2,8 +2,10 @@
       layout:decorate="~{base}">
 
 <div layout:fragment="content">
+
     <div th:id="|toolbar-${ctrl}|">
         <form th:id="|form-${ctrl}|" role="form" method="post" th:action="@{/audit/}" th:object="${filter}">
+            <input type="hidden" name="sort" th:value="|${filter.pageable.sortName},${filter.pageable.sortOrder}|" />
 
             <!-- External filter -->
             <div class="form-inline">
@@ -85,8 +87,8 @@
     <table th:id="|table-${ctrl}|"
            th:object="${filter}"
            th:data-toolbar="|#toolbar-${ctrl}|"
-           data-sort-name="id"
-           data-sort-order="desc">
+           th:data-sort-name="${filter.pageable.sortName}"
+           th:data-sort-order="${filter.pageable.sortOrder}">
         <!--        data-query-params-type=""-->
         <!--/*
         th:data-url="@{/audit(startDate=*{#temporals.format(startDate, 'yyyy-MM-dd HH:mm')}, endDate=*{#temporals.format(endDate, 'yyyy-MM-dd HH:mm')}, message=*{message}, categoryList=*{categoryList}     )      }">
@@ -98,7 +100,7 @@
             <th data-field="member" data-formatter="auditMemberFormatter" data-sortable="true" th:text="#{user}"></th>
             <th data-field="category" data-sortable="true" th:text="#{category}"></th>
             <th data-field="ip" data-formatter="intIpFormatter" data-sortable="true" th:text="IP"></th>
-            <th data-field="message" data-sortable="true" data-formatter="auditMessageFormatter"
+            <th data-field="message" data-sortable="true" data-formatter= "auditMessageFormatter"
                 th:text="#{message}"></th>
         </tr>
         </thead>
@@ -109,10 +111,12 @@
 <th:block layout:fragment="script">
     <script th:inline="javascript">
         /*<![CDATA[*/
-        let filter = [[ ${filter}]];
+        let filter = [[ ${filter} ]];
+        console.log(filter);
         /*]]>*/
     </script>
-    <script th:src="${filter.fastPaging}? @{|/modules/${ctrl}/${ctrl}_fastpaging.js|} : @{|/modules/${ctrl}/${ctrl}.js|}"></script>
+    <script th:src="@{|/js/dpg-pager.js|}"></script>
+    <script th:src="@{|/modules/${ctrl}/${ctrl}_fastpaging.js|}"></script>
     <script th:src="@{|/modules/${ctrl}/formatter.js|}"></script>
 </th:block>
 

@@ -2,26 +2,22 @@ package com.devplayg.coffee.entity.filter;
 
 import com.devplayg.coffee.definition.AuditCategory;
 import lombok.Getter;
-import lombok.NoArgsConstructor;
 import lombok.Setter;
 import lombok.ToString;
-import org.springframework.data.domain.Page;
+import lombok.extern.slf4j.Slf4j;
 import org.springframework.data.domain.Pageable;
 import org.springframework.data.domain.Sort;
-import org.springframework.data.repository.NoRepositoryBean;
 
-import java.time.LocalDateTime;
 import java.util.ArrayList;
 import java.util.List;
 
 @Getter
 @Setter
 @ToString(callSuper = true)
+@Slf4j
 public class AuditFilter extends SearchFilter{
-
-    public AuditFilter() {
-        categoryList = new ArrayList<>();
-    }
+    private final static String defaultSortName = "id";
+    private final static Sort.Direction defaultSortOrder = Sort.Direction.DESC;
 
     // Message
     private String message;
@@ -32,10 +28,12 @@ public class AuditFilter extends SearchFilter{
     // IP
     private String ip;
 
-    public void tune() {
-        super.tune();
+    public AuditFilter() {
+        categoryList = new ArrayList<>();
+    }
 
-//        this.setStartDate(LocalDateTime.now().toLocalDate().minusDays(100).atStartOfDay());
+    public void tune(Pageable pageable) {
+        super.tune(pageable, defaultSortName, defaultSortOrder);
     }
 
 
