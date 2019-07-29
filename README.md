@@ -22,9 +22,3 @@
 - [x] JPA
 - [x] QueryDSL
 - [x] MariaDB
-- [ ] MyBatis (needed)
-
-
-## Documents
-
-#### [Package](docs/package.md)

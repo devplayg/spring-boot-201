@@ -5,7 +5,7 @@
     <title></title>
     <meta charset="utf-8">
     <meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no">
-    <link rel="stylesheet" th:href="@{/plugins/bootstrap/css/bootstrap.min.css}">
+    <link rel="stylesheet" th:href="@{/assets/css/bootstrap.min.css}">
     <link rel="stylesheet" th:href="@{/plugins/fontawesome/css/fontawesome.min.css}">
     <link rel="stylesheet" th:href="@{/modules/login/login.css}">
 </head>
@@ -30,7 +30,7 @@
 
 <!--/* Base script */-->
 <script th:src="@{/js/jquery-3.3.1.min.js}"></script>
-<script th:src="@{/plugins/bootstrap/js/bootstrap.min.js}"></script>
+<script th:src="@{/assets/js/bootstrap/bootstrap.min.js}"></script>
 <script th:inline="javascript">
     let roles = {/*[# th:each="n : ${T(com.devplayg.coffee.definition.RoleType.Role).values()}"]*/"[(${n})]": "[(${n.description})]",/*[/]*/};
 </script>

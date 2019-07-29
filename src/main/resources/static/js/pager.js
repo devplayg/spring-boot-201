@@ -96,7 +96,7 @@ let Pager = function (id, _filter) {
                 c.paging.dataLength = c.log.length;
                 renderDataToTable(c.table, c.log, c.paging);
                 updatePagingNavButtons(c.paging, c.navigationButtonGroup);
-                this.navigationButtonGroup.page.text(this.paging.no);
+                c.navigationButtonGroup.page.text(c.paging.no);
             }).fail(function (jqXHR, textStatus, errorThrown) {
                 console.log(jqXHR);
                 Swal.fire("Error", jqXHR.message, 'warning');

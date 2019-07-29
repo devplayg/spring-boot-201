@@ -2,6 +2,8 @@
       layout:decorate="~{base}">
 
 <div layout:fragment="content">
+    <span th:text="${filter.pageable.delegate.pageSize}"></span>
+
     <div th:id="|toolbar-${ctrl}|">
         <form th:id="|form-${ctrl}|" role="form" method="post" th:action="@{/audit/}" th:object="${filter}">
             <input type="hidden" name="sort" th:value="|${filter.pageable.sortName},${filter.pageable.sortOrder}|" />
@@ -63,8 +65,37 @@
                             </div>
                             <div class="form-group">
                                 <label th:text="#{message}"></label>
-                                <input type="text" class="form-control" th:name="message" th:value="*{message}"/>
+                                <input type="text" class="form-control" name="message" th:value="*{message}"/>
                             </div>
+                            <div class="form-group" th:if="*{fastPaging == true}">
+                                <div class="row">
+                                    <div class="col-md-6">
+                                        <label th:text="#{page-size}"></label>
+                                        <input type="text" class="form-control" name="size" th:value="*{pageable.delegate.pageSize}"/>
+                                    </div>
+                                </div>
+                            </div>
+<!--                            <div class="form-group">-->
+<!--                                <div class="radio">-->
+<!--                                    <label>-->
+<!--                                        <input type="radio" class="radiobox style-0" checked="checked" name="style-0">-->
+<!--                                        <span th:text="#{fast-paging}"></span>-->
+<!--                                    </label>-->
+<!--                                </div>-->
+<!--                                <div class="radio">-->
+<!--                                    <label>-->
+<!--                                        <input type="radio" class="radiobox style-0" name="style-0">-->
+<!--                                        <span th:text="#{general-paging}"></span>-->
+<!--                                    </label>-->
+<!--                                </div>-->
+<!--                                <div class="radio">-->
+<!--                                    <label>-->
+<!--                                        <input type="radio" class="radiobox style-0" name="style-0">-->
+<!--                                        <span>Radiobox 3</span>-->
+<!--                                    </label>-->
+<!--                                </div>-->
+<!--                            </div>-->
+
                             <div class="form-group">
                                 <div class="checkbox">
                                     <label>
@@ -75,7 +106,7 @@
                             </div>
                         </div>
                         <div class="modal-footer">
-                            <button type="submit    " class="btn btn-primary" th:text="#{search}"></button>
+                            <button type="submit" class="btn btn-primary" th:text="#{search}"></button>
                             <button type="button" class="btn btn-default" data-dismiss="modal" th:text="#{cancel}"></button>
                         </div>
                     </div>
@@ -88,7 +119,8 @@
            th:object="${filter}"
            th:data-toolbar="|#toolbar-${ctrl}|"
            th:data-sort-name="${filter.pageable.sortName}"
-           th:data-sort-order="${filter.pageable.sortOrder}">
+           th:data-sort-order="${filter.pageable.sortOrder}"
+           th:data-page-size="${filter.pageable.delegate.pageSize}">
         <!--        data-query-params-type=""-->
         <!--/*
         th:data-url="@{/audit(startDate=*{#temporals.format(startDate, 'yyyy-MM-dd HH:mm')}, endDate=*{#temporals.format(endDate, 'yyyy-MM-dd HH:mm')}, message=*{message}, categoryList=*{categoryList}     )      }">
@@ -100,8 +132,7 @@
             <th data-field="member" data-formatter="auditMemberFormatter" data-sortable="true" th:text="#{user}"></th>
             <th data-field="category" data-sortable="true" th:text="#{category}"></th>
             <th data-field="ip" data-formatter="intIpFormatter" data-sortable="true" th:text="IP"></th>
-            <th data-field="message" data-sortable="true" data-formatter= "auditMessageFormatter"
-                th:text="#{message}"></th>
+            <th data-field="message" data-sortable="true" data-formatter= "auditMessageFormatter" th:text="#{message}"></th>
         </tr>
         </thead>
     </table>
