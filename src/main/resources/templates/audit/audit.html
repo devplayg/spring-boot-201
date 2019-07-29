@@ -75,27 +75,16 @@
                                     </div>
                                 </div>
                             </div>
-<!--                            <div class="form-group">-->
-<!--                                <div class="radio">-->
-<!--                                    <label>-->
-<!--                                        <input type="radio" class="radiobox style-0" checked="checked" name="style-0">-->
-<!--                                        <span th:text="#{fast-paging}"></span>-->
-<!--                                    </label>-->
-<!--                                </div>-->
-<!--                                <div class="radio">-->
-<!--                                    <label>-->
-<!--                                        <input type="radio" class="radiobox style-0" name="style-0">-->
-<!--                                        <span th:text="#{general-paging}"></span>-->
-<!--                                    </label>-->
-<!--                                </div>-->
-<!--                                <div class="radio">-->
-<!--                                    <label>-->
-<!--                                        <input type="radio" class="radiobox style-0" name="style-0">-->
-<!--                                        <span>Radiobox 3</span>-->
-<!--                                    </label>-->
-<!--                                </div>-->
-<!--                            </div>-->
-
+                            <div class="form-group">
+                                <div class="radio" th:each="paging, stat : ${T(com.devplayg.coffee.definition.PagingMode.Paging).values()}">
+                                    <label>
+                                        <input type="radio" class="radiobox style-0"
+                                               th:name="pagingMode"
+                                               th:value="${paging.value}"/>
+                                        <span th:text="#{${paging.description}}"></span>
+                                    </label>
+                                </div>
+                            </div>
                             <div class="form-group">
                                 <div class="checkbox">
                                     <label>
@@ -104,6 +93,8 @@
                                     </label>
                                 </div>
                             </div>
+
+
                         </div>
                         <div class="modal-footer">
                             <button type="submit" class="btn btn-primary" th:text="#{search}"></button>

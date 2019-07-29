@@ -1,5 +1,6 @@
 package com.devplayg.coffee.entity.filter;
 
+import com.devplayg.coffee.definition.PagingMode;
 import com.devplayg.coffee.framework.CustomPageRequest;
 import com.devplayg.coffee.framework.InMemoryMemberManager;
 import lombok.Getter;
@@ -19,6 +20,8 @@ class SearchFilter {
 
     @DateTimeFormat(pattern = "yyyy-MM-dd HH:mm")
     private LocalDateTime endDate;
+
+    private int pagingMode;
 
     private Boolean fastPaging;
 
