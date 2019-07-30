@@ -93,8 +93,8 @@
 
     <!-- #PROJECTS: projects dropdown -->
     <div class="project-context hidden-xs">
-        <span class="label">User Timezone</span>
-        <span class="project-selector"><span th:text="|${userTz}|">Timezone</span> <small th:text="|${remoteAddr}|"></small></span>
+        <span class="label" th:text="|${userTz}|"></span>
+        <span class="project-selector systemTime"></span>
 <!--        <span class="project-selector dropdown-toggle" data-toggle="dropdown">Recent projects <i class="fa fa-angle-down"></i></span>-->
 
         <!-- Suggestion: populate this list with fetch and push technique -->
@@ -339,7 +339,9 @@
 <script th:src="@{/plugins/js.cookie.min.js}"></script>
 <script th:inline="javascript">
 /*<![CDATA[*/
-    let userRoles = {/*[# th:each="n : ${T(com.devplayg.coffee.definition.RoleType.Role).values()}"]*/"[(${n})]": "[(${n.description})]",/*[/]*/};
+    let userRoles = {/*[# th:each="n : ${T(com.devplayg.coffee.definition.RoleType.Role).values()}"]*/"[(${n})]": "[(${n.description})]",/*[/]*/},
+        PagingMode = Object.freeze({/*[# th:each="n : ${T(com.devplayg.coffee.definition.PagingMode.Paging).values()}"]*/"[(${n})]": [(${n.value})],/*[/]*/});
+
     let systemTz = [[ ${systemTz} ]],
         userTz = [[ ${userTz} ]],
         ctrl = [[ ${ctrl} ]];

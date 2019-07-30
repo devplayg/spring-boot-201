@@ -23,24 +23,16 @@ class SearchFilter {
 
     private int pagingMode;
 
-    private Boolean fastPaging;
-
     private CustomPageRequest pageable;
 
-    void tune(CustomPageRequest customPageRequest) {
+    SearchFilter() {
         LocalDateTime now = ZonedDateTime.now(InMemoryMemberManager.getCurrentMemberTimezone()).toLocalDateTime();
-        if (this.startDate == null) {
-            this.startDate = now.toLocalDate().atStartOfDay();
-        }
+        this.startDate = now.toLocalDate().atStartOfDay();
+        this.endDate = this.startDate.plusSeconds(86400 - 1);
+        pagingMode = PagingMode.Paging.GeneralPaging.getValue();
+    }
 
-        if (this.endDate == null) {
-            this.endDate = this.startDate.plusSeconds(86400 - 1);
-        }
-
-        if (fastPaging == null) {
-            fastPaging = false;
-        }
-
+    void tune(CustomPageRequest customPageRequest) {
         this.pageable = customPageRequest;
     }
 }
