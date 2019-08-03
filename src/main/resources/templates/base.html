@@ -188,30 +188,22 @@
         -->
 
         <ul>
-            <li>
-                <a href="#" title="Camera"><i class="fa fa-lg fa-fw fa-video-camera"></i> <span class="menu-item-parent" th:text="monitoring"></span></a>
-                <ul>
-                    <li>
-                        <a href="index.html" title="Dashboard"><span class="menu-item-parent" th:text="monitoring"></span></a>
-                    </li>
-                </ul>
-            </li>
             <li class="top-menu-invisible">
-                <a href="#"><i class="fa fa-lg fa-fw fa-cube txt-color-blue"></i> <span class="menu-item-parent" th:text="security"></span></a>
+                <a href="#"><i class="fa fa-lg fa-fw fa-cube txt-color-blue"></i> <span class="menu-item-parent" th:text="#{security}"></span></a>
                 <ul>
                     <li class="">
-                        <a href="/audit/"><i class="fa fa-lg fa-fw fa-gear"></i> <span class="menu-item-parent" th:text="audit.log"></span></a>
+                        <a href="/audit/"><i class="fa fa-lg fa-fw fa-gear"></i> <span class="menu-item-parent" th:text="#{audit-log}"></span></a>
                     </li>
                 </ul>
             </li>
             <li>
-                <a href="#"><i class="fa fa-lg fa-fw fa-gear"></i> <span class="menu-item-parent" th:text="settings"></span></a>
+                <a href="#"><i class="fa fa-lg fa-fw fa-gear"></i> <span class="menu-item-parent" th:text="#{setting}"></span></a>
                 <ul>
                     <li>
-                        <a href="/members/" th:text="member"></a>
+                        <a href="/members/" th:text="#{user}"></a>
                     </li>
                     <li>
-                        <a href="/device/" th:text="device"></a>
+                        <a href="/device/" th:text="#{device}"></a>
                     </li>
                 </ul>
             </li>

@@ -2,14 +2,6 @@
       layout:decorate="~{base}">
 
 <div layout:fragment="content">
-    <!--/* This code will be removed at Thymeleaf parsing time! */-->
-
-    <!--/*-->
-    <div>
-        you can see me only before Thymeleaf processes me!
-    </div>
-    <!--*/-->
-
     <table data-toggle="table"
            th:id="|table-${ctrl}|"
            th:object="${filter}"
