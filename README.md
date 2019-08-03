@@ -1,6 +1,6 @@
 # Spring Boot 201
 
-### Technology stack 
+## Technology stack 
 
 ### Core
 
@@ -8,10 +8,6 @@
 - [x] Validation
 - [x] DevTools
 - [x] Lombok
-
-### Template Engine
-
-- [x] Thymeleaf
 
 ### Security
 
@@ -22,3 +18,19 @@
 - [x] JPA
 - [x] QueryDSL
 - [x] MariaDB
+
+### Template Engine
+
+- [x] Thymeleaf
+
+## Pagination philosophy 
+
+<img src="pagination_philosophy.png" width="500"/>
+
+### General pagination
+### 
+### Block pagination 
+
+
+ 
+
