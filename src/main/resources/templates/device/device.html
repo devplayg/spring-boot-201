@@ -1,0 +1,90 @@
+<html lang="ko" xmlns:layout="http://www.ultraq.net.nz/thymeleaf/layout" xmlns:th="http://www.thymeleaf.org"
+      layout:decorate="~{base}">
+
+<div layout:fragment="content">
+    <div th:id="|toolbar-${ctrl}|">
+        <form th:id="|form-${ctrl}|" role="form" method="post" th:action="@{|/${ctrl}/|}" th:object="${filter}">
+            <input type="hidden" name="sort" th:value="|${filter.pageable.sortName},${filter.pageable.sortOrder}|" />
+
+            <!-- Exposed filter -->
+            <div class="form-inline">
+            </div>
+
+            <!-- Unexposed filter -->
+            <div class="modal fade" th:id="|modal-${ctrl}-filter|" tabindex="-1" role="dialog">
+                <div class="modal-dialog modal-sm" role="document">
+                    <div class="modal-content">
+                        <div class="modal-header">
+                            <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+                                <span aria-hidden="true">&times;</span>
+                            </button>
+                            <h4 class="modal-title">
+                                <i class="fa fa-filter"></i> <span th:text="#{filter}"></span>
+                            </h4>
+                        </div>
+                        <div class="modal-body">
+                            <div class="form-group">
+                                <div class="radio" th:each="paging, stat : ${T(com.devplayg.coffee.definition.PagingMode.Paging).values()}">
+                                    <label>
+                                        <input type="radio" class="radiobox style-0"
+                                               th:name="pagingMode"
+                                               th:value="${paging.value}"/>
+                                        <span th:text="#{${paging.description}}"></span>
+                                    </label>
+                                </div>
+                            </div>
+                            <div class="form-group">
+                                <div class="checkbox">
+                                    <label>
+                                        <input type="checkbox" class="checkbox style-0" checked="checked" th:name="fastPaging" th:checked="*{fastPaging}"/>
+                                        <span th:text="#{fast-paging}"></span>
+                                    </label>
+                                </div>
+                            </div>
+                        </div>
+                        <div class="modal-footer">
+                            <button type="submit" class="btn btn-primary" th:text="#{search}"></button>
+                            <button type="button" class="btn btn-default" data-dismiss="modal" th:text="#{cancel}"></button>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </form>
+    </div>
+
+    <table data-toggle="table"
+           th:id="|table-${ctrl}|"
+           th:object="${filter}"
+           th:data-url="|/${ctrl}?category=2|"
+           th:data-toolbar="|#toolbar-${ctrl}|"
+           th:data-sort-name="${filter.pageable.sortName}"
+           th:data-sort-order="${filter.pageable.sortOrder}"
+           th:data-page-size="${filter.pageable.delegate.pageSize}">
+        <thead>
+        <tr>
+            <th data-field="id" data-sortable="true" data-visible="false">ID</th>
+            <th data-field="code" data-sortable="true" th:text="#{code}"></th>
+            <th data-field="hostname" data-sortable="true" th:text="#{hostname}"></th>
+            <th data-field="port" data-sortable="true" th:text="#{port}"></th>
+            <th data-field="model" data-sortable="true" th:text="#{model}"></th>
+            <th data-field="version" data-sortable="true" th:text="#{version}"></th>
+        </tr>
+        </thead>
+    </table>
+
+</div>
+
+<th:block layout:fragment="script">
+    <script th:inline="javascript">
+        /*<![CDATA[*/
+        let filter = [[ ${filter} ]];
+        console.log(filter);
+        /*]]>*/
+    </script>
+    <script th:src="@{|/modules/${ctrl}/${ctrl}.js|}"></script>
+    <script th:src="@{|/modules/${ctrl}/formatter.js|}"></script>
+</th:block>
+
+
+
+

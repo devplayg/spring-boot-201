@@ -5,7 +5,7 @@
     <span th:text="${filter.pageable.delegate.pageSize}"></span>
 
     <div th:id="|toolbar-${ctrl}|">
-        <form th:id="|form-${ctrl}|" role="form" method="post" th:action="@{/audit/}" th:object="${filter}">
+        <form th:id="|form-${ctrl}|" role="form" method="post" th:action="@{|/${ctrl}/|}" th:object="${filter}">
             <input type="hidden" name="sort" th:value="|${filter.pageable.sortName},${filter.pageable.sortOrder}|" />
 
             <!-- Exposed filter -->

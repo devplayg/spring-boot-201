@@ -15,7 +15,6 @@ import java.util.List;
 @Getter
 @Setter
 @ToString(callSuper = true)
-@Slf4j
 public class AuditFilter extends SearchFilter {
     private final static String defaultSortName = "id";
     private final static Sort.Direction defaultSortOrder = Sort.Direction.DESC;
