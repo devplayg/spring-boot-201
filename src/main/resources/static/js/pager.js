@@ -3,7 +3,6 @@
  */
 
 'use strict';
-
 let Pager = function (id, _filter) {
 
     // Controller ID
@@ -35,7 +34,7 @@ let Pager = function (id, _filter) {
     // Check filtering
     this.isFiltered = function() {
         let isFiltered = false;
-        $(".modal-body input[type=text]", this.form).each(function (i, elm) {
+        $(".modal-body input[type=text]", this.form).not(".exception").each(function (i, elm) {
             if ($(elm).val().trim().length > 0) {
                 isFiltered = true;
                 return false;
@@ -104,6 +103,7 @@ let Pager = function (id, _filter) {
         } else {
             renderDataToTable(this.table, this.log, this.paging);
             updatePagingNavButtons(this.paging, this.navigationButtonGroup);
+            this.navigationButtonGroup.page.text(this.paging.no);
         }
         this.paging.blockIndex_before = this.paging.blockIndex;
     }
@@ -172,21 +172,21 @@ let Pager = function (id, _filter) {
     };
 
 
-    // Initialize bootstrap-table for normal paging
-    this.initTableForNormalPaging = function () {
+    // Initialize bootstrap-table for general paging
+    this.initTableForGeneralPaging = function () {
         let c = this;
         this.table = $("#table-" + id).bootstrapTable({
             sidePagination: "server",
             url: "/" + this.id,
             queryParamsType: "", // DO NOT REMOVE. LEAVE BLANK
             pagination: true,
-            queryParams: function (normalPagingParam) {
-                tuneFilterAndPageable(c.filter, normalPagingParam);
+            queryParams: function (generalPagingParam) {
+                tuneFilterAndPageable(c.filter, generalPagingParam);
                 return $.param(c.filter, true);
             },
             responseHandler: function (data) {
                 console.log(data);
-                if (c.filter.fastPaging) {
+                if (c.filter.pagingMode === PagingMode.FastPaging) {
                     return data;
                 }
                 return {
@@ -210,7 +210,7 @@ let Pager = function (id, _filter) {
     this.init = function () {
 
         // Fast paging
-        if (this.filter.fastPaging) {
+        if (this.filter.pagingMode === PagingMode.FastPaging) {
             this.initTableForFastPaging();
             this.initForm();
             this.initPaging();
@@ -219,14 +219,14 @@ let Pager = function (id, _filter) {
             return true;
         }
 
-        // Normal paging
-        this.initTableForNormalPaging();
+        // General paging
+        this.initTableForGeneralPaging();
         this.initForm();
     }
 
     this.init();
 
-    if (this.filter.fastPaging) {
+    if (this.filter.pagingMode === PagingMode.FastPaging) {
         this.fetchPage();
     }
 };

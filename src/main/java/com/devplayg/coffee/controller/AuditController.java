@@ -1,5 +1,6 @@
 package com.devplayg.coffee.controller;
 
+import com.devplayg.coffee.definition.PagingMode;
 import com.devplayg.coffee.entity.Audit;
 import com.devplayg.coffee.entity.filter.AuditFilter;
 import com.devplayg.coffee.repository.audit.AuditPredicate;
@@ -53,7 +54,7 @@ public class AuditController {
 //        log.debug("# pageable: {}", pageable);
         filter.tune(pageable);
 
-        if (filter.getFastPaging()) {
+        if (filter.getPagingMode() == PagingMode.Paging.FastPaging.getValue()) {
             List<Audit> list = auditRepositoryImpl.find(AuditPredicate.find(filter), pageable);
             return new ResponseEntity<>(list, HttpStatus.OK);
         }

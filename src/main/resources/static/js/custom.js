@@ -124,7 +124,7 @@ function convertToUserTime(dt) {
     return moment(dt).tz(userTz).format();
 }
 
-function tuneFilterAndPageable(filter, normalPagingParam) {
+function tuneFilterAndPageable(filter, generalPagingParam) {
     if (filter.hasOwnProperty("startDate")) {
         filter.startDate = filter.startDate.replace("T", " ").substring(0, 16);
     }
@@ -135,14 +135,46 @@ function tuneFilterAndPageable(filter, normalPagingParam) {
     delete filter.pageable;
 
     // Fast paging
-    if (filter.fastPaging) {
+    if (filter.pagingMode === PagingMode.FastPaging) {
         return filter;
     }
 
     // Normal paging
     return Object.assign(filter, {
-        size: normalPagingParam.pageSize,
-        page: normalPagingParam.pageNumber - 1,
-        sort: normalPagingParam.sortName + "," + normalPagingParam.sortOrder,
+        size: generalPagingParam.pageSize,
+        page: generalPagingParam.pageNumber - 1,
+        sort: generalPagingParam.sortName + "," + generalPagingParam.sortOrder,
     });
 }
+
+/**
+ * Timer
+ */
+let sysInfo = null;
+function fetchSystemInfo() {
+    $.ajax({
+        url: "/public/sysinfo",
+    }).done(function (data) {
+        // {"timezone":"Asia/Seoul","time":1564372825}
+        sysInfo = data;
+        updateSystemInfoText();
+    });
+}
+
+// let sysTime = null;
+function updateSystemInfoText() {
+    if (sysInfo !== null) {
+        let m = moment.unix(sysInfo.time).tz(sysInfo.timezone);
+        $("#header .systemTime").text(m.format("MMM D, HH:mm:ss"));
+    }
+}
+let sysTicker = function() {
+    sysInfo.time++;
+    updateSystemInfoText();
+    if (sysInfo.time % 60 === 0) {
+        fetchSystemInfo();
+    }
+}
+
+fetchSystemInfo();
+setInterval(sysTicker, 1000);

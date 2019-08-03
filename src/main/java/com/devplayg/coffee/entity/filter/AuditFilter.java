@@ -1,6 +1,7 @@
 package com.devplayg.coffee.entity.filter;
 
 import com.devplayg.coffee.definition.AuditCategory;
+import com.devplayg.coffee.definition.PagingMode;
 import com.devplayg.coffee.framework.CustomPageRequest;
 import lombok.Getter;
 import lombok.Setter;
@@ -30,6 +31,9 @@ public class AuditFilter extends SearchFilter {
 
     public AuditFilter() {
         categoryList = new ArrayList<>();
+
+        // Default fast paging mode
+        setPagingMode(PagingMode.Paging.FastPaging.getValue());
     }
 
     public void tune(Pageable pageable) {
