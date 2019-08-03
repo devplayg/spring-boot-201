@@ -18,7 +18,6 @@ public class DeviceFilter extends SearchFilter {
     private int type;
 
     public void tune(Pageable pageable) {
-        this.setFastPaging(false);
         super.tune(new CustomPageRequest(pageable, defaultSortName, defaultSortOrder));
     }
 }
