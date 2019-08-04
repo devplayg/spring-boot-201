@@ -8,3 +8,6 @@ cache:
 script:
     - gradle check
     - gradle build
+
+before_install:
+    - chmod +x gradlew
