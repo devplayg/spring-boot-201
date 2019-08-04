@@ -3,9 +3,6 @@ language: java
 jdk:
     - openjdk11
 
-before_install:
-    - chmod +x mvnw
-
 branches:
     only:
         - master
@@ -16,3 +13,6 @@ cache:
         - '$HOME/.gradle'
 
 script: "./gradlew clean build"
+
+before_install:
+    - chmod +x mvnw
