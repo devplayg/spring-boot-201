@@ -28,5 +28,3 @@ public class Message {
     private boolean read;
     private String url;
 }
-
-
