@@ -31,11 +31,10 @@ public class TestController {
     public void fireGreeting() {
         Message m = new Message();
         m.setMessage("testtest");
+        m.setUsername("SYSTEM");
         log.debug("# msg: {}", m);
-        this.template.convertAndSend("/topic/system", m);
+        this.template.convertAndSend("/topic/public", m);
     }
-
-
 
     public TestController(SampleRepository sampleRepository, SampleRepositorySupport sampleRepositorySupport) {
         this.sampleRepository = sampleRepository;

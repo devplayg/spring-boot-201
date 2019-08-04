@@ -178,54 +178,61 @@ let sysTicker = function() {
 fetchSystemInfo();
 setInterval(sysTicker, 1000);
 
+
 /**
  * Websocket
  */
 
 let WebSocket = function () {
 
-    const SERVER_SOCKET_API = "/websocket";
+    const SERVER_SOCKET_API = "/ws";
     const ENTER_KEY = 13;
 
     this.stompClient = null;
 
     this.connected = false;
 
-    this.input = $("#message-box input[name=message]");
-    this.output = $("#message-box .message-list");
+    this.input = $("#message-input input[name=message]");
+    this.output = $("#message-output");
 
     this.connect = function () {
-        console.log(SERVER_SOCKET_API);
         let socket = new SockJS(SERVER_SOCKET_API);
         this.stompClient = Stomp.over(socket);
+        this.stompClient.debug = null
 
         let s = this;
         this.stompClient.connect({}, function (frame) {
             s.setConnected(true);
-            console.log('Connected: ' + frame);
-            s.stompClient.subscribe('/topic/system', function (packet) {
+            console.log(frame);
+            // s.stompClient.send("/messaging/join", {}, JSON.stringify({'message': "I'm in"}));
+            s.stompClient.subscribe('/topic/public', function (packet) {
                 s.printMessage(packet);
             });
         });
     };
 
     this.printMessage = function(packet) {
-        $("#header .message-list").prepend(createMessage(packet));
+        this.output.prepend(createMessage(packet));
+        let alarmCount = parseInt($("#activity .badge").text());
+        $("#activity .badge").text(++alarmCount);
     };
 
     this.disconnect = function() {
         if (this.stompClient !== null) {
+            // this.stompClient.send("/messaging/join", {}, JSON.stringify({'message': "I'm out"}));
             this.stompClient.disconnect();
         }
         this.setConnected(false);
         console.log("Disconnected");
     };
 
-    this.send = function() {
-        let message = $("#message-box input[name=message]").val().trim();
-        message = JSON.stringify({'message': message});
-        this.stompClient.send("/messaging/hello", {}, message);
+    this.sendInput = function() {
+        this.send(this.input.val().trim());
         this.clearInput();
+    };
+
+    this.send = function(message) {
+        this.stompClient.send("/messaging/talk", {}, JSON.stringify({'message': message}));
     };
 
     this.setConnected = function(connected) {
@@ -245,27 +252,11 @@ let WebSocket = function () {
             }
             return false;
         }
-
-
-        // if (e.which === ENTER_KEY && this.input.val().trim() !== "") {
-        //     this.send();
-        //     return false;
-            // sendMessage(inputElm.value);
-            // clear(inputElm);
-        // }
-
-    }
+    };
 
     this.init = function () {
         this.connect();
-        // this.input.keydown(function() {
-        //     return false;
-        // });
         this.input.keydown(this.chatKeyDownHandler);
-            // if (key.keyCode === ENTER_KEY) {
-            //     return false;
-            // }
-        // });s
     };
 
     this.init();
@@ -273,16 +264,13 @@ let WebSocket = function () {
 let webSocket = new WebSocket();
 
 function sendMessage() {
-    webSocket.send();
+    webSocket.sendInput();
 }
-// $("#btn-message-send").click(function (e) {
-//     e.preventDefault();
-//     webSocket.send();
-// })
 
 function createMessage(packet) {
-    let message = JSON.parse(packet.body).message;
+    console.log(packet);
+    let message = JSON.parse(packet.body);
     return $("<div/>", {
         "class": 'alert alert-info fade in',
-    }).html("<strong>Info</strong> " + message);
+    }).html("<strong>[" + message.username + "]</strong> " + message.message);
 }

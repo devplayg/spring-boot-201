@@ -1,6 +1,5 @@
 package com.devplayg.coffee.entity;
 
-import lombok.Builder;
 import lombok.Getter;
 import lombok.Setter;
 import lombok.ToString;
@@ -30,4 +29,8 @@ public class Message {
     private String message;
     private boolean read;
     private String url;
+
+    @Transient
+    private String username;
+
 }

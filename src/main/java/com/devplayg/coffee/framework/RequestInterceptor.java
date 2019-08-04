@@ -114,7 +114,7 @@ public class RequestInterceptor extends HandlerInterceptorAdapter {
             mv.addObject("ctrl", controllerName);
             mv.addObject("remoteAddr", req.getRemoteAddr());
 
-            // Get member'ㄴ timezone and set it to view object
+            // Get member's timezone and set it to view object
             Authentication auth = SecurityContextHolder.getContext().getAuthentication();
             if (auth instanceof AnonymousAuthenticationToken) {
                 return;
