@@ -5,6 +5,7 @@ jdk: oraclejdk11
 script:
     - ./gradlew build --scan -s
 before_cache:
+    - chmod +x gradlew
     - rm -f  $HOME/.gradle/caches/modules-2/modules-2.lock
     - rm -fr $HOME/.gradle/caches/*/plugin-resolution/
 
