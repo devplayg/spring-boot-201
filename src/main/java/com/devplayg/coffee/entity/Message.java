@@ -1,6 +1,8 @@
 package com.devplayg.coffee.entity;
 
+import lombok.Builder;
 import lombok.Getter;
+import lombok.Setter;
 import lombok.ToString;
 import org.hibernate.annotations.CreationTimestamp;
 
@@ -10,6 +12,7 @@ import java.time.LocalDateTime;
 @Entity
 @Table(name = "msg_message")
 @Getter
+@Setter
 @ToString
 public class Message {
     @Id

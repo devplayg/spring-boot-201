@@ -41,7 +41,7 @@ let Pager = function (id, _filter) {
             }
         });
         return isFiltered;
-    }
+    };
 
 
     // Set sorting options (Fast paging only)
@@ -106,7 +106,7 @@ let Pager = function (id, _filter) {
             this.navigationButtonGroup.page.text(this.paging.no);
         }
         this.paging.blockIndex_before = this.paging.blockIndex;
-    }
+    };
 
 
     this.initForm = function () {
@@ -117,7 +117,7 @@ let Pager = function (id, _filter) {
         if (this.isFiltered()) {
             $(".filter", this.form).html('<i class="fa fa-filter txt-color-red"></i>');
         }
-    }
+    };
 
 
     // Initialize paging variables
@@ -132,7 +132,7 @@ let Pager = function (id, _filter) {
             sort: this.table.bootstrapTable("getOptions").sortName + "," + this.table.bootstrapTable("getOptions").sortOrder,
         };
         console.log(this.paging);
-    }
+    };
 
 
     // Initialize navigation button group
@@ -222,7 +222,7 @@ let Pager = function (id, _filter) {
         // General paging
         this.initTableForGeneralPaging();
         this.initForm();
-    }
+    };
 
     this.init();
 

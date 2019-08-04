@@ -1,10 +1,12 @@
 package com.devplayg.coffee.controller;
 
 import com.devplayg.coffee.entity.Audit;
+import com.devplayg.coffee.entity.Message;
 import com.devplayg.coffee.repository.sample.SampleRepository;
 import com.devplayg.coffee.repository.sample.SampleRepositorySupport;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.messaging.simp.SimpMessagingTemplate;
 import org.springframework.security.authentication.AnonymousAuthenticationToken;
 import org.springframework.security.authentication.UsernamePasswordAuthenticationToken;
 import org.springframework.security.core.Authentication;
@@ -21,6 +23,19 @@ public class TestController {
     private final SampleRepository sampleRepository;
 
     private final SampleRepositorySupport sampleRepositorySupport;
+
+    @Autowired
+    private SimpMessagingTemplate template;
+
+    @GetMapping("msg")
+    public void fireGreeting() {
+        Message m = new Message();
+        m.setMessage("testtest");
+        log.debug("# msg: {}", m);
+        this.template.convertAndSend("/topic/system", m);
+    }
+
+
 
     public TestController(SampleRepository sampleRepository, SampleRepositorySupport sampleRepositorySupport) {
         this.sampleRepository = sampleRepository;

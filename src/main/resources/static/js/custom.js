@@ -175,6 +175,114 @@ let sysTicker = function() {
         fetchSystemInfo();
     }
 }
-
 fetchSystemInfo();
 setInterval(sysTicker, 1000);
+
+/**
+ * Websocket
+ */
+
+let WebSocket = function () {
+
+    const SERVER_SOCKET_API = "/websocket";
+    const ENTER_KEY = 13;
+
+    this.stompClient = null;
+
+    this.connected = false;
+
+    this.input = $("#message-box input[name=message]");
+    this.output = $("#message-box .message-list");
+
+    this.connect = function () {
+        console.log(SERVER_SOCKET_API);
+        let socket = new SockJS(SERVER_SOCKET_API);
+        this.stompClient = Stomp.over(socket);
+
+        let s = this;
+        this.stompClient.connect({}, function (frame) {
+            s.setConnected(true);
+            console.log('Connected: ' + frame);
+            s.stompClient.subscribe('/topic/system', function (packet) {
+                s.printMessage(packet);
+            });
+        });
+    };
+
+    this.printMessage = function(packet) {
+        $("#header .message-list").prepend(createMessage(packet));
+    };
+
+    this.disconnect = function() {
+        if (this.stompClient !== null) {
+            this.stompClient.disconnect();
+        }
+        this.setConnected(false);
+        console.log("Disconnected");
+    };
+
+    this.send = function() {
+        let message = $("#message-box input[name=message]").val().trim();
+        message = JSON.stringify({'message': message});
+        this.stompClient.send("/messaging/hello", {}, message);
+        this.clearInput();
+    };
+
+    this.setConnected = function(connected) {
+        this.connected = connected;
+    };
+
+    this.clearInput = function() {
+        this.input.val("");
+    };
+
+
+    this.chatKeyDownHandler = function (e) {
+        if (e.which === ENTER_KEY) {
+            if ($(this).val().trim() !== "") {
+                sendMessage();
+                return false;
+            }
+            return false;
+        }
+
+
+        // if (e.which === ENTER_KEY && this.input.val().trim() !== "") {
+        //     this.send();
+        //     return false;
+            // sendMessage(inputElm.value);
+            // clear(inputElm);
+        // }
+
+    }
+
+    this.init = function () {
+        this.connect();
+        // this.input.keydown(function() {
+        //     return false;
+        // });
+        this.input.keydown(this.chatKeyDownHandler);
+            // if (key.keyCode === ENTER_KEY) {
+            //     return false;
+            // }
+        // });s
+    };
+
+    this.init();
+};
+let webSocket = new WebSocket();
+
+function sendMessage() {
+    webSocket.send();
+}
+// $("#btn-message-send").click(function (e) {
+//     e.preventDefault();
+//     webSocket.send();
+// })
+
+function createMessage(packet) {
+    let message = JSON.parse(packet.body).message;
+    return $("<div/>", {
+        "class": 'alert alert-info fade in',
+    }).html("<strong>Info</strong> " + message);
+}
