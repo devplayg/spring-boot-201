@@ -49,7 +49,7 @@
 
         <!--/* Note: The activity badge color changes when clicked and resets the number to 0
              Suggestion: You may want to set a flag when this happens to tick off all checked messages / notifications */-->
-        <span id="activity" class="activity-dropdown"> <i class="fa fa-user"></i> <b class="badge"> 21 </b> </span>
+        <span id="activity" class="activity-dropdown"> <i class="fa fa-user"></i> <b class="badge"> 0 </b> </span>
 
         <!--/* AJAX-DROPDOWN : control this dropdown height, look and feel from the LESS variable file */-->
         <div class="ajax-dropdown">
@@ -84,10 +84,11 @@
             <!--/* end notification content */-->
 
             <div class="ajax-notifications custom-scroll" style="padding: 0px 10px;">
+                <!--/*
                 <form id="message-input" role="form">
                     <input type="text" class="form-control" name="message" style="width: 99%; padding: 0px;"/>
-<!--                    <button id="btn-message-send" type="button" class="btn btn-primary">Send</button>-->
                 </form>
+                */-->
                 <div id="message-output"></div>
             </div>
 
@@ -164,16 +165,20 @@
         <!--/* multiple lang dropdown : find all flags in the flags page */-->
         <ul class="header-dropdown-list hidden-xs">
             <li>
-                <a href="#" class="dropdown-toggle" data-toggle="dropdown"> <span class="flag-icon flag-icon-kr"></span> <span> 한국어 (KR) </span> <i class="fa fa-angle-down"></i> </a>
+                <a href="#" class="dropdown-toggle" data-toggle="dropdown">
+                    <img th:src="@{|/plugins/flag-icon-css/flags/4x3/${#strings.toLowerCase(#locale.country)}.svg|}" height="15" />
+                    <span th:text="|${#locale.ISO3Country}|"></span>
+                    <i class="fa fa-angle-down"></i>
+                </a>
                 <ul class="dropdown-menu pull-right">
-                    <li class="active">
-                        <a href="javascript:void(0);"><span class="flag-icon flag-icon-us"></span> English (US)</a>
+                    <li th:class="${#locale.language} == 'ko' ? 'active' : ''">
+                        <a href="?lang=ko-KR"><img th:src="@{/plugins/flag-icon-css/flags/4x3/kr.svg}" class="flag-border" height="15" /> 한국어</a>
                     </li>
-                    <li>
-                        <a href="javascript:void(0);"><span class="flag-icon flag-icon-kr"></span> 한국어</a>
+                    <li th:class="${#locale.language} == 'vi' ? 'active' : ''">
+                        <a href="?lang=vi-VN"><img th:src="@{/plugins/flag-icon-css/flags/4x3/vn.svg}" class="flag-border" height="15" /> Tiếng việt (VN)</a>
                     </li>
-                    <li>
-                        <a href="javascript:void(0);"><span class="flag-icon flag-icon-vn"></span> Tiếng việt (VN)</a>
+                    <li th:class="${#locale.language} == 'en' ? 'active' : ''">
+                        <a href="?lang=en-US"><img th:src="@{/plugins/flag-icon-css/flags/4x3/us.svg}" class="flag-border" height="15" /> English (US)</a>
                     </li>
                 </ul>
             </li>
@@ -227,6 +232,9 @@
                         <a href="/device/" th:text="#{device}"></a>
                     </li>
                 </ul>
+            </li>
+            <li>
+                <a href="/test/"><i class="fa fa-lg fa-fw fa-gear"></i> <span class="menu-item-parent">Test</span></a>
             </li>
         </ul>
     </nav>
@@ -296,7 +304,7 @@
 <script th:src="@{/assets/js/smartwidgets/jarvis.widget.min.js}"></script>
 
 <!--/* EASY PIE CHARTS */-->
-<!--<script th:src="@{/assets/js/plugin/easy-pie-chart/jquery.easy-pie-chart.min.js}"></script>-->
+<script th:src="@{/assets/js/plugin/easy-pie-chart/jquery.easy-pie-chart.min.js}"></script>
 
 <!--/* SPARKLINES */-->
 <!--<script th:src="@{/assets/js/plugin/sparkline/jquery.sparkline.min.js}"></script>-->

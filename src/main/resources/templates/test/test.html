@@ -1,0 +1,24 @@
+<html lang="ko" xmlns:layout="http://www.ultraq.net.nz/thymeleaf/layout" xmlns:th="http://www.thymeleaf.org"
+      layout:decorate="~{base}">
+
+<div layout:fragment="content">
+    <button type="button" class="btn btn-primary btn-test" data-url="/test/msg">Test</button>
+</div>
+
+<th:block layout:fragment="script">
+    <script th:inline="javascript">
+        /*<![CDATA[*/
+        $(".btn-test").click(function() {
+            let url = $(this).data("url");
+            $.ajax({
+                url: url,
+            }).done(function (data) {
+            });
+        });
+        /*]]>*/
+    </script>
+</th:block>
+
+
+
+

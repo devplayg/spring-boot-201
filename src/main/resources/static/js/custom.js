@@ -62,7 +62,6 @@ function renderDataToTable($table, logs, paging) {
 
 // Capture table column state
 function captureTableColumnsState($table) {
-    console.log($table);
     let cols = [],
         key = getTableKey($table);
     $table.find("th").each(function (i, th) {
@@ -200,16 +199,23 @@ let WebSocket = function () {
         this.stompClient = Stomp.over(socket);
         this.stompClient.debug = null
 
-        let s = this;
+        let $this = this;
         this.stompClient.connect({}, function (frame) {
-            s.setConnected(true);
-            console.log(frame);
+            $this.setConnected(true);
             // s.stompClient.send("/messaging/join", {}, JSON.stringify({'message': "I'm in"}));
-            s.stompClient.subscribe('/topic/public', function (packet) {
-                s.printMessage(packet);
+            $this.stompClient.subscribe('/topic/public', function (packet) {
+                $this.printMessage(packet);
+                $this.checkBadge();
             });
         });
     };
+
+    this.checkBadge = function() {
+        let $badge = $('#activity > .badge');
+        if (parseInt($badge.text()) > 0) {
+            $badge.addClass("bg-color-red bounceIn animated");
+        }
+    }
 
     this.printMessage = function(packet) {
         this.output.prepend(createMessage(packet));
