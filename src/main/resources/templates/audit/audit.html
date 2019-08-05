@@ -99,7 +99,7 @@
            th:object="${filter}"
            th:data-toolbar="|#toolbar-${ctrl}|"
            th:data-sort-name="${filter.pageable.sortName}"
-           th:data-sort-order="${filter.pageable.sortOrder}"
+           th:data-sort-order="${#strings.toLowerCase(filter.pageable.sortOrder)}"
            th:data-page-size="${filter.pageable.delegate.pageSize}">
         <!--        data-query-params-type=""-->
         <!--/*
