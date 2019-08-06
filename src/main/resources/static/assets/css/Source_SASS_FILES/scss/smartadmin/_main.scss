@@ -1505,9 +1505,9 @@ input[type="text"]:focus + .input-group-addon {
 }
 
 .alert-danger {
-    border-color: darken($state-danger-border, 10%);
-    color: $white;
-    background-color: darken($state-danger-bg, 33%);
+    border-color: $state-danger-border;
+    color: $state-danger-text;
+    background-color: $state-danger-bg;
     text-shadow:none;
 }
 

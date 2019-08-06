@@ -36,7 +36,7 @@ $brand-danger:          #db5565;
 //** Background color for `<body>`.
 $body-bg:               #fff;
 //** Global text color on `<body>`.
-$text-color:            $gray;
+$text-color:            $gray-dark;
 
 //** Global textual link color.
 $link-color:            $brand-primary;
@@ -450,17 +450,17 @@ $state-success-text:             #468847;
 $state-success-bg:               #dff0d8;
 $state-success-border:           #468847;
 
-$state-info-text:                #346597;
-$state-info-bg:                  #d6dde7;
-$state-info-border:              darken(adjust-hue($state-info-bg, -10), 18%);
+$state-info-text:                #31708f;
+$state-info-bg:                  #d9edf7;
+$state-info-border:              darken($state-info-bg, 18%);
 
 $state-warning-text:             #c09853;
 $state-warning-bg:               #fcf8e3;
 $state-warning-border:           #dbab57;
 
-$state-danger-text:              #b94a48;
-$state-danger-bg:                #f2dede;
-$state-danger-border:            #b94a48;
+$state-danger-text:              #a94442;
+$state-danger-bg:                #ffe3e4;
+$state-danger-border:            #f0898c;
 
 
 //== Tooltips
