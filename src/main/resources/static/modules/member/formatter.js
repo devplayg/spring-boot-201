@@ -35,3 +35,9 @@ function memberActionFormatter(val, row, idx) {
     return commonActionFormatter(val, row, idx)
             + '<a class="password s14" href="javascript:void(0)" title="Change password"><i class="fa fa-key"></i></a>';
 }
+
+function memberUsernameFormatter(val, row, idx) {
+    if (! row.enabled) {
+        return '<stroke>' + val + '</stroke>';
+    }
+}

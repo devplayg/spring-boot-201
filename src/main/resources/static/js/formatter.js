@@ -22,3 +22,7 @@ function commonActionFormatter(val, row, idx) {
 function intIpFormatter(val, row, idx) {
     return intToip(val);
 }
+
+function emailFormatter(val, row, idx) {
+    return createEmailLink(val);
+}

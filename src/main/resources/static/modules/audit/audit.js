@@ -1,5 +1,13 @@
 $(function () {
+    /**
+     * 1. Initialize
+     */
     let pager = new Pager(ctrl, filter);
+
+
+    /**
+     * 2. Events
+     */
 
     // Validation
     pager.form.validate({

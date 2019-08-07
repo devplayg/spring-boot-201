@@ -114,6 +114,10 @@ function intToip(ipInt) {
     return ((ipInt >>> 24) + '.' + (ipInt >> 16 & 255) + '.' + (ipInt >> 8 & 255) + '.' + (ipInt & 255));
 }
 
+function createEmailLink(email) {
+    return '<a href="mailto:' + email + '">' + email + '</a>';
+}
+
 
 /**
  * Date and paging function
@@ -280,3 +284,4 @@ function createMessage(packet) {
         "class": 'alert alert-info fade in',
     }).html("<strong>[" + message.username + "]</strong> " + message.message);
 }
+

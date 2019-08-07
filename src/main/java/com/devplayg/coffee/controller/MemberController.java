@@ -151,9 +151,8 @@ public class MemberController {
      */
     @PatchMapping("{id}/password")
     public ResponseEntity<?> patch(@ModelAttribute MemberPassword memberPassword, @PathVariable("id") long id, BindingResult bindingResult) {
-//        log.debug("pw: {}", input);
         memberService.updatePassword(id, memberPassword);
-        return new ResponseEntity<>(memberPassword, HttpStatus.OK);
+        return new ResponseEntity<>(null, HttpStatus.OK);
     }
 
 //    private List<MemberNetwork> getValidNetworkList(Member member) throws IllegalArgumentException {

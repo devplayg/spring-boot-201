@@ -62,7 +62,7 @@ public class Member implements UserDetails, CredentialsContainer, Serializable {
     private String email;
 
     @Column(name = "name", length = 32, nullable = false)
-    @Length(min = 4, max = 16)
+    @Length(min = 2, max = 32)
     @JsonView({AuditView.Normal.class})
     private String name;
 

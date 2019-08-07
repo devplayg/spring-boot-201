@@ -3,25 +3,25 @@
 
 <div layout:fragment="content">
     <div th:id="|toolbar-${ctrl}|">
-        <button class="btn btn-primary" th:text="#{registration}" data-toggle="modal" th:data-target="|#modal-${ctrl}-create|">
-        </button>
+        <button class="btn btn-primary" th:text="#{registration}" data-toggle="modal" th:data-target="|#modal-${ctrl}-create|"></button>
     </div>
     <table th:id="|table-${ctrl}|"
            th:data-toolbar="|#toolbar-${ctrl}|"
            th:data-url="@{/members}"
-    >
+           data-sort-name="username"
+           data-sort-order="asc">
         <thead>
         <tr>
             <th data-field="action" data-formatter="memberActionFormatter" data-events="memberCommandEvents" data-width="100" th:text="#{table.action}"></th>
             <th data-field="roleList" data-sortable="true" data-formatter="memberRoleListFormatter" th:text="#{role}"></th>
-            <th data-field="id" data-sortable="true" data-visible="true">ID</th>
-            <th data-field="username" data-sortable="true" th:text="#{member.username}"></th>
+            <th data-field="id" data-sortable="true" data-visible="false">ID</th>
+            <th data-field="username" data-sortable="true" data-formatter="memberUsernameFormatter" th:text="#{member.username}"></th>
             <th data-field="name" data-sortable="true" th:text="#{name}"></th>
-            <th data-field="email" data-sortable="true" th:text="#{email}"></th>
+            <th data-field="email" data-sortable="true" data-visible="false" data-formatter="emailFormatter" th:text="#{email}"></th>
             <th data-field="enabled" data-sortable="true" th:text="#{enable}"></th>
             <th data-field="timezone" data-sortable="true" th:text="#{timezone}"></th>
             <th data-field="accessibleIpList" data-sortable="true" data-formatter="memberAccessibleIpListFormatter" th:text="IP"></th>
-            <th data-field="created" data-sortable="true" data-formatter="datePrettyFormatter" th:text="#{created}"></th>
+            <th data-field="created" data-sortable="true" data-visible="false" data-formatter="datePrettyFormatter" th:text="#{created}"></th>
         </tr>
         </thead>
     </table>
@@ -41,7 +41,7 @@
                             <div class="col-md-6">
                                 <div class="form-group">
                                     <label th:text="#{member.username}"></label>
-                                    <input type="text" class="form-control" th:name="username" autocomplete="off">
+                                    <input type="text" class="form-control mask-username" th:name="username" autocomplete="off">
                                 </div>
                                 <div class="form-group">
                                     <label th:text="#{password}"></label>
@@ -68,9 +68,8 @@
 
                             <div class="col-md-6">
                                 <div class="form-group">
-                                    <label th:text="#{ipAddress}"></label>
-                                    <textarea name="accessibleIpListText" class="form-control" rows="5">,,1.1.1.0,,,10.10.10.0/24
-192.168.0.3</textarea>
+                                    <label th:text="#{allowed-ip}"></label>
+                                    <textarea name="accessibleIpListText" class="form-control" rows="5"></textarea>
                                 </div>
                                 <div class="form-group">
                                     <label class="control-label" th:text="#{role}"></label>
@@ -147,7 +146,7 @@
                             </div>
                             <div class="col-md-6">
                                 <div class="form-group">
-                                    <label th:text="#{ipAddress}"></label>
+                                    <label th:text="#{allowed-ip}"></label>
                                     <textarea name="accessibleIpListText" class="form-control" rows="5"></textarea>
                                 </div>
 
@@ -181,8 +180,8 @@
                         </div>
                     </div>
                     <div class="modal-footer">
-                        <button type="submit" class="btn btn-primary" th:text="update"></button>
-                        <button type="button" class="btn btn-default" data-dismiss="modal" th:text="close"></button>
+                        <button type="submit" class="btn btn-primary" th:text="#{update}"></button>
+                        <button type="button" class="btn btn-default" data-dismiss="modal" th:text="#{close}"></button>
                     </div>
                 </div>
             </div>
@@ -215,8 +214,8 @@
                         </div>
                     </div>
                     <div class="modal-footer">
-                        <button type="submit" class="btn btn-primary" th:text="change"></button>
-                        <button type="button" class="btn btn-default" data-dismiss="modal" th:text="close"></button>
+                        <button type="submit" class="btn btn-primary" th:text="#{change}"></button>
+                        <button type="button" class="btn btn-default" data-dismiss="modal" th:text="#{close}"></button>
                     </div>
                 </div>
             </div>
@@ -227,10 +226,12 @@
 
 <th:block layout:fragment="script">
     <script th:src="@{|/js/custom-validate-methods.js|}"></script>
+
     <script th:src="@{|/modules/${ctrl}/${ctrl}.js|}"></script>
     <script th:src="@{|/modules/${ctrl}/formatter.js|}"></script>
-    <script>
+    <script th:inline="javascript">
         /*<![CDATA[*/
+
         /*]]>*/
     </script>
 </th:block>
