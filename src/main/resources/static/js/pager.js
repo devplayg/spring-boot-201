@@ -98,7 +98,6 @@ let Pager = function (id, _filter) {
                 c.navigationButtonGroup.page.text(c.paging.no);
             }).fail(function (jqXHR, textStatus, errorThrown) {
                 console.log(jqXHR);
-                Swal.fire("Error", jqXHR.message, 'warning');
             });
         } else {
             renderDataToTable(this.table, this.log, this.paging);

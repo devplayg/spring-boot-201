@@ -1,7 +1,5 @@
 $(function () {
 
-
-
     /**
      * 1. Define and initialize
      */
@@ -21,21 +19,23 @@ $(function () {
         this.$updateForm = $("#form-" + ctrl + "-update");
         this.$passwordForm = $("#form-" + ctrl + "-password");
 
-        this.create = function () {
-            let $this = this;
+        // Create member
+        // this.create = function () {
+        //     let $this = this;
+        //
+        //     $.ajax({
+        //         method: "POST",
+        //         url: "/members",
+        //         data: this.$createForm.serialize()
+        //     }).done(function () {
+        //         $this.$createForm.find(".modal").modal("hide");
+        //     }).fail(function (jqXHR, textStatus, errorThrown) {
+        //         $this.$createForm.find(".msg").text(jqXHR.responseText);
+        //         $this.$createForm.find(".alert").removeClass("hide").addClass("in");
+        //     });
+        // };
 
-            $.ajax({
-                method: "POST",
-                url: "/members",
-                data: this.$createForm.serialize()
-            }).done(function () {
-                $this.$createForm.find(".modal").modal("hide");
-            }).fail(function (jqXHR, textStatus, errorThrown) {
-                $this.$createForm.find(".msg").text(jqXHR.responseText);
-                $this.$createForm.find(".alert").removeClass("hide").addClass("in");
-            });
-        }
-
+        // Show member
         this.show = function (row) {
             this.selected = row;
 
@@ -65,23 +65,25 @@ $(function () {
             }).fail(function (jqXHR, textStatus, errorThrown) {
                 Swal.fire(jqXHR.responseJSON.message, row.username, "warning");
             });
-        }
+        };
 
-        this.update = function () {
-            let $this = this;
-            $.ajax({
-                method: "PATCH",
-                url: "/members/" + this.selected.id,
-                data: $this.$updateForm.serialize()
-            }).done(function (data) {
-                console.log(data);
-                $this.$updateForm.find(".modal").modal("hide");
-            }).fail(function (jqXHR, textStatus) {
-                console.log(jqXHR);
-                Swal.fire("failed to update", jqXHR.responseJSON.message, "error");
-            });
-        }
+        // // Updte member
+        // this.update = function () {
+        //     let $this = this;
+        //     $.ajax({
+        //         method: "PATCH",
+        //         url: "/members/" + this.selected.id,
+        //         data: $this.$updateForm.serialize()
+        //     }).done(function (data) {
+        //         console.log(data);
+        //         $this.$updateForm.find(".modal").modal("hide");
+        //     }).fail(function (jqXHR, textStatus) {
+        //         console.log(jqXHR);
+        //         Swal.fire("failed to update", jqXHR.responseJSON.message, "error");
+        //     });
+        // };
 
+        // Update member
         this.updatePassword = function () {
             let $this = this;
             $.ajax({
@@ -95,7 +97,7 @@ $(function () {
                 console.log(jqXHR);
                 Swal.fire("Error", jqXHR.responseJSON.message, "error");
             });
-        }
+        };
 
         this.delete = function (row) {
             this.selected = row;
@@ -122,16 +124,102 @@ $(function () {
                     });
                 }
             })
-        }
+        };
 
+        // Show password form
         this.showPasswordChangeForm = function (row) {
             this.selected = row;
             $("#modal-" + ctrl + "-password").modal("show");
-        }
+        };
+
+        // Validation
+        this.$createForm.validate({
+            submitHandler: function (form) {
+                $.ajax({
+                    method: "POST",
+                    url: "/members",
+                    data: $(form).serialize()
+                }).done(function () {
+                    $(form).find(".modal").modal("hide");
+                }).fail(function (jqXHR) {
+                    $(form).find(".msg").text(jqXHR.responseText);
+                    $(form).find(".alert").removeClass("hide").addClass("in");
+                });
+            },
+            rules: {
+                username: {
+                    required: true,
+                    minlength: 3,
+                    maxlength: 16,
+                    username: true
+                },
+                name: {
+                    minlength: 2,
+                    maxlength: 32,
+                },
+                password: {
+                    required: true,
+                    minlength: 9,
+                    maxlength: 16,
+                },
+                email: {
+                    required: true,
+                    email: true,
+                },
+                accessibleIpListText: {
+                    required: true,
+                },
+            },
+        });
+
+        this.$updateForm.validate({
+            submitHandler: function (form) {
+                $.ajax({
+                    method: "PATCH",
+                    url: "/members/" + this.id,
+                    data: $(form).serialize()
+                }).done(function (data) {
+                    console.log(data);
+                    $(form).find(".modal").modal("hide");
+                }).fail(function (jqXHR, textStatus) {
+                    console.log(jqXHR);
+                    Swal.fire("failed to update", jqXHR.responseJSON.message, "error");
+                });
+            },
+            rules: {
+                name: {
+                    minlength: 2,
+                    maxlength: 32,
+                },
+                email: {
+                    required: true,
+                    email: true,
+                },
+                accessibleIpListText: {
+                    required: true,
+                },
+            }
+        });
+
+        this.$passwordForm.validate({
+            submitHandler: function (form, e) {
+                e.preventDefault();
+                member.updatePassword(form);
+            },
+            rules: {
+                password: {
+                    required: true,
+                    password: true
+                },
+                passwordConfirm: {
+                    equalTo: "#" + this.$passwordForm.attr("id") + " input[name=password]"
+                },
+            }
+        });
     };
 
 
-    /*
+    /**
      * 2. Events
      */
     window.memberCommandEvents = {
@@ -162,90 +250,20 @@ $(function () {
             $form.find("input:not(readonly)[type=text],textarea").filter(":visible:first").focus().select();
         });
 
-
-    let member = new Member();
-    member.$createForm.validate({
-        submitHandler: function (form, e) {
-            e.preventDefault();
-            member.create();
-        },
-        rules: {
-            username: {
-                required: true,
-                minlength: 3,
-                maxlength: 16,
-                username: true
-            },
-            name: {
-                minlength: 2,
-                maxlength: 32,
-            },
-            password: {
-                required: true,
-                minlength: 9,
-                maxlength: 16,
-            },
-            email: {
-                required: true,
-                email: true,
-            },
-            accessibleIpListText: {
-                required: true,
-            },
-        },
-
-    });
-
-    member.$updateForm.validate({
-        submitHandler: function (form, e) {
-            e.preventDefault();
-            member.update();
-        },
-        rules: {
-            name: {
-                minlength: 2,
-                maxlength: 32,
-            },
-            email: {
-                required: true,
-                email: true,
-            },
-            accessibleIpListText: {
-                required: true,
-            },
-        }
-    });
-
-    member.$passwordForm.validate({
-        submitHandler: function (form, e) {
-            e.preventDefault();
-            member.updatePassword(form);
-        },
-        rules: {
-            password: {
-                required: true,
-                password: true
-            },
-            passwordConfirm: {
-                equalTo: "#" + member.$passwordForm.attr("id") + " input[name=password]"
-            },
-        }
-    });
-
-
     /*
      * 4. Main
      */
 
+    let member = new Member();
 
 
 
     // // Test code
     // {
-    //     //let $form = $("#form-member-create");
-    //     //$("input[name=username]", $form).val("won1");
-    //     //$("input[name=name]", $form).val("DEV Play G");
-    //     //$("input[name=email]", $form).val("devplayg@korea.com");
-    //     //$("input[name=inputPassword]", $form).val("dev123!@#");
+        let $form = $("#form-member-create");
+        $("input[name=username]", $form).val("won1");
+        $("input[name=name]", $form).val("DEV Play G");
+        $("input[name=email]", $form).val("devplayg@korea.com");
+        $("input[name=inputPassword]", $form).val("dev123!@#");
     // }
 });
