@@ -13,7 +13,8 @@ public class AuditPredicate {
         QAudit audit = QAudit.audit;
 
         BooleanBuilder builder = new BooleanBuilder();
-        builder.and(audit.created.between(filter.getStartDate(), filter.getEndDate()));
+
+        builder.and(audit.created.between(filter.getLocalizedStartdate(), filter.getLocalizedEndDate()));
 
         if (filter.getCategoryList().size() > 0) {
             builder.and(audit.category.in(filter.getCategoryList()));

@@ -4,12 +4,13 @@ $(function () {
      * 1. Define and initialize
      */
 
+    // Mask
     $('.mask-username').mask('Z',{translation:  {'Z': {pattern: /[a-zA-Z0-9 ]/, recursive: true}}});
 
-    let Member = function () {
+    // Selected object
+    let selected = null;
 
-        // Selected ID
-        this.selected = null;
+    let Member = function () {
 
         // Table
         this.$table = $("#table-" + ctrl).bootstrapTable();
@@ -19,29 +20,14 @@ $(function () {
         this.$updateForm = $("#form-" + ctrl + "-update");
         this.$passwordForm = $("#form-" + ctrl + "-password");
 
-        // Create member
-        // this.create = function () {
-        //     let $this = this;
-        //
-        //     $.ajax({
-        //         method: "POST",
-        //         url: "/members",
-        //         data: this.$createForm.serialize()
-        //     }).done(function () {
-        //         $this.$createForm.find(".modal").modal("hide");
-        //     }).fail(function (jqXHR, textStatus, errorThrown) {
-        //         $this.$createForm.find(".msg").text(jqXHR.responseText);
-        //         $this.$createForm.find(".alert").removeClass("hide").addClass("in");
-        //     });
-        // };
 
         // Show member
         this.show = function (row) {
-            this.selected = row;
+            selected = row;
 
             let $this = this;
             $.ajax({
-                url: "/members/" + this.selected.id,
+                url: "/members/" + selected.id,
             }).done(function (data) {
                 $("input[name=username]", $this.$updateForm).val(data.username);
                 $("input[name=email]", $this.$updateForm).val(data.email);
@@ -57,7 +43,7 @@ $(function () {
                     if (r.ipCidr.endsWith("/32")) {
                         return r.ipCidr.substr(0, r.ipCidr.indexOf("/"));
                     }
-                    console.log(r.ipCidr);
+                    // console.log(r.ipCidr);
                     return r.ipCidr;
                 }).join("\n");
                 $("textarea[name=accessibleIpListText]", $this.$updateForm).val(accessibleIpListText);
@@ -67,28 +53,13 @@ $(function () {
             });
         };
 
-        // // Updte member
-        // this.update = function () {
-        //     let $this = this;
-        //     $.ajax({
-        //         method: "PATCH",
-        //         url: "/members/" + this.selected.id,
-        //         data: $this.$updateForm.serialize()
-        //     }).done(function (data) {
-        //         console.log(data);
-        //         $this.$updateForm.find(".modal").modal("hide");
-        //     }).fail(function (jqXHR, textStatus) {
-        //         console.log(jqXHR);
-        //         Swal.fire("failed to update", jqXHR.responseJSON.message, "error");
-        //     });
-        // };
 
         // Update member
         this.updatePassword = function () {
             let $this = this;
             $.ajax({
                 method: "PATCH",
-                url: "/members/" + this.selected.id + "/password",
+                url: "/members/" + selected.id + "/password",
                 data: this.$passwordForm.serialize()
             }).done(function (data) {
                 console.log(data);
@@ -99,13 +70,15 @@ $(function () {
             });
         };
 
+
+        // Delete member
         this.delete = function (row) {
-            this.selected = row;
+            selected = row;
             let $this = this;
 
             Swal.fire({
                 title: "Are you sure?",
-                text: this.selected.username,
+                text: selected.username,
                 type: "warning",
                 showCancelButton: true,
                 confirmButtonColor: "#3085d6",
@@ -115,24 +88,26 @@ $(function () {
                 if (result.value) {
                     $.ajax({
                         method: "DELETE",
-                        url: "/members/" + $this.selected.id,
+                        url: "/members/" + selected.id,
                     }).done(function (data) {
-                        console.log(data);
+                        // console.log(data);
                         $this.$table.bootstrapTable("refresh");
                     }).fail(function (jqXHR, textStatus) {
-                        Swal.fire('failed to delete', row.username, "warning");
+                        Swal.fire('failed to delete', selected.username, "warning");
                     });
                 }
             })
         };
 
+
         // Show password form
         this.showPasswordChangeForm = function (row) {
-            this.selected = row;
+            selected = row;
             $("#modal-" + ctrl + "-password").modal("show");
         };
 
-        // Validation
+
+        // Validate registration form
         this.$createForm.validate({
             submitHandler: function (form) {
                 $.ajax({
@@ -172,11 +147,15 @@ $(function () {
             },
         });
 
+
+        // Validate update form
         this.$updateForm.validate({
             submitHandler: function (form) {
+                console.log(selected);
+                // console.log(form);
                 $.ajax({
                     method: "PATCH",
-                    url: "/members/" + this.id,
+                    url: "/members/" + selected.id,
                     data: $(form).serialize()
                 }).done(function (data) {
                     console.log(data);
@@ -201,6 +180,8 @@ $(function () {
             }
         });
 
+
+        // Validate password-change form
         this.$passwordForm.validate({
             submitHandler: function (form, e) {
                 e.preventDefault();
@@ -257,13 +238,11 @@ $(function () {
     let member = new Member();
 
 
-
-    // // Test code
     // {
-        let $form = $("#form-member-create");
-        $("input[name=username]", $form).val("won1");
-        $("input[name=name]", $form).val("DEV Play G");
-        $("input[name=email]", $form).val("devplayg@korea.com");
-        $("input[name=inputPassword]", $form).val("dev123!@#");
+    //     let $form = $("#form-member-create");
+    //     $("input[name=username]", $form).val("won1");
+    //     $("input[name=name]", $form).val("DEV Play G");
+    //     $("input[name=email]", $form).val("devplayg@korea.com");
+    //     $("input[name=inputPassword]", $form).val("dev123!@#");
     // }
 });

@@ -363,9 +363,9 @@
     let userRoles = {/*[# th:each="n : ${T(com.devplayg.coffee.definition.RoleType.Role).values()}"]*/"[(${n})]": "[(${n.description})]",/*[/]*/},
         PagingMode = Object.freeze({/*[# th:each="n : ${T(com.devplayg.coffee.definition.PagingMode.Paging).values()}"]*/"[(${n})]": [(${n.value})],/*[/]*/});
 
-    let systemTz = [[ ${systemTz} ]],
-        userTz = [[ ${userTz} ]],
-        ctrl = [[ ${ctrl} ]];
+    const systemTz = [[ ${systemTz} ]],
+          userTz   = [[ ${userTz} ]],
+           ctrl    = [[ ${ctrl} ]];
     moment.tz.setDefault(systemTz);
 
     $(document).ready(function() {

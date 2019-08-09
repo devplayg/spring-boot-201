@@ -38,12 +38,16 @@ function memberActionFormatter(val, row, idx) {
 
 function memberUsernameFormatter(val, row, idx) {
     if (! row.enabled) {
-        return '<span class="text-muted">' + val + '</span>';
+        return '<span class="txt-color-red text-muted">' + val + '</span>';
     }
     return val;
 }
 
 function memberEnabledFormatter(enabled, row, idx) {
+    if (row.enabled) {
+        return 'Enabled';
+    }
+
     if (!enabled) {
         return '<span class="txt-color-red">Disabled</span>';
     }

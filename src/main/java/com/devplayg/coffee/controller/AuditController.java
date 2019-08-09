@@ -6,7 +6,6 @@ import com.devplayg.coffee.entity.filter.AuditFilter;
 import com.devplayg.coffee.repository.audit.AuditPredicate;
 import com.devplayg.coffee.repository.audit.AuditRepository;
 import com.devplayg.coffee.repository.audit.AuditRepositoryImpl;
-import lombok.extern.slf4j.Slf4j;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
 import org.springframework.http.HttpStatus;
@@ -25,7 +24,6 @@ import java.util.List;
  */
 @Controller
 @RequestMapping("audit")
-@Slf4j
 public class AuditController {
 
     private final AuditRepository auditRepository;
@@ -50,9 +48,9 @@ public class AuditController {
     // Fetch
     @GetMapping
     public ResponseEntity<?> findAll(@ModelAttribute AuditFilter filter, Pageable pageable) {
-//        log.debug("# filter: {}", filter);
-//        log.debug("# pageable: {}", pageable);
         filter.tune(pageable);
+//        log.debug("# pageable: {}", pageable);
+//        log.debug("# filter: {}", filter);
 
         if (filter.getPagingMode() == PagingMode.Paging.FastPaging.getValue()) {
             List<Audit> list = auditRepositoryImpl.find(AuditPredicate.find(filter), pageable);

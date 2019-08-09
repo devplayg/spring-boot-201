@@ -11,6 +11,7 @@ spring:
         driver-class-name: com.mysql.cj.jdbc.Driver
         hikari:
             auto-commit: false
+            maximum-pool-size: 20
         sql-script-encoding: UTF-8
     resources:
         static-locations: classpath:/static/
@@ -65,7 +66,7 @@ spring:
         livereload:
             enabled: true
     datasource:
-        url: jdbc:mysql://127.0.0.1:3306/sb201?useUnicode=yes&characterEncoding=UTF-8
+        url: jdbc:mysql://127.0.0.1:3306/sb201?useUnicode=yes&characterEncoding=UTF-8&serverTimezone=UTC
         username: root
         password: Uniiot12!@
         tomcat:
@@ -93,7 +94,7 @@ spring:
         livereload:
             enabled: false
     datasource:
-        url: jdbc:mysql://127.0.0.1:3306/sb201?useUnicode=yes&characterEncoding=UTF-8
+        url: jdbc:mysql://127.0.0.1:3306/sb201?useUnicode=yes&characterEncoding=UTF-8&serverTimezone=UTC
         username: root
         password: Uniiot12!@
         tomcat:

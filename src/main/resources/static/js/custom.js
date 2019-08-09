@@ -124,7 +124,7 @@ function createEmailLink(email) {
  */
 
 function convertToUserTime(dt) {
-    return moment(dt).tz(userTz).format();
+    return moment.tz(dt, systemTz).tz(userTz);
 }
 
 function tuneFilterAndPageable(filter, generalPagingParam) {
@@ -167,7 +167,7 @@ function fetchSystemInfo() {
 // let sysTime = null;
 function updateSystemInfoText() {
     if (sysInfo !== null) {
-        let m = moment.unix(sysInfo.time).tz(sysInfo.timezone);
+        let m = moment.unix(sysInfo.time).tz(userTz);
         $("#header .systemTime").text(m.format("MMM D, HH:mm:ss"));
     }
 }
