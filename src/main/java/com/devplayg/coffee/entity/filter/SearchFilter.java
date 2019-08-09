@@ -36,6 +36,7 @@ class SearchFilter {
 
     private CustomPageRequest pageable;
 
+    @JsonIgnore
     private ZoneId clientZoneId;
 
     SearchFilter() {
