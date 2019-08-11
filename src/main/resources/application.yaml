@@ -45,7 +45,6 @@ app:
     home-uri: /audit/
     name: Spring Boot 201
     path-patterns-not-to-be-intercepted:
-        - /test/**
         - /public/**
         - /login/**
         - /favicon.ico

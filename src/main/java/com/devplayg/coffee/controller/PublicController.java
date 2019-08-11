@@ -15,7 +15,8 @@ public class PublicController {
     public HashMap<String, Object> getSystemInfo() {
         HashMap<String, Object> m = new HashMap<>();
         m.put("time", System.currentTimeMillis() / 1000);
-        m.put("timezone", TimeZone.getDefault().toZoneId());
+        m.put("timezone", TimeZone.getDefault().toZoneId().toString());
+        // m.put("time", ZonedDateTime.now(TimeZone.getDefault().toZoneId()).withNano(0).);
         return m;
     }
 }

@@ -163,10 +163,11 @@ function fetchSystemInfo() {
         updateSystemInfoText();
     });
 }
+fetchSystemInfo();
 
-// let sysTime = null;
 function updateSystemInfoText() {
-    if (sysInfo !== null) {
+    if (sysInfo !== null ) {
+        // console.log(sysInfo);
         let m = moment.unix(sysInfo.time).tz(userTz);
         $("#header .systemTime").text(m.format("MMM D, HH:mm:ss"));
     }
@@ -177,10 +178,15 @@ let sysTicker = function() {
     if (sysInfo.time % 60 === 0) {
         fetchSystemInfo();
     }
-}
-fetchSystemInfo();
+};
 setInterval(sysTicker, 1000);
 
+/**
+ * Audit
+ */
+
+let audio = new Audio();
+audio.src = "/sound/alarm-01.mp3";
 
 /**
  * Websocket
@@ -225,6 +231,10 @@ let WebSocket = function () {
         this.output.prepend(createMessage(packet));
         let alarmCount = parseInt($("#activity .badge").text());
         $("#activity .badge").text(++alarmCount);
+
+        audio.pause();
+        audio.currentTime = 0;
+        audio.play();
     };
 
     this.disconnect = function() {
@@ -277,11 +287,23 @@ function sendMessage() {
     webSocket.sendInput();
 }
 
+/**
+ * Message
+ */
+
 function createMessage(packet) {
-    console.log(packet);
+    // console.log(packet);
     let message = JSON.parse(packet.body);
     return $("<div/>", {
         "class": 'alert alert-info fade in',
     }).html("<strong>[" + message.username + "]</strong> " + message.message);
 }
 
+// console.log(44);
+// $(".ajax-dropdown").on('hide', function() {
+//     console.log('#foo is hidden');
+// });
+//
+$('.ajax-dropdown').on('hide', function() {
+    console.log('#foo is hidden');
+});

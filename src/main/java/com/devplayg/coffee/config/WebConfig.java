@@ -90,11 +90,11 @@ public class WebConfig implements WebMvcConfigurer {
     private class ZoneComparator implements Comparator<ZoneId> {
         @Override
         public int compare(ZoneId zoneId1, ZoneId zoneId2) {
-            LocalDateTime now = LocalDateTime.now();
-            ZoneOffset offset1 = now.atZone(zoneId1).getOffset();
-            ZoneOffset offset2 = now.atZone(zoneId2).getOffset();
-
-            return offset1.compareTo(offset2);
+//            LocalDateTime now = LocalDateTime.now();
+//            ZoneOffset offset1 = now.atZone(zoneId1).getOffset();
+//            ZoneOffset offset2 = now.atZone(zoneId2).getOffset();
+//            return offset1.compareTo(offset2);
+            return zoneId1.toString().compareToIgnoreCase(zoneId2.toString());
         }
     }
 

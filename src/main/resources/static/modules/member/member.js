@@ -228,7 +228,7 @@ $(function () {
         })
         .on("shown.bs.modal", function () {
             let $form = $(this).closest("form");
-            $form.find("input:not(readonly)[type=text],textarea").filter(":visible:first").focus().select();
+            $form.find("input[type=text],input[type=password],textarea").filter(":visible:first").focus().select();
         });
 
     /*
@@ -236,7 +236,6 @@ $(function () {
      */
 
     let member = new Member();
-
 
     // {
     //     let $form = $("#form-member-create");

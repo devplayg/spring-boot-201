@@ -53,6 +53,9 @@
 
         <!--/* AJAX-DROPDOWN : control this dropdown height, look and feel from the LESS variable file */-->
         <div class="ajax-dropdown">
+            <audio id="alarmAudio" preload="auto">
+                <source th:src="@{/sound/alarm-01.mp3}" type="audio/mp3">
+            </audio>
 
             <!--/* the ID links are fetched via AJAX to the ajax container "ajax-notifications" */-->
             <!--/*
@@ -83,7 +86,7 @@
             */-->
             <!--/* end notification content */-->
 
-            <div class="ajax-notifications custom-scroll" style="padding: 0px 10px;">
+            <div class="ajax-notifications custom-scroll" style="padding: 15px 10px 0px 10px;">
                 <!--/*
                 <form id="message-input" role="form">
                     <input type="text" class="form-control" name="message" style="width: 99%; padding: 0px;"/>
@@ -166,19 +169,19 @@
         <ul class="header-dropdown-list hidden-xs">
             <li>
                 <a href="#" class="dropdown-toggle" data-toggle="dropdown">
-                    <img th:src="@{|/plugins/flag-icon-css/flags/4x3/${#strings.toLowerCase(#locale.country)}.svg|}" height="15" />
+                    <img th:src="@{|/plugins/flag-icon-css/flags/4x3/${#strings.toLowerCase(#locale.country)}.svg|}" class="border-a" height="15" />
                     <span th:text="|${#locale.ISO3Country}|"></span>
                     <i class="fa fa-angle-down"></i>
                 </a>
                 <ul class="dropdown-menu pull-right">
                     <li th:class="${#locale.language} == 'ko' ? 'active' : ''">
-                        <a href="?lang=ko-KR"><img th:src="@{/plugins/flag-icon-css/flags/4x3/kr.svg}" class="flag-border" height="15" /> 한국어</a>
+                        <a href="?lang=ko-KR"><img th:src="@{/plugins/flag-icon-css/flags/4x3/kr.svg}" class="border-a" height="15" /> 한국어</a>
                     </li>
                     <li th:class="${#locale.language} == 'vi' ? 'active' : ''">
-                        <a href="?lang=vi-VN"><img th:src="@{/plugins/flag-icon-css/flags/4x3/vn.svg}" class="flag-border" height="15" /> Tiếng việt (VN)</a>
+                        <a href="?lang=vi-VN"><img th:src="@{/plugins/flag-icon-css/flags/4x3/vn.svg}" class="border-a" height="15" /> Tiếng việt (VN)</a>
                     </li>
                     <li th:class="${#locale.language} == 'en' ? 'active' : ''">
-                        <a href="?lang=en-US"><img th:src="@{/plugins/flag-icon-css/flags/4x3/us.svg}" class="flag-border" height="15" /> English (US)</a>
+                        <a href="?lang=en-US"><img th:src="@{/plugins/flag-icon-css/flags/4x3/us.svg}" class="border-a" height="15" /> English (US)</a>
                     </li>
                 </ul>
             </li>

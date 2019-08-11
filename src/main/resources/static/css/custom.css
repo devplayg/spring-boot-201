@@ -1,5 +1,13 @@
+.modal-wide {
+    width: 90%;
+}
+
 .bred {
     border: 1px dotted red;
+}
+
+.border-a {
+    border: 1px solid #aaaaaa;
 }
 
 .datetime {
