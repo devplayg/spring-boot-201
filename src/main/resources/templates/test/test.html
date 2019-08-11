@@ -2,9 +2,9 @@
       layout:decorate="~{base}">
 
 <div layout:fragment="content">
-    <button type="button" class="btn btn-primary btn-test" data-url="/test/msg">Test</button>
+    <button type="button" class="btn btn-primary btn-test-alarm" data-url="/test/msg">Alarm & make sound</button>
+    <button type="button" class="btn btn-primary btn-test-snapshot" data-url="/test/msg">VXG Snapshot</button>
 
-    <iframe width="640" height="360" src="https://127.0.0.1:8443/v/iframe.html?channel=eyJ0b2tlbiI6InNoYXJlLmV5SnphU0k2SUROOS41ZDRlNTE2OHQxMmNmZjc4MC5lc2djRlN3RWpfZjhPa2pfQk9ra0ZKQmg4Rk0iLCJjYW1pZCI6MiwiY21uZ3JpZCI6MiwiYWNjZXNzIjoid2F0Y2giLCJhcGlfcCI6IjgzIiwiYXBpX3NwIjoiODYiLCJjYW0iOiIxMjcuMC4wLjEiLCJjYW1fcCI6Ijg4ODgiLCJjYW1fc3AiOiI4ODgzIiwic3ZjcCI6Imh0dHBzOi8vMTI3LjAuMC4xOjg2LyIsImFwaSI6IjEyNy4wLjAuMSJ9" frameborder="0" scrolling="no" align="left" allowfullscreen>Your browser are not supported iframe.</iframe>
     <iframe width="640" height="360" src="https://127.0.0.1:8443/v/iframe.html?channel=eyJ0b2tlbiI6InNoYXJlLmV5SnphU0k2SURWOS41ZDRlNmNjZXQxMmNmZjc4MC5lZUJHUGNOS09rcWZlUlhVeWVoWXlUcmxVSzQiLCJjYW1pZCI6MywiY21uZ3JpZCI6MywiYWNjZXNzIjoid2F0Y2giLCJhcGlfcCI6IjgzIiwiYXBpX3NwIjoiODYiLCJjYW0iOiIxMjcuMC4wLjEiLCJjYW1fcCI6Ijg4ODgiLCJjYW1fc3AiOiI4ODgzIiwic3ZjcCI6Imh0dHBzOi8vMTI3LjAuMC4xOjg2LyIsImFwaSI6IjEyNy4wLjAuMSJ9&timeline=on" frameborder="0" scrolling="no" align="left" allowfullscreen>Your browser are not supported iframe.</iframe>
 
 </div>
@@ -12,7 +12,15 @@
 <th:block layout:fragment="script">
     <script th:inline="javascript">
         /*<![CDATA[*/
-        $(".btn-test").click(function() {
+        $(".btn-test-alarm").click(function() {
+            let url = $(this).data("url");
+            $.ajax({
+                url: url,
+            }).done(function (data) {
+            });
+        });
+
+        $(".btn-test-snapshot").click(function() {
             let url = $(this).data("url");
             $.ajax({
                 url: url,

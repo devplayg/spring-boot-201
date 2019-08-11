@@ -16,6 +16,7 @@ spring:
     resources:
         static-locations: classpath:/static/
 #    jackson:
+#        property-naming-strategy: SNAKE_CASE
 #        date-format: yyyy/MM/dd HH:mm:ss
 #        time-zone: America/Sao_Paulo
 server:
@@ -38,6 +39,9 @@ logging:
                 type.descriptor.sql.BasicBinder: info
 
 app:
+    video-server:
+        address: https://127.0.0.1:86/api/
+        api-key: VBLWA8_tJEGnZNGy
     admin-info:
         name: Administrator
         email: admin@admin.com

@@ -19,9 +19,11 @@ public class AppConfig {
     private List<String> pathPatternsNotToBeIntercepted;
     private AdminInfo adminInfo;
     private Boolean useIpBlocking;
+    private Server videoServer;
 
     public AppConfig() {
         adminInfo = new AdminInfo();
+        videoServer = new Server();
     }
 
     @Getter
@@ -30,6 +32,14 @@ public class AppConfig {
     public class AdminInfo {
         private String name;
         private String email;
+    }
+
+    @Getter
+    @Setter
+    @ToString
+    public class Server {
+        private String address;
+        private String apiKey;
     }
 }
 
