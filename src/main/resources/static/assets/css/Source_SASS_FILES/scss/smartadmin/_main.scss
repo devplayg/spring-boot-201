@@ -27,7 +27,7 @@ a:hover, a:active, a:focus, button, button:active, button:focus, object, embed, 
 
 h1,h2,h3,h4 {
 	margin:0;
-	font-family:"Open Sans", Arial, Helvetica, Sans-Serif;
+	font-family:"Nanum Gothic", "Open Sans", Arial, Helvetica, Sans-Serif;
 	font-weight:300;
 }
 
@@ -1902,7 +1902,7 @@ a:link, .btn, button {
 	background-image: -ms-linear-gradient(top,$table-header-color-start 0,$table-header-color-end 100%);
 	background-image: -o-linear-gradient(top,$table-header-color-start 0,$table-header-color-end 100%);
 	background-image: -linear-gradient(top,$table-header-color-start 0,$table-header-color-end 100%);
-	font-size: 12px;
+	/* font-size: 12px; */
 }
 .fc-border-separate thead tr th {
 		padding: 4px;
@@ -2419,9 +2419,9 @@ img.away {
 }
 
 .btn {
-	border-radius:2px;
-	-webkit-border-radius: 2px;
-	-moz-border-radius: 2px;
+	border-radius:3px;
+	-webkit-border-radius: 3px;
+	-moz-border-radius: 3px;
 	box-shadow: inset 0 -2px 0 rgba(red($black), green($black), blue($black), 0.05);
 	-moz-box-shadow: inset 0 -2px 0 rgba(red($black), green($black), blue($black), 0.05);
 	-webkit-box-shadow: inset 0 -2px 0 rgba(red($black), green($black), blue($black), 0.05);
