@@ -3883,11 +3883,11 @@ INSERT INTO `ast_asset` (`asset_id`, `parent_id`, `category`, `type`, `name`, `s
 
 -- 테이블 sb201.ast_device 구조 내보내기
 CREATE TABLE IF NOT EXISTS `ast_device` (
-  `device_id` bigint(20) NOT NULL AUTO_INCREMENT COMMENT 'Device ID',
   `asset_id` bigint(20) NOT NULL COMMENT 'Asset ID',
+  `uid` VARCHAR(64) NOT NULL COMMENT 'Unique ID',
   `category` int(11) NOT NULL COMMENT 'Category',
   `type` int(11) NOT NULL COMMENT 'Type',
-  `code` int(11) NOT NULL DEFAULT 0 COMMENT 'Code',
+  `code` BIGINT(20) NOT NULL DEFAULT 0 COMMENT 'Code',
   `name` varchar(64) NOT NULL COMMENT 'Name',
   `hostname` varchar(256) NOT NULL COMMENT 'Hostname',
   `port1` int(10) unsigned NOT NULL DEFAULT 0 COMMENT 'Port',
@@ -3900,23 +3900,16 @@ CREATE TABLE IF NOT EXISTS `ast_device` (
   `firmware` varchar(64) NOT NULL DEFAULT '' COMMENT 'Firmware',
   `username` varchar(64) NOT NULL DEFAULT '' COMMENT 'Username',
   `password` varchar(64) NOT NULL DEFAULT '' COMMENT 'Password',
+  `api_key` VARCHAR(1024) NOT NULL DEFAULT '' COMMENT 'API-Key',
+  `url` VARCHAR(256) NOT NULL DEFAULT '' COMMENT 'URL',
+  `timezone` VARCHAR(64) NOT NULL DEFAULT '' COMMENT 'Timezone',
   `enabled` bit(1) NOT NULL DEFAULT b'0' COMMENT 'Enabled',
+  `status` VARCHAR(64) NOT NULL DEFAULT '' COMMENT 'Status',
   `created` datetime NOT NULL DEFAULT current_timestamp() COMMENT 'Created date',
   `updated` datetime NOT NULL DEFAULT current_timestamp() ON UPDATE current_timestamp() COMMENT 'Updated date',
-  PRIMARY KEY (`device_id`),
+  PRIMARY KEY (`asset_id`, `uid`),
   KEY `ix_astDevice_assetId` (`asset_id`)
-) ENGINE=InnoDB AUTO_INCREMENT=13 DEFAULT CHARSET=utf8;
-
--- 테이블 데이터 sb201.ast_device:~6 rows (대략적) 내보내기
-/*!40000 ALTER TABLE `ast_device` DISABLE KEYS */;
-INSERT INTO `ast_device` (`device_id`, `asset_id`, `category`, `type`, `code`, `name`, `hostname`, `port1`, `port2`, `port3`, `port4`, `manufactured_by`, `model`, `version`, `firmware`, `username`, `password`, `enabled`, `created`, `updated`) VALUES
-	(1, 0, 1, 1, 0, 'localhost', 'localhost', 0, 0, 0, 0, 'Company', 'Server', '', '1.0', '', '', b'1', '2019-08-03 12:41:17', '2019-08-03 12:41:18'),
-	(2, 3, 2, 1, 105, 'VXG Storage', '127.0.0.1', 86, 0, 0, 0, 'VXG Group', 'C', '1.0', '2.0.0', 'VBLWA8_tJEGnZNGy', '', b'1', '2019-08-03 12:42:51', '2019-08-11 01:47:42'),
-	(3, 2, 3, 1, 101, 'Server-101', '192.168.0.101', 20101, 30101, 0, 0, 'H-Vision', 'A', '1.0', '1.1.1', 'camadmin', '1234', b'1', '2019-08-03 12:42:51', '2019-08-11 01:45:59'),
-	(4, 2, 3, 1, 102, 'Server-102', '192.168.0.102', 20102, 30102, 0, 0, 'H-Vision', 'A', '2.0', '1.1.1', 'camadmin', '1234', b'1', '2019-08-03 12:42:51', '2019-08-11 01:46:00'),
-	(5, 2, 3, 1, 103, 'Server-103', '192.168.0.103', 20103, 30103, 0, 0, 'H-Vision', 'A', '2.0', '1.1.1', 'camadmin', '1234', b'1', '2019-08-03 12:42:51', '2019-08-11 01:46:02'),
-	(6, 3, 3, 2, 104, 'Server-104', '192.168.0.104', 20104, 30104, 0, 0, 'I-Vision', 'C', '1.0', '2.0.1', 'myadmin', '1234', b'1', '2019-08-03 12:42:51', '2019-08-11 01:46:03');
-/*!40000 ALTER TABLE `ast_device` ENABLE KEYS */;
+) ENGINE=InnoDB DEFAULT CHARSET=UTF8;
 
 -- 테이블 sb201.mbr_allowed_ip 구조 내보내기
 CREATE TABLE IF NOT EXISTS `mbr_allowed_ip` (

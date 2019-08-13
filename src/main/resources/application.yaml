@@ -46,6 +46,7 @@ app:
         name: Administrator
         email: admin@admin.com
     use-ip-blocking: false
+    file-upload-dir: e:/upload
     home-uri: /audit/
     name: Spring Boot 201
     path-patterns-not-to-be-intercepted:

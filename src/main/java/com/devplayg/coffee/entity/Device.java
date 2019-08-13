@@ -1,8 +1,7 @@
 package com.devplayg.coffee.entity;
 
 import com.fasterxml.jackson.annotation.JsonIgnore;
-import lombok.Getter;
-import lombok.ToString;
+import lombok.*;
 import org.hibernate.annotations.CreationTimestamp;
 import org.hibernate.annotations.UpdateTimestamp;
 
@@ -10,21 +9,25 @@ import javax.persistence.*;
 import java.time.LocalDateTime;
 
 @Entity
-@Table(name = "ast_device")
 @Getter
+@Builder
+@Table(name="ast_device")
+@IdClass(DeviceId.class)
 @ToString
+@NoArgsConstructor
+@AllArgsConstructor
 public class Device {
-    @Id
-    @GeneratedValue(strategy = GenerationType.IDENTITY)
-    @Column(name = "device_id")
-    private long id;
 
+    @Id
     @Column(name = "asset_id")
     private long assetId;
 
+    @Id
+    private String uid;
+
     private int category;
     private int type;
-    private int code;
+    private long code;
     private String name;
     private String hostname;
     private int port1;
@@ -32,17 +35,26 @@ public class Device {
     private int port3;
     private int port4;
 
-    @Column(name="manufactured_by")
+    @Column(name = "manufactured_by")
     private String manufacturedBy;
 
     private String model;
     private String version;
     private String firmware;
+
+    @JsonIgnore
     private String username;
 
     @JsonIgnore
     private String password;
+
+    @JsonIgnore
+    private String apiKey;
     private Boolean enabled;
+
+    private String url;
+    private String timezone;
+    private String status;
 
     @CreationTimestamp
     private LocalDateTime created;

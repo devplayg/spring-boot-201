@@ -20,6 +20,7 @@ public class AppConfig {
     private AdminInfo adminInfo;
     private Boolean useIpBlocking;
     private Server videoServer;
+    private String fileUploadDir;
 
     public AppConfig() {
         adminInfo = new AdminInfo();
