@@ -8,7 +8,7 @@ import java.io.Serializable;
 
 @EqualsAndHashCode(onlyExplicitlyIncluded = true)
 @NoArgsConstructor
-class DeviceId  implements Serializable {
+public class DeviceId  implements Serializable {
     @EqualsAndHashCode.Include
     @Id
     private Long assetId;

@@ -1,4 +1,8 @@
 function dateFormatter(val, row, idx) {
+    return convertToUserTime(val).format("ll"); // Aug 12, 2019
+}
+
+function datetimeFormatter(val, row, idx) {
     return convertToUserTime(val);
 }
 
@@ -11,7 +15,6 @@ function datePrettyFormatter(val, row, idx) {
         + '' + m.format("HH:mm:ss") + ''
         + '<span class="txt-color-grayLight">' + m.format("Z") + '</span>';
 }
-
 function commonActionFormatter(val, row, idx) {
     return [
         '<a class="update s14" href="javascript:void(0)" title="Update"><i class="fa fa-pencil"></i></a>',

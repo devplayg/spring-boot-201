@@ -22,6 +22,7 @@ let defaultDatetimeOption = {
     autoclose: true
 };
 
+
 /**
  * jquery-validation default settings
  */
@@ -150,6 +151,7 @@ function tuneFilterAndPageable(filter, generalPagingParam) {
         sort: generalPagingParam.sortName + "," + generalPagingParam.sortOrder,
     });
 }
+
 
 /**
  * Timer
@@ -300,11 +302,15 @@ function createMessage(packet) {
     }).html("<strong>[" + message.username + "]</strong> " + message.message);
 }
 
-// console.log(44);
-// $(".ajax-dropdown").on('hide', function() {
-//     console.log('#foo is hidden');
-// });
-//
 $('.ajax-dropdown').on('hide', function() {
     console.log('#foo is hidden');
 });
+
+
+/**
+ * Handle images
+ */
+
+function handleImgError() {
+    this.src = "/img/noimage.png";
+}

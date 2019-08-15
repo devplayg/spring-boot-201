@@ -48,7 +48,6 @@ public class Device {
     @JsonIgnore
     private String password;
 
-    @JsonIgnore
     private String apiKey;
     private Boolean enabled;
 

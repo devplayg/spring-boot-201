@@ -1,0 +1,47 @@
+<html lang="ko" xmlns:layout="http://www.ultraq.net.nz/thymeleaf/layout" xmlns:th="http://www.thymeleaf.org"
+      layout:decorate="~{base}">
+
+<div layout:fragment="content">
+
+    <div class="panel panel-default">
+        <div class="panel-body">
+            <div th:id="|toolbar-${ctrl}|">
+                <button type="button" class="btn btn-primary btn-camera-sync" th:text="#{sync-cameras}"></button>
+            </div>
+
+            <table th:id="|table-${ctrl}|"
+                   th:data-toolbar="|#toolbar-${ctrl}|"
+                   th:data-sort-name="name"
+                   th:data-sort-order="asc"
+                   th:data-url="@{|/${ctrl}s|}">
+                <thead>
+                <tr>
+                    <th data-formatter="rowNumberFormatter" data-width="50">#</th>
+                    <th data-field="name" data-sortable="true" data-visible="true" th:text="#{name}"></th>
+                    <th data-field="code" data-sortable="true" data-visible="true">Channel ID</th>
+                    <th data-field="created" data-sortable="true" data-visible="true" data-formatter="dateFormatter" th:text="#{created}"></th>
+                    <th data-field="enabled" data-sortable="true" data-visible="true" data-formatter="cameraStateFormatter" th:text="#{state}"></th>
+                    <th data-formatter="cameraLiveFormatter" th:text="#{live}"></th>
+                    <th data-formatter="cameraWatchUrlFormatter">URLs</th>
+                </tr>
+                </thead>
+            </table>
+        </div>
+    </div>
+
+    <div th:replace="camera/live">`</div>
+</div>
+
+<th:block layout:fragment="script">
+    <div th:replace="video-css">`</div>
+    <div th:replace="video-js">`</div>
+
+    <script th:src="@{|/modules/${ctrl}/settings.js|}"></script>
+    <script th:src="@{|/modules/${ctrl}/live.js|}"></script>
+    <script th:src="@{|/modules/${ctrl}/formatter.js|}"></script>
+    <script th:inline="javascript">
+        /*<![CDATA[*/
+        /*]]>*/
+    </script>
+</th:block>
+

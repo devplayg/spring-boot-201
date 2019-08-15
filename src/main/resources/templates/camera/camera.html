@@ -1,0 +1,81 @@
+<html lang="ko" xmlns:layout="http://www.ultraq.net.nz/thymeleaf/layout" xmlns:th="http://www.thymeleaf.org"
+      layout:decorate="~{base}">
+
+<head layout:fragment="css">
+    <link rel="stylesheet" type="text/css" th:href="@{/plugins/vxg-2.0.63/videojs-5.18.3.min.css}">
+    <link rel="stylesheet" type="text/css" th:href="@{/plugins/vxg-2.0.63/CloudSDK.min.css}">
+    <link rel="stylesheet" type="text/css" th:href="@{|/modules/${ctrl}/${ctrl}.css|}">
+</head>
+
+<div layout:fragment="content">
+    <div>
+        <div class="col-md-9">
+<!--            <div id="player1" class="player"></div>-->
+<!--            <div id="player2" class="player"></div>-->
+        </div>
+        <div class="col-md-3">
+
+        </div>
+    </div>
+
+
+    ${assetId}
+    <div th:each="c : ${cameras}">
+        <button type="button" class="btn btn-primary btn-xs btn-camera-snapshot" th:data-uid="${c.uid}">Snapshot</button>
+        <button type="button" class="btn btn-success btn-xs btn-camera-image" th:data-uid="${c.uid}">Image</button>
+        <span th:text="${c.name}"></span> /
+        <span th:text="${c.uid}"></span>
+        <img src="#" th:id="|snapshot-${c.uid}|" class="snapshot"/>
+    </div>
+
+</div>
+
+<th:block layout:fragment="script">
+    <!-- automaticly include: begin -->
+    <script type="text/javascript" th:src="@{/plugins/vxg-2.0.63/videojs-5.18.3.min.js}"></script>
+    <script type="text/javascript" th:src="@{/plugins/vxg-2.0.63/videojs-contrib-hls.js}"></script>
+    <script type="text/javascript" th:src="@{/plugins/vxg-2.0.63/moment.min.js}"></script>
+    <script type="text/javascript" th:src="@{/plugins/vxg-2.0.63/moment-timezone-with-data-2012-2022.min.js}"></script>
+    <script type="text/javascript" th:src="@{/plugins/vxg-2.0.63/webrtc-adapter-latest.js}"></script>
+    <script type="text/javascript" th:src="@{/plugins/vxg-2.0.63/CloudSDK.min.js}"></script>
+    <script type="text/javascript" th:inline="javascript">
+        // document.addEventListener('DOMContentLoaded', function() {
+        //     window.player = window.player || new CloudPlayerSDK('player1');
+        //
+        //     var access_token = 'eyJjYW1pZCI6IDEsICJhcGlfc3AiOiA4NiwgImNtbmdyaWQiOiAxLCAiYWNjZXNzIjogImFsbCIsICJ0b2tlbiI6ICJzaGFyZS5leUp6YVNJNklESjkuNWQ1MGM1MGJ0MTJjZmY3ODAuV2Q4b2huaTcyNDBMZzRMcE1DSkgwZm9oZ2dnIiwgImFwaSI6ICIxOTIuMTY4LjAuNzYiLCAiY2FtIjogIjE5Mi4xNjguMC43NiIsICJhcGlfcCI6IDgzfQ==';
+        //     player.setSource(access_token);
+        //     player.play();
+        // });
+
+        // CloudSDK.flashswf = "/plugins/vxg-2.0.63/video-js-by-vxg-buff200.swf";
+        // window.sessNameCh = 'example_cloudplayersdk1_ch';
+
+        $(function () {
+            // var access_token = 'eyJjYW1pZCI6IDEsICJhcGlfc3AiOiA4NiwgImNtbmdyaWQiOiAxLCAiYWNjZXNzIjogImFsbCIsICJ0b2tlbiI6ICJzaGFyZS5leUp6YVNJNklESjkuNWQ1MGM1MGJ0MTJjZmY3ODAuV2Q4b2huaTcyNDBMZzRMcE1DSkgwZm9oZ2dnIiwgImFwaSI6ICIxOTIuMTY4LjAuNzYiLCAiY2FtIjogIjE5Mi4xNjguMC43NiIsICJhcGlfcCI6IDgzfQ==';
+            // let player1 = new CloudPlayerSDK('player1', {
+            //     autohide: 3000,
+            //     useOnlyPlayerFormat: 'html5', // hls force enabled
+            //     // autohide: 3000,
+            //     // timeline: 'timeline1',
+            //     // calendar: true,
+            // });
+            // player1.setSource(access_token);
+            // player1.play();
+            //
+            // let player2 = new CloudPlayerSDK('player2', {
+            //     autohide: 3000,
+            //     useOnlyPlayerFormat: 'html5', // hls force enabled
+            //     // autohide: 3000,
+            //     // timeline: 'timeline1',
+            //     // calendar: true,
+            // });
+            // player2.setSource(access_token);
+            // player2.play();
+        });
+
+    </script>
+    <!-- automaticly include: end -->
+
+    <script th:src="@{|/modules/${ctrl}/${ctrl}.js|}"></script>
+</th:block>
+
