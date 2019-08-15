@@ -1,10 +1,8 @@
 package com.devplayg.coffee.vo.vxg;
 
-import com.fasterxml.jackson.annotation.JsonIgnore;
 import com.fasterxml.jackson.annotation.JsonProperty;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
-import lombok.Setter;
 import lombok.ToString;
 
 import java.time.LocalDateTime;
@@ -30,11 +28,7 @@ public class VxgChannel {
     private Boolean streaming;
     private String timezone;
 
-    @JsonIgnore
     private Source source;
-
-    private String status;
-    private Boolean recording;
 
     public VxgChannel() {
         source = new Source();
@@ -46,7 +40,7 @@ public class VxgChannel {
     @Getter
     @ToString
     @NoArgsConstructor
-    private class AccessTokens {
+    public class AccessTokens {
         private String all;
         private String watch;
     }

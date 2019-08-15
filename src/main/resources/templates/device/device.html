@@ -2,25 +2,29 @@
       layout:decorate="~{base}">
 
 <div layout:fragment="content">
-    <table data-toggle="table"
-           th:id="|table-${ctrl}|"
-           th:object="${filter}"
-           th:data-url="|/${ctrl}?category=2|"
-           th:data-toolbar="|#toolbar-${ctrl}|"
-           th:data-sort-name="${filter.pageable.sortName}"
-           th:data-sort-order="${filter.pageable.sortOrder}"
-           th:data-page-size="${filter.pageable.delegate.pageSize}">
-        <thead>
-        <tr>
-            <th data-field="id" data-sortable="true" data-visible="false">ID</th>
-            <th data-field="code" data-sortable="true" th:text="#{code}"></th>
-            <th data-field="hostname" data-sortable="true" th:text="#{hostname}"></th>
-            <th data-field="port" data-sortable="true" th:text="#{port}"></th>
-            <th data-field="model" data-sortable="true" th:text="#{model}"></th>
-            <th data-field="version" data-sortable="true" th:text="#{version}"></th>
-        </tr>
-        </thead>
-    </table>
+    <div class="panel panel-default">
+        <div class="panel-body">
+            <table data-toggle="table"
+                   th:id="|table-${ctrl}|"
+                   th:object="${filter}"
+                   th:data-url="|/${ctrl}?category=2|"
+                   th:data-toolbar="|#toolbar-${ctrl}|"
+                   th:data-sort-name="${filter.pageable.sortName}"
+                   th:data-sort-order="${filter.pageable.sortOrder}"
+                   th:data-page-size="${filter.pageable.delegate.pageSize}">
+                <thead>
+                <tr>
+                    <th data-field="id" data-sortable="true" data-visible="false">ID</th>
+                    <th data-field="code" data-sortable="true" th:text="#{code}"></th>
+                    <th data-field="hostname" data-sortable="true" th:text="#{hostname}"></th>
+                    <th data-field="port" data-sortable="true" th:text="#{port}"></th>
+                    <th data-field="model" data-sortable="true" th:text="#{model}"></th>
+                    <th data-field="version" data-sortable="true" th:text="#{version}"></th>
+                </tr>
+                </thead>
+            </table>
+        </div>
+    </div>
 </div>
 
 <th:block layout:fragment="script">

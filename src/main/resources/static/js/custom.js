@@ -44,6 +44,7 @@ jQuery.validator.setDefaults({
 
 // Default settings
 $.extend($.fn.bootstrapTable.defaults, {
+    classes: 'table table-hover',
     showRefresh: true,
     showColumns: true,
     pageSize: 15,
