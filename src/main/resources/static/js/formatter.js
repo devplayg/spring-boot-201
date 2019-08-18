@@ -29,3 +29,7 @@ function intIpFormatter(val, row, idx) {
 function emailFormatter(val, row, idx) {
     return createEmailLink(val);
 }
+
+function rowNumberFormatter(val, row, idx) {
+    return idx+1;
+}

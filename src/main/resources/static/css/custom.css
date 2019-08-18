@@ -359,3 +359,21 @@ body {
 .mlr20 {
     margin: 0px 20px  0px 20px;
 }
+
+.bg-color-black {
+    background-color: #000 !important;
+}
+
+.txt-color-red-origin {
+    color: red;
+}
+
+.text-break {
+    word-break: break-word !important;
+    overflow-wrap: break-word !important;
+}
+
+.live-time-on-image {
+    background-color: black;
+    opacity: .5;
+}

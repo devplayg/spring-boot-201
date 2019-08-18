@@ -314,3 +314,4 @@ $('.ajax-dropdown').on('hide', function() {
 function handleImgError() {
     this.src = "/img/noimage.png";
 }
+

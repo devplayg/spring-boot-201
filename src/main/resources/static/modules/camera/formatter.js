@@ -7,21 +7,31 @@ function cameraStateFormatter(enabled, row, idx) {
 }
 
 function cameraLiveFormatter(val, row, idx) {
-    let videoLink = $('<a/>', {
+    let cameraIcon = getCameraIcon(row),
+        imageIcon = getImageIcon(row);
+
+    return cameraIcon + '<span class="mlr5"></span>' + imageIcon;
+}
+
+function getCameraIcon(row) {
+    return $('<a/>', {
         href: "#",
         "data-toggle": "modal",
         "data-target": "#modal-camera-live-video",
         "data-encoded": encodeURIComponent(JSON.stringify(row)),
-    }).html("<i class='fa fa-video-camera'></i>")[0].outerHTML;
+    // }).html('<span class="label label-danger"><i class="fa fa-circle"></i> LIVE</span>')[0].outerHTML;
+    }).html('<button class="btn btn-danger btn-xs"><i class="fa fa-circle"></i> LIVE</button>')[0].outerHTML;
+    // }).html('<button class="btn btn-default btn-xs txt-color-grayDark bg-color-white"><i class="fa fa-circle txt-color-red"></i> LIVE</button>')[0].outerHTML;
+}
 
-    let imageLink = $('<a/>', {
+function getImageIcon(row) {
+    return $('<a/>', {
         href: "#",
         "data-toggle": "modal",
         "data-target": "#modal-camera-live-images",
         "data-encoded": encodeURIComponent(JSON.stringify(row)),
-    }).html("<i class='fa fa-image'></i>")[0].outerHTML;
-
-    return videoLink + '<span class="mlr5"></span>' + imageLink;
+    // }).html('<span class="label label-primary">Images</span>')[0].outerHTML;
+    }).html('<button class="btn btn-primary btn-xs">Images</button>')[0].outerHTML;
 }
 
 function cameraWatchUrlFormatter(val, row, idx){

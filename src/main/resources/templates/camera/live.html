@@ -1,11 +1,21 @@
-<link rel="stylesheet" type="text/css" th:href="@{/plugins/vxg-2.0.63/videojs-5.18.3.min.css}">
-<link rel="stylesheet" type="text/css" th:href="@{/plugins/vxg-2.0.63/CloudSDK.min.css}">
-
 <!-- Camera live video -->
-<div class="modal fade" id="modal-camera-live-video" tabindex="-1" role="dialog" aria-labelledby="">
+<div class="modal fade" id="modal-camera-live-video" tabindex="3" role="dialog" aria-labelledby="">
     <div class="modal-dialog modal-lg" role="document">
-        <div class="modal-content" style="background-color: transparent;">
-            <div class="modal-body p0 bg-color-blueDark">
+        <div class="modal-content">
+            <div class="modal-header bg-color-black" style="border-bottom: none;">
+                <div class="modal-title">
+                    <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+                        <span aria-hidden="true">&times;</span>
+                    </button>
+                    <h5 class="m0">
+                        <span style="padding: 0px 5px 0px 5px; font-size: 16px; font-family: arial black; border:3px solid red; background-color: #000; color: #fff;">
+                            LIVE <i class="fa fa-play-circle-o txt-color-red-origin"></i>
+                        </span>
+                        <span class="camera-name to-be-empty txt-color-white ml10"></span>
+                    </h5>
+                </div>
+            </div>
+            <div class="modal-body p0 bg-color-black">
                 <div id="player1" style="width:100%; height: 500px;"></div>
             </div>
             <div class="modal-footer hidden">
@@ -16,23 +26,27 @@
 </div>
 
 <!-- Camera live images -->
-<div class="modal fade" id="modal-camera-live-images" tabindex="-1" role="dialog" aria-labelledby="">
+<div class="modal fade" id="modal-camera-live-images" tabindex="2" role="dialog" aria-labelledby="">
     <div class="modal-dialog modal-lg" role="document">
         <div class="modal-content">
             <div class="modal-header">
                 <button type="button" class="close" data-dismiss="modal" aria-label="Close">
                     <span aria-hidden="true">&times;</span>
                 </button>
-                <h4 class="modal-title"></h4>
+                <h4 class="modal-title">
+                    <span class="strong">CAMERA</span> <i class="fa fa-chevron-right txt-color-grayLight"></i>
+                    <span class="camera-name to-be-empty"></span>
+                    <div class="camera-live-icon pull-right"></div>
+                </h4>
             </div>
             <div class="modal-body">
-                <button class="btn btn-primary btn-xs btn-block mb10">
-                    <span class="time-range-info"></span>
+                <button class="btn btn-primary btn-block mb10">
+                    <span class="time-range-info to-be-empty"></span>
                 </button>
 
-                <div id="carousel-camera-live-images" class="carousel slide" data-ride="carousel">
+                <div id="carousel-camera-live-images" class="carousel slide">
                     <!-- Indicators -->
-                    <ol class="carousel-indicators"></ol>
+                    <ol class="carousel-indicators to-be-empty"></ol>
 
                     <!-- Wrapper for slides -->
                     <div class="carousel-inner" role="listbox"></div>
@@ -48,24 +62,44 @@
                     </a>
                 </div>
             </div>
-            <div class="modal-footer">
-                <button type="button" class="btn btn-default" data-dismiss="modal" th:text="#{close}"></button>
-            </div>
         </div>
     </div>
 </div>
 
 
-<div class="modal fade" id="modal-camera-urls" tabindex="-1" role="dialog" aria-labelledby="">
+<div class="modal fade" id="modal-camera-urls" tabindex="1" role="dialog" aria-labelledby="">
     <div class="modal-dialog" role="document">
         <div class="modal-content">
             <div class="modal-header">
                 <button type="button" class="close" data-dismiss="modal" aria-label="Close">
                     <span aria-hidden="true">&times;</span>
                 </button>
-                <h4 class="modal-title" id="modal-factoryevent-report-title"> URLs </h4>
+                <h4 class="modal-title">
+                    <b><i class="fa fa-circle txt-color-red"></i> LIVE STREAMING URLs</b> <i class="fa fa-chevron-right txt-color-grayLight"></i>
+                    <span class="camera-name to-be-empty"></span>
+                </h4>
             </div>
             <div class="modal-body">
+                <div>
+                    <button class="btn btn-xs bg-color-blueDark txt-color-white btn-copy-streaming-url"><i class="fa fa-circle txt-color-red"></i> RTSP</button>
+                    <p class="camera-url-rtsp to-be-empty text-break"></p>
+                </div>
+                <div>
+                    <button class="btn btn-xs bg-color-blueDark txt-color-white btn-copy-streaming-url"><i class="fa fa-circle txt-color-red"></i> HLS</button>
+                    <p class="camera-url-hls to-be-empty text-break"></p>
+                </div>
+                <div>
+                    <button class="btn btn-xs bg-color-blueDark txt-color-white btn-copy-streaming-url"><i class="fa fa-circle txt-color-red"></i> RTMP</button>
+                    <p class="camera-url-rtmp to-be-empty text-break"></p>
+                </div>
+                <div>
+                    <button class="btn btn-xs bg-color-blueDark txt-color-white btn-copy-streaming-url"><i class="fa fa-circle txt-color-red"></i> RTC</button>
+                    <p class="camera-url-rtc to-be-empty text-break"></p>
+                </div>
+                <div>
+                    <h3>Expire</h3>
+                    <p class="camera-url-expire to-be-empty"></p>
+                </div>
             </div>
             <div class="modal-footer">
                 <button type="button" class="btn btn-default" data-dismiss="modal" th:text="#{close}"></button>

@@ -69,7 +69,8 @@ public class CameraController {
         VxgImageResult result = vxgService.getImages(assetId, id, pageable);
         return new ResponseEntity<>(result, HttpStatus.OK);
     }
-    @GetMapping("{id}/live/video")
+
+    @GetMapping("{id}/live/urls")
     public ResponseEntity<?> getWatchUrls(@PathVariable("id") String id) {
         VxgWatchUrls result = vxgService.getWatchUrls(assetId, id);
         return new ResponseEntity<>(result, HttpStatus.OK);

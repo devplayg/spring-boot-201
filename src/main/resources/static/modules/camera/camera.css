@@ -29,6 +29,18 @@ body {
 
 .player {
     width: 100%;
-    height: 400px;
+    height: 100%;
     /*height: 0px auto;*/
+}
+
+.cameraBox {
+    border: 1px dashed #fff;
+    height: 400px;
+    color: #fff;
+}
+
+.cameraBox .video {
+    border: 1px solid green;
+    width: 100%;
+    height: 360px;
 }
