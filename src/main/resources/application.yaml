@@ -1,7 +1,7 @@
 # Common configuration
 spring:
     profiles:
-        active: dev
+        active: prod
     jpa:
         show-sql: false
         hibernate:
@@ -9,16 +9,21 @@ spring:
         open-in-view: false
     datasource: # DB 설정
         driver-class-name: com.mysql.cj.jdbc.Driver
+        tomcat:
+            max-active: 50
+            max-idle: 20
+            min-idle: 15
         hikari:
             auto-commit: false
             maximum-pool-size: 20
         sql-script-encoding: UTF-8
     resources:
         static-locations: classpath:/static/
-#    jackson:
-#        property-naming-strategy: SNAKE_CASE
-#        date-format: yyyy/MM/dd HH:mm:ss
-#        time-zone: America/Sao_Paulo
+    servlet:
+        multipart:
+            enabled: true
+            max-file-size: 1MB
+            max-request-size: 10MB
 server:
     address: 127.0.0.1
     servlet:
@@ -31,6 +36,7 @@ server:
 #        context-path: /api
 
 logging:
+    file: web.log
     level:
         root: info
         org:
@@ -44,9 +50,9 @@ app:
         api-key: VBLWA8_tJEGnZNGy
     admin-info:
         name: Administrator
-        email: admin@admin.com
+        email: devplayg@devplayg.com
     use-ip-blocking: false
-    file-upload-dir: e:/upload
+    file-upload-dir: /upload
     home-uri: /audit/
     name: Spring Boot 201
     path-patterns-not-to-be-intercepted:
@@ -66,9 +72,6 @@ app:
 #
 spring:
     profiles: dev
-    devtools:
-        livereload:
-            enabled: true
     datasource:
         url: jdbc:mysql://127.0.0.1:3306/sb201?useUnicode=yes&characterEncoding=UTF-8&serverTimezone=UTC
         username: root
@@ -77,6 +80,9 @@ spring:
             max-active: 3
             max-idle: 3
             min-idle: 3
+    devtools:
+        livereload:
+            enabled: true
     thymeleaf:
         cache: false
 
@@ -84,7 +90,6 @@ server:
     port: 80
 
 logging:
-    file: logs/web-dev.log
     level:
         com.devplayg: debug
 
@@ -94,18 +99,20 @@ logging:
 #
 spring:
     profiles: prod
-    devtools:
-        livereload:
-            enabled: false
     datasource:
         url: jdbc:mysql://127.0.0.1:3306/sb201?useUnicode=yes&characterEncoding=UTF-8&serverTimezone=UTC
         username: root
         password: Uniiot12!@
-        tomcat:
-            max-active: 50
-            max-idle: 20
-            min-idle: 1
 server:
-    port: 8080
-logging:
-    file: logs/web-dev.log
+    port: 443
+    ssl:
+        enabled: true
+        key-store: certificate/sb201.key
+        key-store-password: devplayg
+        key-password: devplayg
+        key-alias: sb201
+        trust-store: certificate/sb201.ts
+        trust-store-password: devplayg
+        enabled-protocols:
+            - TLSv1.2
+            - TLSv1.3

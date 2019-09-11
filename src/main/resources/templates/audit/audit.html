@@ -31,9 +31,9 @@
                                 th:selected="${#lists.contains(#object.categoryList, category)}"></option>
                     </select>
                     <div class="btn-group" th:if="*{pagingMode == T(com.devplayg.coffee.definition.PagingMode.Paging).FastPaging.value}">
-                        <button type="button" class="btn btn-primary btn-move-page btn-page-prev" data-direction="-1">&lt;</button>
+                        <button type="button" class="btn btn-default btn-move-page btn-page-prev bg-color-grayLight" data-direction="-1">&lt;</button>
                         <button type="button" class="btn btn-default btn-move-page btn-page-text" data-direction="0" disabled>1</button>
-                        <button type="button" class="btn btn-primary btn-move-page btn-page-next" data-direction="1">&gt;</button>
+                        <button type="button" class="btn btn-default btn-move-page btn-page-next bg-color-grayLight" data-direction="1">&gt;</button>
                     </div>
                     <button type="submit" class="btn btn-primary" th:text="#{search}"></button>
                     <a class="btn btn-default" href="" th:text="#{cancel}"></a>

@@ -6,6 +6,34 @@ body {
     width: 90%;
 }
 
+.datetime {
+    max-width: 180px;
+}
+.swal2-popup {
+    font-size: 1.6rem !important;
+}
+
+
+.flag-border {
+    border: 1px solid #acacac;
+}
+
+/**
+ * breadcrumb
+ */
+
+.breadcrumb {
+    font-size: 16px;
+}
+
+.breadcrumb>li+li:before {
+    content: "> ";
+}
+
+/**
+ * Border
+ */
+
 .bred {
     border: 1px dotted red;
 }
@@ -14,20 +42,20 @@ body {
     border: 1px solid #aaaaaa;
 }
 
-.datetime {
-    max-width: 180px;
-}
-.swal2-popup {
-    font-size: 1.6rem !important;
+/**
+ * Colors
+ */
+.bg-color-grayLight {
+    background-color: #eeeeee !important;
 }
 
 .txt-color-grayLight {
-    color: #acacac;
+    color: #acacac !important;
+}
+.txt-color-light {
+    color: #dddddd !important;
 }
 
-.flag-border {
-    border: 1px solid #acacac;
-}
 
 /**
  * Bootstrap table

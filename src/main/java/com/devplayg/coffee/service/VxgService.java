@@ -2,6 +2,7 @@ package com.devplayg.coffee.service;
 
 import com.devplayg.coffee.config.AppConfig;
 import com.devplayg.coffee.entity.Device;
+import com.devplayg.coffee.exception.ResourceNotFoundException;
 import com.devplayg.coffee.repository.camera.CameraRepository;
 import com.devplayg.coffee.vo.vxg.*;
 import com.fasterxml.jackson.databind.ObjectMapper;
@@ -14,6 +15,8 @@ import org.springframework.web.client.RestTemplate;
 import java.io.IOException;
 import java.util.ArrayList;
 import java.util.List;
+import java.util.Map;
+import java.util.stream.Collectors;
 
 @Service
 @Slf4j
@@ -63,8 +66,9 @@ public class VxgService {
     /**
      * Returns array of images that match specified criterion. Requires “watch” access-token.
      */
-    public VxgImageResult getImages(long assetId, String uid, Pageable pageable) {
-        Device device = cameraRepository.findOneByAssetIdAndUid(assetId, uid);
+    public VxgImageResult getImages(long deviceId, Pageable pageable) {
+        Device device = cameraRepository.findById(deviceId)
+                .orElseThrow(() -> new ResourceNotFoundException("device", "deviceId", deviceId));
         VxgImageResult result = null;
 
         int limit = pageable.getPageSize();
@@ -81,8 +85,9 @@ public class VxgService {
     /**
      * Returns live video URLs for the channel. This call must precede each attempt to play a live stream. Requires a “watch” access-token.
      */
-    public VxgWatchUrls getWatchUrls(long assetId, String uid) {
-        Device device = cameraRepository.findOneByAssetIdAndUid(assetId, uid);
+    public VxgWatchUrls getWatchUrls(long deviceId) {
+        Device device = cameraRepository.findById(deviceId)
+                .orElseThrow(() -> new ResourceNotFoundException("device", "deviceId", deviceId));
         VxgWatchUrls result = null;
         try {
             result = this.requestViaChannelAPI("v4/live/watch/", device.getApiKey(), VxgWatchUrls.class);
@@ -95,8 +100,9 @@ public class VxgService {
     /**
      * Returns a snapshot image for a ‘pull’ channel if it exists. Requires a “watch” access-token.
      */
-    public VxgSnapshot getSnapshot(long assetId, String uid) {
-        Device device = cameraRepository.findOneByAssetIdAndUid(assetId, uid);
+    public VxgSnapshot getSnapshot(long deviceId) {
+        Device device = cameraRepository.findById(deviceId)
+                .orElseThrow(() -> new ResourceNotFoundException("device", "deviceId", deviceId));
         VxgSnapshot snapshot = null;
         try {
             snapshot = this.requestViaChannelAPI("v4/live/image/", device.getApiKey(), VxgSnapshot.class);
@@ -115,13 +121,18 @@ public class VxgService {
             return false;
         }
 
+        List<Device> devices = cameraRepository.findAllByAssetIdOrderByNameAsc(assetId);
+        Map<Long, Device> codeMap = devices.stream()
+                .collect(
+                        Collectors.toMap(Device::getCode, p -> p)
+                );
+
+
         List<Device> cameras = new ArrayList<>();
         for (VxgChannel ch : result.getObjects()) {
-
-            Device camera = Device.builder()
+            Device newDevice = Device.builder()
                     .assetId(assetId)
-                    .uid(ch.getId().toString())
-                    .code(ch.getId()) // Camera ID
+                    .code(ch.getId())
                     .name(ch.getName())
                     .apiKey(ch.getAccessTokens().getAll())
                     .created(ch.getCreated())
@@ -138,9 +149,14 @@ public class VxgService {
                     .version("")
                     .build();
 
-            cameras.add(camera);
+            Device device = codeMap.get(ch.getId());
+            if (device == null) {
+                cameras.add(newDevice);
+                continue;
+            }
+            newDevice.setDeviceId(device.getDeviceId());
+            cameras.add(newDevice);
         }
-
         cameraRepository.saveAll(cameras);
         return true;
     }
@@ -192,7 +208,3 @@ public class VxgService {
         return appConfig.getVideoServer().getAddress() + api;
     }
 }
-
-//        HttpEntity<Map<String, String>> httpEntity = new HttpEntity<>(headers);
-//        Map<String, String> params = new HashMap<>();
-//        params.put("name", "jaeyeon");
