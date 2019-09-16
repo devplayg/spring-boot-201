@@ -24,7 +24,6 @@ public class CameraPolicy {
     private long assetId;
     private String code;
 
-
     private int obstacle;
     private int abnormalCondition;
     private int crush;

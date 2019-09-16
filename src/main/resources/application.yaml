@@ -1,7 +1,7 @@
 # Common configuration
 spring:
     profiles:
-        active: prod
+        active: dev
     jpa:
         show-sql: false
         hibernate:

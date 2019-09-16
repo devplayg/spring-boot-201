@@ -110,6 +110,7 @@
                 */-->
                 <thead>
                 <tr>
+                    <th data-field="__ROWNUM__" data-sortable="false">#</th>
                     <th data-field="created" data-formatter="datePrettyFormatter" data-sortable="true" data-width="225" th:text="#{created}"></th>
                     <th data-field="id" data-sortable="true" data-visible="true">ID</th>
                     <th data-field="member" data-formatter="auditMemberFormatter" data-sortable="true" th:text="#{user}"></th>
@@ -127,7 +128,6 @@
     <script th:inline="javascript">
         /*<![CDATA[*/
         let filter = [[ ${filter} ]];
-        console.log(filter);
         /*]]>*/
     </script>
     <script th:src="@{|/js/custom-validate-methods.js|}"></script>

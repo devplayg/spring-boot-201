@@ -315,3 +315,42 @@ function handleImgError() {
     this.src = "/img/noimage.png";
 }
 
+
+
+/**
+ * Form
+ */
+
+function objectifyForm($form) {//serialize data function
+    // Check multiple select
+    let multipleSelect = {};
+    $("select", $form).each(function(i, e) {
+        multipleSelect[$(e).attr("name")] = $(e).prop("multiple");
+    });
+
+    let arr = $form.serializeArray(),
+        obj = {};
+
+    $.map(arr, function(e) {
+        let name = e["name"],
+            value = e["value"];
+        if (multipleSelect[name] !== undefined && multipleSelect[name] === true) {
+            if ($.isArray(obj[name])) {
+                obj[name].push(value);
+                return;
+            }
+            obj[name] = [value];
+            return;
+        }
+
+        // PagingMode must be integer type
+        if (name === "pagingMode") {
+            obj[name] = parseInt(value, 10);
+            return;
+        }
+
+        obj[name] = e["value"];
+    });
+
+    return obj;
+}
