@@ -173,7 +173,7 @@ let Pager = function (pager) {
 
         console.debug("render data to table: queueSize="+logs.length + ", begin="+begin+", end="+end);
         $("[rel=tooltip]").tooltip();
-    }
+    };
 
 
     this.initForm = function () {
