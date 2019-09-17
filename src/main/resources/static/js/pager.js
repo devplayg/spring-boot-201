@@ -36,8 +36,17 @@ let Pager = function (pager) {
     // Paging variables (fast-paging-only)
     this.paging = null;
 
+    // Previous paging mode
+    this.pagingMode = null;
+
     // Extra parameter
     this.extraParam = null;
+
+    // Show loading
+    this.showLoading = null;
+
+    this.isInModal = null;
+
 
     // Check filtering in modal
     this.isFilteredInModal = function() {
@@ -119,7 +128,11 @@ let Pager = function (pager) {
             }
             console.debug(" - fetch url: " + url);
             let c = this;
-            //c.table.bootstrapTable("showLoading");
+
+            // Show loading
+            if (this.showLoading) {
+                c.table.bootstrapTable("showLoading");
+            }
             $.ajax({
                 url: url,
             }).done(function (data) {
@@ -138,7 +151,10 @@ let Pager = function (pager) {
                 console.error(jqXHR);
                 Swal.fire("Error", jqXHR.message, "warning");
             }).always(function() {
-                //c.table.bootstrapTable("hideLoading");
+                // Hide loading
+                if (c.showLoading) {
+                    c.table.bootstrapTable("hideLoading");
+                }
             });
         } else {
             this.renderDataToTable(this.log);
@@ -161,26 +177,44 @@ let Pager = function (pager) {
 
 
     this.initForm = function () {
-        console.debug("form is initialized");
 
         // Set form
         this.form = $("#form-" + this.id);
+        console.debug("form(ID:" + this.id + ") is initialized");
 
         // Set modal of filter
-        this.modal = $("#modal-" + this.id + "-filter");
+        this.isInModal = false;
+        if (pager.isInModal !== undefined){
+            this.isInModal = pager.isInModal;
+        }
+        if (this.isInModal) {
+            this.modal = $("#modal-" + this.id);
+            console.debug("pager is in modal");
+        } else {
+            this.modal = $("#modal-" + this.id + "-filter");
+        }
 
         // Set datetime input
         $(".datetime", this.form).datetimepicker(defaultDatetimeOption);
 
         // Set URL to request
         this.api = this.id;
-
         if (pager.api !== undefined) {
-            this.api = options.api;
+            this.api = pager.api;
+        }
+
+        // Set loading
+        this.showLoading = true;
+        if (pager.showLoading !== undefined) {
+            this.showLoading = pager.showLoading;
         }
 
         // Update filter
         this.updateFilter();
+
+        // Set paging mode
+        this.pagingMode = this.filter.pagingMode;
+        console.debug("set paging mode: " + this.pagingMode);
     };
 
     this.initFormValidation = function() {
@@ -209,6 +243,7 @@ let Pager = function (pager) {
                     form.submit();
                     return true;
                 }
+                console.debug("old paging mode: " + c.pagingMode);
 
                 console.debug("--------submitted--------");
 
@@ -236,7 +271,7 @@ let Pager = function (pager) {
     // Update filter
     this.updateFilter = function() {
         this.filter = objectifyForm(this.form);
-        this.pagingMode = this.filter.pagingMode || PagingMode.GeneralPaging;
+        this.filter.pagingMode = this.filter.pagingMode || PagingMode.FastPaging;
         console.debug("filter is updated: pagingMode="+ this.filter.pagingMode);
         console.debug(this.filter);
 
@@ -252,12 +287,14 @@ let Pager = function (pager) {
             no: 1, // Page number
             blockIndex: 0, // Block index
             blockIndex_before: -1, // Previous block index
-            blockSize: 2, // fetch N pages of data at a time
+            blockSize: pager.blockSize || 20, // fetch N pages of data at a time
             dataLength: 0,
             size: parseInt(this.table.bootstrapTable("getOptions").pageSize, 10), // Page size
             sort: this.table.bootstrapTable("getOptions").sortName + "," + this.table.bootstrapTable("getOptions").sortOrder,
         };
         console.debug("paging is initialized");
+
+
         // console.debug(this.paging);
     }
 
@@ -305,7 +342,7 @@ let Pager = function (pager) {
     // Initialize bootstrap-table for general paging
     this.initTableForGeneralPaging = function () {
         let c = this;
-        this.table = $("#table-" + id).bootstrapTable({
+        this.table = $("#table-" + this.id).bootstrapTable({
             sidePagination: "server",
             url: "/" + this.id,
             queryParamsType: "", // DO NOT REMOVE. LEAVE BLANK
@@ -347,6 +384,7 @@ let Pager = function (pager) {
 
     // Initialize module
     this.init = function () {
+        console.debug("##### Pager is initializing: " + pager.id + " #####");
 
         // Initialize form and validation
         this.initForm();
