@@ -32,3 +32,6 @@ HELP.md
 ### Project ###
 logs
 generated
+.js
+.html
+.map
