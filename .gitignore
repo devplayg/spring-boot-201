@@ -32,6 +32,7 @@ HELP.md
 ### Project ###
 logs
 generated
-.js
-.html
-.map
+**.js
+**.html
+**.map
+**.css
