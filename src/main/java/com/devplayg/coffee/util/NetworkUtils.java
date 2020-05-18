@@ -15,7 +15,7 @@ public class NetworkUtils {
                 })
 
                 // Filters
-                .filter(network -> network.length() >= 10) // "1.1.1.1/32"'s  length is 10
+                .filter(network -> network.length() >= 9) // "0.0.0.0/0"'s  length is 9
 
                 // Validate network
                 .map(network -> {

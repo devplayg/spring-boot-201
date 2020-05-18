@@ -1,9 +1,11 @@
 package com.devplayg.coffee.definition;
 
-
 import com.devplayg.coffee.util.EnumModel;
 import lombok.Getter;
 
+/**
+ * 감사로그
+ */
 @Getter
 public enum AuditCategory implements EnumModel {
 
@@ -26,5 +28,3 @@ public enum AuditCategory implements EnumModel {
         this.code = code;
     }
 }
-
-

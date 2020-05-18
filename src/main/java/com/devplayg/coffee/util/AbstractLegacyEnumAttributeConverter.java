@@ -6,6 +6,7 @@ import lombok.Getter;
 
 import javax.persistence.AttributeConverter;
 import java.util.EnumSet;
+import java.util.function.Supplier;
 
 @Getter
 public class AbstractLegacyEnumAttributeConverter<E extends Enum<E> & EnumModel> implements AttributeConverter<E, String> {
@@ -32,20 +33,13 @@ public class AbstractLegacyEnumAttributeConverter<E extends Enum<E> & EnumModel>
         if (StringUtils.isBlank(code)) {
             return null;
         }
-        if (nullable) {
-            return EnumSet.allOf(this.enumClass).stream()
-                    .filter(v -> v.getCode().equals(code))
-                    .findAny()
-                    .orElse(null);
-        } else {
-            return EnumSet.allOf(this.enumClass).stream()
-                    .filter(v -> v.getCode().equals(code))
-                    .findAny()
-                    .orElseThrow(() -> new ResourceNotFoundException(this.enumClass.getName(), enumName, code));
-        }
+        return EnumSet.allOf(this.enumClass).stream()
+                .filter(v -> v.getCode().equals(code))
+                .findAny()
+                .orElseThrow(() -> new ResourceNotFoundException(this.enumClass.getName(), enumName, code));
     }
 
-//    static Supplier<ResourceNotFoundException> notFound(String msg) {
-//        return () -> new ResourceNotFoundException(msg, "a", "bbb");
-//    }
+    static Supplier<ResourceNotFoundException> notFound(String msg) {
+        return () -> new ResourceNotFoundException(msg, "a", "bbb");
+    }
 }

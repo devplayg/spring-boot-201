@@ -37,44 +37,11 @@ public class HttpConnectionConfig {
                 .build();
 
         HttpComponentsClientHttpRequestFactory httpRequestFactory = new HttpComponentsClientHttpRequestFactory();
-        httpRequestFactory.setConnectTimeout(2000);
-        httpRequestFactory.setReadTimeout(3000);
+        httpRequestFactory.setConnectTimeout(10 * 1000);
+        httpRequestFactory.setReadTimeout(20 * 1000);
         httpRequestFactory.setHttpClient(httpClient);
 
-        // Message
-//        List<HttpMessageConverter<?>> messageConverters = new ArrayList<>();
-//        MappingJackson2HttpMessageConverter jsonMessageConverter = new MappingJackson2HttpMessageConverter();
-//        jsonMessageConverter.setObjectMapper(jacksonObjectMapper());
-//        messageConverters.add(jsonMessageConverter);
-
         RestTemplate restTemplate = new RestTemplate(httpRequestFactory);
-//        restTemplate.setMessageConverters(messageConverters);
         return restTemplate;
     }
-
-//    @Bean
-//    public RestTemplate restTemplate() {
-//        HttpComponentsClientHttpRequestFactory httpRequestFactory = new HttpComponentsClientHttpRequestFactory();
-//        httpRequestFactory.setConnectTimeout(2000);
-//        httpRequestFactory.setReadTimeout(3000);
-//        HttpClient httpClient = HttpClientBuilder.create()
-//                .setMaxConnTotal(200)
-//                .setMaxConnPerRoute(20)
-//                .build();
-//        httpRequestFactory.setHttpClient(httpClient);
-//        return new RestTemplate(httpRequestFactory);
-//    }
-//
-//    @Bean
-//    public ObjectMapper jacksonObjectMapper()
-//    {
-//        return new ObjectMapper().setPropertyNamingStrategy(propertyNamingStrategy());
-//    }
-//
-//    @Bean
-//    public PropertyNamingStrategy propertyNamingStrategy()
-//    {
-//        return new PropertyNamingStrategy.UpperCamelCaseStrategy();
-//    }
-
 }

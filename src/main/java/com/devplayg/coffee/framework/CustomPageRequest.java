@@ -27,6 +27,5 @@ public class CustomPageRequest {
             this.sortName = defaultSortName;
             this.sortOrder = defaultSortOrder;
         }
-
     }
 }

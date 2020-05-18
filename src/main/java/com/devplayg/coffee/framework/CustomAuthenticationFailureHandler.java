@@ -19,12 +19,17 @@ public class CustomAuthenticationFailureHandler implements AuthenticationFailure
 
     @Override
     public void onAuthenticationFailure(HttpServletRequest req, HttpServletResponse res, AuthenticationException exception) throws IOException, ServletException {
-        HashMap<String, Object> m  = new HashMap<>();
+        HashMap<String, Object> m = new HashMap<>();
         m.put("uri", req.getRequestURI());
         m.put("method", req.getMethod());
-        m.put("parameter", req.getParameterMap());
+
+        // Save input parameters but password
+        HashMap<String, String[]> param = new HashMap<>(req.getParameterMap());
+        param.put("app_password", null);
+        m.put("parameter", param);
         auditService.audit(AuditCategory.LOGIN_FAILED, m);
-        res.sendRedirect("/login?error");
+
+        res.sendRedirect("/login?error&username=" + req.getParameter("app_username"));
     }
 
 //    public String getBody(HttpServletRequest request) throws IOException {

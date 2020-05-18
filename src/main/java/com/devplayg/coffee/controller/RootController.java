@@ -2,7 +2,6 @@ package com.devplayg.coffee.controller;
 
 import com.devplayg.coffee.config.AppConfig;
 import com.devplayg.coffee.util.WebHelper;
-import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.security.authentication.AnonymousAuthenticationToken;
 import org.springframework.security.core.Authentication;
 import org.springframework.security.core.context.SecurityContextHolder;
@@ -29,7 +28,7 @@ public class RootController {
             return mv;
         }
 
-        // Following method provides unnecessary parameterless URLs when redirecting
+        // 불필요한 파라메터 없는 리다이렉션 처리
         mv.setView(WebHelper.getRedirectView(appConfig.getHomeUri()));
         return mv;
     }

@@ -1,5 +1,6 @@
 body {
     background: url(/img/bg.png) #fff;
+
 }
 
 .modal-wide {
@@ -19,18 +20,6 @@ body {
 }
 
 /**
- * breadcrumb
- */
-
-.breadcrumb {
-    font-size: 16px;
-}
-
-.breadcrumb>li+li:before {
-    content: "> ";
-}
-
-/**
  * Border
  */
 
@@ -38,23 +27,20 @@ body {
     border: 1px dotted red;
 }
 
-.border-a {
-    border: 1px solid #aaaaaa;
-}
-
 /**
  * Colors
  */
-.bg-color-grayLight {
-    background-color: #eeeeee !important;
-}
 
-.txt-color-grayLight {
-    color: #acacac !important;
-}
-.txt-color-light {
-    color: #dddddd !important;
-}
+/*.bg-color-grayLight {*/
+/*    background-color: #eeeeee !important;*/
+/*}*/
+
+/*.txt-color-grayLight {*/
+/*    color: #acacac !important;*/
+/*}*/
+/*.txt-color-light {*/
+/*    color: #dddddd !important;*/
+/*}*/
 
 
 /**

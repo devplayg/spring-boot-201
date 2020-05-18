@@ -2,8 +2,6 @@ package com.devplayg.coffee.entity;
 
 import com.devplayg.coffee.converter.AuditCategoryConverter;
 import com.devplayg.coffee.definition.AuditCategory;
-import com.devplayg.coffee.entity.view.AuditView;
-import com.fasterxml.jackson.annotation.JsonView;
 import lombok.AllArgsConstructor;
 import lombok.Builder;
 import lombok.Getter;
@@ -28,31 +26,25 @@ public class Audit implements Serializable {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     @Column(name = "audit_id")
-    @JsonView(AuditView.Normal.class)
     private long id;
 
     @ManyToOne(targetEntity = Member.class, fetch = FetchType.EAGER)
     @JoinColumn(name = "member_id")
     @NotFound(action = NotFoundAction.IGNORE)
-    @JsonView(AuditView.Normal.class)
     private Member member;
 
     @Column(length = 16, nullable = false)
     @Convert(converter = AuditCategoryConverter.class)
-    @JsonView(AuditView.Normal.class)
     @NotFound(action = NotFoundAction.IGNORE)
     private AuditCategory category;
 
     @Column(nullable = false)
-    @JsonView(AuditView.Normal.class)
     private long ip;
 
     @Column(length = 4096)
-    @JsonView(AuditView.Normal.class)
     private String message;
 
     @Column
     @CreationTimestamp
-    @JsonView(AuditView.Normal.class)
     private LocalDateTime created;
 }

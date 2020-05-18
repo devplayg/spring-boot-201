@@ -1,36 +1,32 @@
 # Spring Boot 201
 
+- Spring Boot 2.2.6
+- QueryDSL 4.2.2
+
 ## Technology stack 
 
-### Core
+Core
 
 - [x] Web
 - [x] Validation
 - [x] DevTools
 - [x] Lombok
 
-### Security
+Security
 
 - [x] Security
 
-### SQL
+DB
 
 - [x] JPA
 - [x] QueryDSL
 - [x] MariaDB
 
-### Template Engine
+Template Engine
 
 - [x] Thymeleaf
 
 ## Pagination philosophy 
 
 <img src="pagination_philosophy.png" width="500"/>
-
-### General pagination
-### 
-### Block pagination 
-
-
- 
 

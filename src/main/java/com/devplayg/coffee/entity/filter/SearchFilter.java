@@ -7,6 +7,7 @@ import com.fasterxml.jackson.annotation.JsonIgnore;
 import lombok.Getter;
 import lombok.Setter;
 import lombok.ToString;
+import lombok.extern.slf4j.Slf4j;
 import org.springframework.format.annotation.DateTimeFormat;
 
 import java.time.LocalDateTime;
@@ -17,7 +18,8 @@ import java.util.TimeZone;
 @Getter
 @Setter
 @ToString
-class SearchFilter {
+@Slf4j
+public class SearchFilter {
     @DateTimeFormat(pattern = "yyyy-MM-dd HH:mm")
     private LocalDateTime startDate;
 
@@ -34,6 +36,7 @@ class SearchFilter {
 
     private int pagingMode;
 
+    @JsonIgnore
     private CustomPageRequest pageable;
 
     @JsonIgnore
@@ -44,10 +47,12 @@ class SearchFilter {
         clientZoneId = InMemoryMemberManager.getCurrentMemberTimezone();
     }
 
+    @JsonIgnore
     public LocalDateTime getLocalizedStartdate() {
         return zoneStartDate.withZoneSameInstant(TimeZone.getDefault().toZoneId()).toLocalDateTime();
     }
 
+    @JsonIgnore
     public LocalDateTime getLocalizedEndDate() {
         return zoneEndDate.withZoneSameInstant(TimeZone.getDefault().toZoneId()).toLocalDateTime().plusSeconds(59);
     }
@@ -65,5 +70,11 @@ class SearchFilter {
 
         // Set custom pageable
         this.pageable = customPageRequest;
+    }
+
+    void setSearchDateRange(int days) {
+        ZonedDateTime now = ZonedDateTime.now(getClientZoneId());
+        setStartDate(now.minusDays(days).toLocalDate().atStartOfDay());
+        setEndDate(now.toLocalDate().atStartOfDay().plusSeconds(86400 - 1));
     }
 }

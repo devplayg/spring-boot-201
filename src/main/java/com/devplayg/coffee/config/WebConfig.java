@@ -1,9 +1,14 @@
+/*
+ * Developed by Won.
+ * Last modified 19. 5. 20 오전 9:57.
+ * Copyright (c) 2019. All rights reserved.
+ */
+
 package com.devplayg.coffee.config;
 
 import com.devplayg.coffee.framework.RequestInterceptor;
 import com.devplayg.coffee.vo.TimeZone;
 import lombok.extern.slf4j.Slf4j;
-import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.context.MessageSource;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
@@ -16,7 +21,6 @@ import org.springframework.web.servlet.i18n.LocaleChangeInterceptor;
 
 import java.time.LocalDateTime;
 import java.time.ZoneId;
-import java.time.ZoneOffset;
 import java.util.Comparator;
 import java.util.List;
 import java.util.Locale;
@@ -90,10 +94,6 @@ public class WebConfig implements WebMvcConfigurer {
     private class ZoneComparator implements Comparator<ZoneId> {
         @Override
         public int compare(ZoneId zoneId1, ZoneId zoneId2) {
-//            LocalDateTime now = LocalDateTime.now();
-//            ZoneOffset offset1 = now.atZone(zoneId1).getOffset();
-//            ZoneOffset offset2 = now.atZone(zoneId2).getOffset();
-//            return offset1.compareTo(offset2);
             return zoneId1.toString().compareToIgnoreCase(zoneId2.toString());
         }
     }

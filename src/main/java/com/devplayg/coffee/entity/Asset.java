@@ -22,7 +22,10 @@ public class Asset {
     public final static int ALL = 0;
     public final static int ORG = 1;
     public final static int GROUP = 2;
+
     public final static long ROOT_ID = -1;
+
+
 
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)

@@ -8,19 +8,11 @@ import org.hibernate.annotations.UpdateTimestamp;
 import javax.persistence.*;
 import java.time.LocalDateTime;
 
-import com.fasterxml.jackson.annotation.JsonIgnore;
-import lombok.*;
-import org.hibernate.annotations.CreationTimestamp;
-import org.hibernate.annotations.UpdateTimestamp;
-
-import javax.persistence.*;
-import java.time.LocalDateTime;
-
 @Entity
 @Getter
 @Setter
 @Builder
-@Table(name="ast_device")
+@Table(name = "ast_device")
 @ToString
 @NoArgsConstructor
 @AllArgsConstructor
@@ -53,6 +45,7 @@ public class Device {
 
     private String apiKey;
     private Boolean enabled;
+
     private String url;
     private String timezone;
     private String status;

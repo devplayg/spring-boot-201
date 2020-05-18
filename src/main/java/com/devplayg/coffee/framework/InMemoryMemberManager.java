@@ -48,13 +48,13 @@ public class InMemoryMemberManager implements UserDetailsManager, UserDetailsPas
     public void createUser(UserDetails user) {
         Assert.isTrue(!userExists(user.getUsername()), "user should not exist");
 
-        Member member = (Member)user;
+        Member member = (Member) user;
 
         // Set Member accessible networks
         member.setSubnetUtils(
-            member.getAccessibleIpList().stream()
-                    .map(ip -> new SubnetUtils(ip.getIpCidr()))
-                    .collect(Collectors.toList())
+                member.getAccessibleIpList().stream()
+                        .map(ip -> new SubnetUtils(ip.getIpCidr()))
+                        .collect(Collectors.toList())
         );
         users.put(user.getUsername().toLowerCase(), member);
     }
@@ -63,7 +63,7 @@ public class InMemoryMemberManager implements UserDetailsManager, UserDetailsPas
     public void updateUser(UserDetails user) {
         Assert.isTrue(userExists(user.getUsername()), "user should exist");
 
-        Member member = (Member)user;
+        Member member = (Member) user;
 
         // Set Member accessible networks
         member.setSubnetUtils(
@@ -148,6 +148,15 @@ public class InMemoryMemberManager implements UserDetailsManager, UserDetailsPas
         }
         Member member = (Member) auth.getPrincipal();
         return member.getTimezoneId();
+    }
+
+    public static long getCurrentMemberId() {
+        Authentication auth = SecurityContextHolder.getContext().getAuthentication();
+        if (auth instanceof AnonymousAuthenticationToken) {
+            return 0;
+        }
+        Member member = (Member) auth.getPrincipal();
+        return member.getId();
     }
 
     public Collection<Member> getAllMembers() {

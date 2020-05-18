@@ -2,16 +2,17 @@ package com.devplayg.coffee.config;
 
 import com.devplayg.coffee.definition.RoleType;
 import com.devplayg.coffee.entity.Member;
+import com.devplayg.coffee.framework.AssetManager;
 import com.devplayg.coffee.framework.CustomAuthenticationFailureHandler;
 import com.devplayg.coffee.framework.CustomAuthenticationSuccessHandler;
 import com.devplayg.coffee.framework.InMemoryMemberManager;
+import com.devplayg.coffee.repository.asset.AssetRepository;
 import com.devplayg.coffee.repository.member.MemberRepository;
 import lombok.extern.slf4j.Slf4j;
-import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
+import org.springframework.http.HttpMethod;
 import org.springframework.security.config.annotation.authentication.builders.AuthenticationManagerBuilder;
-import org.springframework.security.config.annotation.method.configuration.EnableGlobalMethodSecurity;
 import org.springframework.security.config.annotation.web.builders.HttpSecurity;
 import org.springframework.security.config.annotation.web.configuration.EnableWebSecurity;
 import org.springframework.security.config.annotation.web.configuration.WebSecurityConfigurerAdapter;
@@ -20,46 +21,50 @@ import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.security.web.authentication.AuthenticationFailureHandler;
 import org.springframework.security.web.authentication.AuthenticationSuccessHandler;
 import org.springframework.security.web.csrf.CsrfFilter;
+import org.springframework.security.web.firewall.HttpFirewall;
+import org.springframework.security.web.firewall.StrictHttpFirewall;
 import org.springframework.web.filter.CharacterEncodingFilter;
 
 import java.util.List;
 import java.util.TimeZone;
 
-/**
- * Security configuration
- */
 @Configuration
 @EnableWebSecurity
-@EnableGlobalMethodSecurity(prePostEnabled = true)
 @Slf4j
 public class SecurityConfig extends WebSecurityConfigurerAdapter {
 
     private final MemberRepository memberRepository;
 
+    private final AssetRepository assetRepository;
+
     private final AppConfig appConfig;
 
-    public SecurityConfig(MemberRepository memberRepository, AppConfig appConfig) {
+    public SecurityConfig(MemberRepository memberRepository, AppConfig appConfig, AssetRepository assetRepository) {
         this.memberRepository = memberRepository;
         this.appConfig = appConfig;
+        this.assetRepository = assetRepository;
     }
 
     @Override
     protected void configure(HttpSecurity httpSecurity) throws Exception {
-//        log.debug("# security: {}", appConfig.getPathPatternsNotToBeIntercepted());
         CharacterEncodingFilter filter = new CharacterEncodingFilter();
         httpSecurity
                 .authorizeRequests()
 
                 // API for Administrators
-                .antMatchers("/audit/**", "/members/**")
+                .antMatchers("/audit/**", "/members/**", "/workschedule/**")
                 .hasAnyRole(RoleType.Role.ADMIN.getCode(), RoleType.Role.SHERIFF.getCode())
 
+                .antMatchers("/cameras/{\\d+}/policy", "/factoryevent/{\\d+}/toggleEventType")
+                .hasAnyRole(RoleType.Role.ADMIN.getCode())
+
+                // Request create the period report
+                .antMatchers(HttpMethod.POST, "/periodreport")
+                .hasAnyRole(RoleType.Role.ADMIN.getCode())
+
                 // White APIs
-//                .antMatchers("/favicon.ico", "/assets/**", "/modules/**", "/plugins/**", "/css/**", "/font/**", "/img/**", "/js/**")
                 .antMatchers(appConfig.getPathPatternsNotToBeIntercepted().stream().toArray(String[]::new))
                 .permitAll()
-//                .antMatchers("/favicon.ico", "/css/**")
-//                .permitAll()
 
                 // Others need to be authenticated
                 .anyRequest()
@@ -68,23 +73,16 @@ public class SecurityConfig extends WebSecurityConfigurerAdapter {
 
                 // Login
                 .formLogin()
-                // https://docs.spring.io/spring-security/site/docs/current/guides/html5/form-javaconfig.html
-                // Login plage
                 .loginPage("/login")
                 .loginProcessingUrl("/app-login")
                 .usernameParameter("app_username")
                 .passwordParameter("app_password")
 
                 // Logged in successfully
-                //.successForwardUrl("/app/articles")
-                //.defaultSuccessUrl(appConfig.getHomeUri())
-                //.successForwardUrl("/members")
                 .successHandler(authenticationSuccessHandler())
 
                 // Login failed
                 .failureHandler(authenticationFailureHandler())
-                //.failureUrl("/login?error")
-                //.failureForwardUrl()
 
                 .permitAll()
                 .and()
@@ -100,26 +98,7 @@ public class SecurityConfig extends WebSecurityConfigurerAdapter {
 
                 .addFilterBefore(filter, CsrfFilter.class)
                 .csrf().disable();
-
-        // .sessionManagement().maximumSessions(10).sessionRegistry(sessionRegistry());
     }
-
-//        @Override
-//        protected void configure(HttpSecurity http) throws Exception {
-//            // Spring security off
-//            http.httpBasic().disable();
-//            http
-//                .cors()
-//                .and()
-//
-//                .csrf()
-//                    .disable();
-//        }
-
-//    @Bean
-//    public SessionRegistry sessionRegistry() {
-//        return new SessionRegistryImpl();
-//    }
 
 
     /**
@@ -157,16 +136,6 @@ public class SecurityConfig extends WebSecurityConfigurerAdapter {
     @Bean
     public InMemoryMemberManager inMemoryMemberManager() {
         List members = memberRepository.findAll();
-//        Member member = Member.builder()
-//                .id(InMemoryMemberManager.adminId)
-//                .username(InMemoryMemberManager.adminUsername)
-//                .enabled(false)
-//                .name("System Administrator")
-//                .roles(RoleType.Role.ADMIN.getValue())
-//                .timezone(TimeZone.getDefault().toZoneId().getId())
-//                .email("admin@admin.com")
-//                .password("")
-//                .build();
         Member member = new Member();
         member.setId(InMemoryMemberManager.adminId);
         member.setUsername(InMemoryMemberManager.adminUsername);
@@ -180,11 +149,22 @@ public class SecurityConfig extends WebSecurityConfigurerAdapter {
         return new InMemoryMemberManager(members);
     }
 
-//    @Bean
-//    public HttpFirewall allowUrlEncodedSlashHttpFirewall() {
-//        StrictHttpFirewall firewall = new StrictHttpFirewall();
-//        firewall.setAllowSemicolon(true);
-//        return firewall;
-//    }
+    /**
+     * Firewall
+     */
+    @Bean
+    public HttpFirewall allowUrlEncodedSlashHttpFirewall() {
+        StrictHttpFirewall firewall = new StrictHttpFirewall();
+        firewall.setAllowSemicolon(true);
+        return firewall;
+    }
 
+
+    /**
+     * Asset
+     */
+    @Bean
+    public AssetManager assetManager() {
+        return new AssetManager(assetRepository.findAllByOrderByTypeAscNameAsc());
+    }
 }

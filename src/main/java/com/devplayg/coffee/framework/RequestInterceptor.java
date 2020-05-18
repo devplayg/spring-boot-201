@@ -36,7 +36,7 @@ public class RequestInterceptor extends HandlerInterceptorAdapter {
     public boolean preHandle(HttpServletRequest req, HttpServletResponse res, Object handler) {
         if (log.isDebugEnabled()) {
             log.debug("----------------- REQUEST ---------------------------------------");
-            log.debug("# RequestInterceptor-1: [{}] {}{}", req.getMethod(), req.getRequestURI(), (req.getQueryString() == null) ? "" : "?" + req.getQueryString());
+            log.debug("# RequestInterceptor-1: [{} - {}] {}{}", req.getMethod(), req.getRemoteAddr(), req.getRequestURI(), (req.getQueryString() == null) ? "" : "?" + req.getQueryString());
             for (String key : req.getParameterMap().keySet()) {
                 log.debug("     - {} = {}", key, req.getParameterMap().get(key));
             }
@@ -80,14 +80,6 @@ public class RequestInterceptor extends HandlerInterceptorAdapter {
             }
         }
 
-//        UserDetails userDetails = null;
-//        try {
-//            userDetails = inMemoryMemberManager.loadUserByUsername(username);
-//        } catch(UsernameNotFoundException e) {
-//            return false;
-//        }
-
-
         if (log.isDebugEnabled()) {
             log.debug("# RequestInterceptor-2: name={}, isLogged={}, role={}", auth.getName(), auth.isAuthenticated(), auth.getAuthorities());
 //            log.debug("# RequestInterceptor-3: username={}, detail={}", auth.getPrincipal(), auth.getDetails());
@@ -114,60 +106,16 @@ public class RequestInterceptor extends HandlerInterceptorAdapter {
             mv.addObject("ctrl", controllerName);
             mv.addObject("remoteAddr", req.getRemoteAddr());
 
-            // Get member's timezone and set it to view object
+            // Get member'ㄴ timezone and set it to view object
             Authentication auth = SecurityContextHolder.getContext().getAuthentication();
             if (auth instanceof AnonymousAuthenticationToken) {
                 return;
             }
             Member member = (Member) SecurityContextHolder.getContext().getAuthentication().getPrincipal();
             mv.addObject("userTz", member.getTimezone());
+            mv.addObject("memberName", member.getName());
+            mv.addObject("memberUsername", member.getUsername());
         }
     }
 
 }
-
-
-//    private void readNews(String username) {
-//        log.debug("==============================");
-//        log.debug("Got news to {}", username);
-//        log.debug("==============================");
-//        UserDetails userDetails = MembershipCenter.readNews(username);
-//        if (userDetails != null) {
-//            Authentication auth = SecurityContextHolder.getContext().getAuthentication();
-//            Authentication newAuth = new UsernamePasswordAuthenticationToken(userDetails, auth.getCredentials(), userDetails.getAuthorities());
-//            SecurityContextHolder.getContext().setAuthentication(newAuth);
-//        }
-//    }
-//
-//        Boolean anyNews = mc.anyNews(req.getUserPrincipal().getName());
-//        log.debug("### anyNews to {}: {}", req.getUserPrincipal().getName(), anyNews);
-//        membershipCenter.anyNews("system");
-//        membershipCenter().anyNews("abc");
-//        log.info("### Request: {} -- {}?{}", req.getMethod(), req.getRequestURI(), req.getQueryString());
-//        Member m = (Member) auth.getDetails();
-//        Authentication auth = SecurityContextHolder.getContext().getAuthentication();
-//        log.debug("# session member: {}", m);
-//        log.info("### Auth-1: name={}, isLogged={}, role={}", auth.getName(), auth.isAuthenticated(), auth.getAuthorities());
-//        log.info("### Auth-2: username={}, detail={}", auth.getPrincipal(), auth.getDetails());
-//        log.info("### Auth-3: object={}", auth.getDetails());
-//        SecurityContextHolder.getContext().getAuthentication().
-
-//        Object principal = SecurityContextHolder.getContext().getAuthentication().getPrincipal();
-//        if (principal instanceof UserDetails) {
-//            String username = ((UserDetails)principal).getUsername();
-//        } else {
-//            String username = principal.toString();
-//        }
-//        Member m = (Member) auth.getDetails();
-//        Member member = (Member)SecurityContextHolder.getContext().getAuthentication().getPrincipal();
-//        log.debug("# session member: {}", m);
-//        Authentication auth = SecurityContextHolder.getContext().getAuthentication();
-
-//        if req.getUserPrincipal()
-
-//        Object principal = SecurityContextHolder.getContext().getAuthentication().getPrincipal();
-//        if (principal instanceof UserDetails) {
-//            username = ((UserDetails)principal).getUsername();
-//        } else {
-//            username = principal.toString();
-//        }

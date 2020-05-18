@@ -27,9 +27,6 @@ import java.util.Collection;
 import java.util.List;
 import java.util.stream.Collectors;
 
-/**
- * Member entity which implements UserDetails, CredentialsContainer.
- */
 @Entity
 @Table(name = "mbr_member")
 @Getter
@@ -62,7 +59,7 @@ public class Member implements UserDetails, CredentialsContainer, Serializable {
     private String email;
 
     @Column(name = "name", length = 32, nullable = false)
-    @Length(min = 2, max = 32)
+    @Length(min = 2, max = 16)
     @JsonView({AuditView.Normal.class})
     private String name;
 
@@ -166,6 +163,7 @@ public class Member implements UserDetails, CredentialsContainer, Serializable {
     public ZoneId getTimezoneId() {
         return ZoneId.of(getTimezone());
     }
+
 
     private LocalDateTime lastPasswordChange;
 }

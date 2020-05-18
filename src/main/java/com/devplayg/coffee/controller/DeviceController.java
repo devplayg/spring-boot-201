@@ -16,7 +16,7 @@ import org.springframework.web.bind.annotation.RequestMethod;
 @Controller
 @RequestMapping("device")
 @Slf4j
-public class DeviceController  {
+public class DeviceController {
     private final DeviceRepository deviceRepository;
 
     public DeviceController(DeviceRepository deviceRepository) {
@@ -34,12 +34,12 @@ public class DeviceController  {
     // Fetch
     @GetMapping
     public ResponseEntity<?> findAll(@ModelAttribute DeviceFilter filter) {
-        if (filter.getCategory() > 0) {
-            if (filter.getType() > 0) {
-                return new ResponseEntity<>(deviceRepository.findByCategoryAndType(filter.getCategory(), filter.getType()), HttpStatus.OK);
-            }
-            return new ResponseEntity<>(deviceRepository.findByCategory(filter.getCategory()), HttpStatus.OK);
-        }
+//        if (filter.getCategory() > 0) {
+//            if (filter.getType() > 0) {
+//                return new ResponseEntity<>(deviceRepository.findByCategoryAndType(filter.getCategory(), filter.getType()), HttpStatus.OK);
+//            }
+//            return new ResponseEntity<>(deviceRepository.findByCategory(filter.getCategory()), HttpStatus.OK);
+//        }
         return new ResponseEntity<>(deviceRepository.findAll(), HttpStatus.OK);
     }
 }

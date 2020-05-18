@@ -33,7 +33,7 @@ public class CustomAuthenticationSuccessHandler implements AuthenticationSuccess
                                         HttpServletResponse response, Authentication auth)
             throws IOException {
 
-        auditService.audit(AuditCategory.LOGIN_SUCCESS,  request.getQueryString());
+        auditService.audit(AuditCategory.LOGIN_SUCCESS, request.getQueryString());
         handle(request, response, auth);
 
         clearAuthenticationAttributes(request);
@@ -42,41 +42,12 @@ public class CustomAuthenticationSuccessHandler implements AuthenticationSuccess
     protected void handle(HttpServletRequest request,
                           HttpServletResponse response, Authentication authentication)
             throws IOException {
-//        String targetUrl = determineTargetUrl(authentication);
-
         if (response.isCommitted()) {
-            log.warn("Response has already been committed. Unable to redirect to "+ appConfig.getHomeUri());
+            log.warn("Response has already been committed. Unable to redirect to " + appConfig.getHomeUri());
             return;
         }
 
         redirectStrategy.sendRedirect(request, response, appConfig.getHomeUri());
-    }
-
-    protected String determineTargetUrl(Authentication authentication) {
-//        boolean isUser = false;
-//        boolean isAdmin = false;
-//        Collection<? extends GrantedAuthority> authorities = authentication.getAuthorities();
-//        for (GrantedAuthority grantedAuthority : authorities) {
-//            if (grantedAuthority.getAuthority().equals("ROLE_USER")) {
-//                isUser = true;
-//                break;
-//            } else if (grantedAuthority.getAuthority().equals("ROLE_ADMIN")) {
-//                isAdmin = true;
-//                break;
-//            }
-//        }
-
-
-//        if (isAdmin) {
-//
-//        if (isUser) {
-//            return "/audit/";
-//        } else if (isAdmin) {
-//            return "/members/";
-//        } else {
-//            throw new IllegalStateException();
-//        }
-        return "";
     }
 
     protected void clearAuthenticationAttributes(HttpServletRequest request) {
@@ -90,6 +61,7 @@ public class CustomAuthenticationSuccessHandler implements AuthenticationSuccess
     public void setRedirectStrategy(RedirectStrategy redirectStrategy) {
         this.redirectStrategy = redirectStrategy;
     }
+
     protected RedirectStrategy getRedirectStrategy() {
         return redirectStrategy;
     }

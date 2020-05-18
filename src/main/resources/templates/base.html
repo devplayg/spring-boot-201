@@ -1,393 +1,59 @@
 <!DOCTYPE html>
 <html lang="en-us" xmlns:th="http://www.thymeleaf.org" xmlns:layout="http://www.ultraq.net.nz/thymeleaf/layout">
 <head>
+    <!-- Required meta tags -->
     <meta charset="utf-8">
-    <title>  </title>
-    <meta name="description" content="">
-    <meta name="author" content="">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
+    <meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no">
 
-    <link rel="stylesheet" type="text/css" media="screen" th:href="@{/assets/css/bootstrap.css}">
-    <link rel="stylesheet" th:href="@{/font/NanumGothic/nanumgothic.css}">
-    <link rel="stylesheet" type="text/css" media="screen" th:href="@{/assets/css/font-awesome.min.css}">
-    <link rel="stylesheet" type="text/css" media="screen" th:href="@{/assets/css/smartadmin-production-plugins.css}">
-    <link rel="stylesheet" type="text/css" media="screen" th:href="@{/assets/css/smartadmin-production.css}">
-    <link rel="stylesheet" type="text/css" media="screen" th:href="@{/assets/css/smartadmin-skins.css}">
-    <link rel="stylesheet" type="text/css" media="screen" th:href="@{/assets/css/smartadmin-rtl.min.css}">
+    <!-- Bootstrap CSS -->
+    <link rel="stylesheet" type="text/css" media="screen" th:href="@{/plugins/bootstrap/css/bootstrap.min.css}">
     <link rel="stylesheet" type="text/css" media="screen" th:href="@{/plugins/bootstrap-table/bootstrap-table.min.css}">
     <link rel="stylesheet" type="text/css" media="screen" th:href="@{/plugins/bootstrap-select/css/bootstrap-select.min.css}">
     <link rel="stylesheet" type="text/css" media="screen" th:href="@{/plugins/sweetalert2/sweetalert2.min.css}">
     <link rel="stylesheet" type="text/css" media="screen" th:href="@{/plugins/bootstrap-datetimepicker/bootstrap-datetimepicker.min.css}">
     <link rel="stylesheet" type="text/css" media="screen" th:href="@{/plugins/flag-icon-css/css/flag-icon.min.css}">
+    <link rel="stylesheet" type="text/css" media="screen" th:href="@{/font/font-awesome/css/font-awesome.min.css}">
     <link rel="stylesheet" type="text/css" media="screen" th:href="@{/css/custom.css}">
-    <link rel="shortcut icon" th:href="@{/favicon.ico}" type="image/x-icon">
-    <link rel="icon" th:href="@{/favicon.ico}" type="image/x-icon">
+    <title>Hello, world!</title>
 </head>
-<!--/* #BODY */-->
-
-<!--/* Possible Classes
-    * 'smart-style-{SKIN#}'
-    * 'smart-rtl'         - Switch theme mode to RTL
-    * 'menu-on-top'       - Switch to top navigation (no DOM change required)
-    * 'no-menu'			  - Hides the menu completely
-    * 'hidden-menu'       - Hides the main menu but still accessable by hovering over left edge
-    * 'fixed-header'      - Fixes the header
-    * 'fixed-navigation'  - Fixes the main menu
-    * 'fixed-ribbon'      - Fixes breadcrumb
-    * 'fixed-page-footer' - Fixes footer
-    * 'container'         - boxed layout mode (non-responsive: will not work with fixed-navigation & fixed-ribbon)
-*/-->
-<body class="desktop-detected pace-done smart-style-1">
-
-<!--/* #HEADER */-->
-<header id="header" class="">
-    <div id="logo-group">
-
-        <!--/* PLACE YOUR LOGO HERE */-->
-        <span id="logo"> <img th:src="@{/assets/img/logo.png}" alt="SmartAdmin"> </span>
-        <!--/* END LOGO PLACEHOLDER */-->
-
-        <!--/* Note: The activity badge color changes when clicked and resets the number to 0
-             Suggestion: You may want to set a flag when this happens to tick off all checked messages / notifications */-->
-        <span id="activity" class="activity-dropdown"> <i class="fa fa-user"></i> <b class="badge"> 0 </b> </span>
-
-        <!--/* AJAX-DROPDOWN : control this dropdown height, look and feel from the LESS variable file */-->
-        <div class="ajax-dropdown">
-            <audio id="alarmAudio" preload="auto">
-                <source th:src="@{/sound/alarm-01.mp3}" type="audio/mp3">
-            </audio>
-
-            <!--/* the ID links are fetched via AJAX to the ajax container "ajax-notifications" */-->
-            <!--/*
-            <div class="btn-group btn-group-justified" data-toggle="buttons">
-                <label class="btn btn-default">
-                    <input type="radio" name="activity" id="ajax/notify/mail.html">
-                    Msgs (14) </label>
-                <label class="btn btn-default">
-                    <input type="radio" name="activity" id="ajax/notify/notifications.html">
-                    notify (3) </label>
-                <label class="btn btn-default">
-                    <input type="radio" name="activity" id="ajax/notify/tasks.html">
-                    Tasks (4) </label>
-            </div>
-            */-->
-
-            <!--/* notification content */-->
-            <!--/*
-            <div class="ajax-notifications custom-scroll">
-
-                <div class="alert alert-transparent">
-                    <h4>Click a button to show messages here</h4>
-                    This blank page message helps protect your privacy, or you can show the first message here automatically.
-                </div>
-
-                <i class="fa fa-lock fa-4x fa-border"></i>
-            </div>
-            */-->
-            <!--/* end notification content */-->
-
-            <div class="ajax-notifications custom-scroll" style="padding: 15px 10px 0px 10px;">
-                <!--/*
-                <form id="message-input" role="form">
-                    <input type="text" class="form-control" name="message" style="width: 99%; padding: 0px;"/>
-                </form>
-                */-->
-                <div id="message-output"></div>
-            </div>
-
-
-<!--            <div class="ajax-notifications custom-scroll bred">-->
-<!--                <form id="messageBox" role="form" method="post" th:action="@{/app/hello/}">-->
-<!--                    <div class="form-group">-->
-<!--                        <textarea name="message" class="form-control" rows="3">asdfasdfasd</textarea>-->
-<!--                    </div>-->
-<!--                    <button type="submit" class="btn btn-primary">Send</button>-->
-<!--                </form>-->
-<!--            </div>-->
-
-            <!--/* footer: refresh area */-->
-            <span> Last updated on: 12/12/2013 9:43AM
-                <button type="button" data-loading-text="<i class='fa fa-refresh fa-spin'></i> Loading..." class="btn btn-xs btn-default pull-right">
-                    <i class="fa fa-refresh"></i>
-                </button> </span>
-            <!--/* end footer */-->
-
-        </div>
-        <!--/* END AJAX-DROPDOWN */-->
-    </div>
-
-    <!--/* #PROJECTS: projects dropdown */-->
-    <div class="project-context hidden-xs">
-        <span class="label" th:text="|${userTz}|"></span>
-        <span class="project-selector systemTime"></span>
-    <!--/*        <span class="project-selector dropdown-toggle" data-toggle="dropdown">Recent projects <i class="fa fa-angle-down"></i></span> */-->
-
-        <!--/* Suggestion: populate this list with fetch and push technique */-->
-        <ul class="dropdown-menu">
-            <li>
-                <a href="javascript:void(0);">Online e-merchant management system - attaching integration with the iOS</a>
-            </li>
-            <li>
-                <a href="javascript:void(0);">Notes on pipeline upgradee</a>
-            </li>
-            <li>
-                <a href="javascript:void(0);">Assesment Report for merchant account</a>
-            </li>
-            <li class="divider"></li>
-            <li>
-                <a href="javascript:void(0);"><i class="fa fa-power-off"></i> Clear</a>
-            </li>
-        </ul>
-        <!--/* end dropdown-menu */-->
-
-    </div>
-    <!--/* end projects dropdown */-->
-
-    <!--/* #TOGGLE LAYOUT BUTTONS */-->
-    <!--/* pulled right: nav area */-->
-    <div class="pull-right">
-
-        <!--/* collapse menu button */-->
-        <div id="hide-menu" class="btn-header pull-right">
-            <span> <a href="javascript:void(0);" data-action="toggleMenu" title="Collapse Menu"><i class="fa fa-reorder"></i></a> </span>
-        </div>
-        <!--/* end collapse menu */-->
-
-        <!--/* logout button */-->
-        <div id="logout" class="btn-header transparent pull-right">
-            <span> <a href="/logout" title="Sign Out" data-action="userLogout" data-logout-msg="You can improve your security further after logging out by closing this opened browser"><i class="fa fa-sign-out"></i></a> </span>
-        </div>
-        <!--/* end logout button */-->
-
-        <!--/* fullscreen button */-->
-        <div id="fullscreen" class="btn-header transparent pull-right">
-            <span> <a href="javascript:void(0);" data-action="launchFullscreen" title="Full Screen"><i class="fa fa-arrows-alt"></i></a> </span>
-        </div>
-        <!--/* end fullscreen button */-->
-
-        <!--/* multiple lang dropdown : find all flags in the flags page */-->
-        <ul class="header-dropdown-list hidden-xs">
-            <li>
-                <a href="#" class="dropdown-toggle" data-toggle="dropdown">
-                    <img th:src="@{|/plugins/flag-icon-css/flags/4x3/${#strings.toLowerCase(#locale.country)}.svg|}" class="border-a" height="15" />
-                    <span th:text="|${#locale.ISO3Country}|"></span>
-                    <i class="fa fa-angle-down"></i>
-                </a>
-                <ul class="dropdown-menu pull-right">
-                    <li th:class="${#locale.language} == 'ko' ? 'active' : ''">
-                        <a href="?lang=ko-KR"><img th:src="@{/plugins/flag-icon-css/flags/4x3/kr.svg}" class="border-a" height="15" /> 한국어</a>
-                    </li>
-                    <li th:class="${#locale.language} == 'vi' ? 'active' : ''">
-                        <a href="?lang=vi-VN"><img th:src="@{/plugins/flag-icon-css/flags/4x3/vn.svg}" class="border-a" height="15" /> Tiếng việt (VN)</a>
-                    </li>
-                    <li th:class="${#locale.language} == 'en' ? 'active' : ''">
-                        <a href="?lang=en-US"><img th:src="@{/plugins/flag-icon-css/flags/4x3/us.svg}" class="border-a" height="15" /> English (US)</a>
-                    </li>
-                </ul>
-            </li>
-        </ul>
-        <!--/* end multiple lang */-->
-    </div>
-    <!--/* end pulled right: nav area */-->
-
-</header>
-<!--/* END HEADER */-->
-
-<!--/* #NAVIGATION */-->
-<!--/* Left panel : Navigation area */-->
-<!--/* Note: This width of the aside area can be adjusted through LESS variables */-->
-<aside id="left-panel" class="">
-
-    <!--/* User info */-->
-    <div class="login-info">
-        <span> <!--/* User image size is adjusted inside CSS, it should stay as it */-->
-            <a href="javascript:void(0);">
-                <img th:src="@{/img/avatar.png}" alt="me" class="online" />
-                <span th:text="${#httpServletRequest.remoteUser}"></span>
-            </a>
-        </span>
-    </div>
-    <!--/* end user info */-->
-
-    <nav>
-        <!--/*
-        NOTE: Notice the gaps after each icon usage <i></i>..
-        Please note that these links work a bit different than
-        traditional th:href="@{" links. See documentation for details.
-        */-->
-
-        <ul>
-            <li class="top-menu-invisible">
-                <a href="#"><i class="fa fa-lg fa-fw fa-cube txt-color-blue"></i> <span class="menu-item-parent" th:text="#{security}"></span></a>
-                <ul>
-                    <li class="">
-                        <a href="/audit/"><i class="fa fa-lg fa-fw fa-gear"></i> <span class="menu-item-parent" th:text="#{audit-log}"></span></a>
-                    </li>
-                </ul>
-            </li>
-            <li>
-                <a href="#"><i class="fa fa-lg fa-fw fa-gear"></i> <span class="menu-item-parent" th:text="#{setting}"></span></a>
-                <ul>
-                    <li>
-                        <a href="/members/" th:text="#{user}"></a>
-                    </li>
-                    <li>
-                        <a href="/device/" th:text="#{device}"></a>
-                    </li>
-                    <li>
-                        <a href="/cameras/settings/" th:text="#{camera}"></a>
-                    </li>
-                </ul>
-            </li>
-            <li>
-                <a href="/test/"><i class="fa fa-lg fa-fw fa-gear"></i> <span class="menu-item-parent">Test</span></a>
-            </li>
-        </ul>
-    </nav>
-</aside>
-<!--/* END NAVIGATION */-->
-
-<!--/* MAIN PANEL */-->
-<div id="main" role="main">
-
-    <!--/* RIBBON */-->
-    <div id="ribbon">
-
-        <!--/* breadcrumb */-->
-        <ol class="breadcrumb">
-        </ol>
-        <!--/* end breadcrumb */-->
-
-        <!--/* You can also add more buttons to the
-        ribbon for further usability
-
-        Example below:
-
-        <span class="ribbon-button-alignment pull-right">
-        <span id="search" class="btn btn-ribbon hidden-xs" data-title="search"><i class="fa-grid"></i> Change Grid</span>
-        <span id="add" class="btn btn-ribbon hidden-xs" data-title="add"><i class="fa-plus"></i> Add</span>
-        <span id="search" class="btn btn-ribbon" data-title="search"><i class="fa-search"></i> <span class="hidden-mobile">Search</span></span>
-        </span> */-->
-
-    </div>
-    <!--/* END RIBBON */-->
-
-    <!--/* MAIN CONTENT */-->
-    <div id="content" class="p20">
+<body>
+    <div class="container-fluid bg-white">
         <div layout:fragment="content"></div>
     </div>
-    <!--/* END MAIN CONTENT */-->
 
-</div>
-<!--/* END MAIN PANEL */-->
+    <script th:src="@{/js/jquery-3.5.1.min.js}"></script>
+    <script th:src="@{/js/popper.min.js}"></script>
+    <script th:src="@{/plugins/bootstrap/js/bootstrap.min.js}"></script>
+    <script th:src="@{/plugins/bootstrap-table/bootstrap-table.min.js}"></script>
+    <script th:src="@{/plugins/moment/moment.min.js}"></script>
+    <script th:src="@{/plugins/moment/moment-timezone-with-data.min.js}"></script>
+    <script th:src="@{/plugins/bootstrap-select/js/bootstrap-select.min.js}"></script>
+    <script th:src="@{/plugins/jquery-validation/jquery.validate.min.js}"></script>
+    <script th:src="@{/plugins/jquery-mask/jquery.mask.min.js}"></script>
+    <script th:src="@{/plugins/bootstrap-datetimepicker/bootstrap-datetimepicker.min.js}"></script>
+    <script th:src="@{/plugins/sweetalert2/sweetalert2.min.js}"></script>
+    <script th:src="@{/plugins/js.cookie.min.js}"></script>
+    <script th:src="@{/webjars/sockjs-client/sockjs.min.js}"></script>
+    <script th:src="@{/webjars/stomp-websocket/stomp.min.js}"></script>
+    <script th:inline="javascript">
+    /*<![CDATA[*/
+        let userRoles = {/*[# th:each="n : ${T(com.devplayg.coffee.definition.RoleType.Role).values()}"]*/"[(${n})]": "[(${n.description})]",/*[/]*/},
+            PagingMode = Object.freeze({/*[# th:each="n : ${T(com.devplayg.coffee.definition.PagingMode.Paging).values()}"]*/"[(${n})]": [(${n.value})],/*[/]*/});
 
-<!--/* PACE LOADER - turn this on if you want ajax loading to show (caution: uses lots of memory on iDevices) */-->
-<script data-pace-options='{ "restartOnRequestAfter": true }' th:src="@{/assets/js/plugin/pace/pace.min.js}"></script>
+        const systemTz = [[ ${systemTz} ]],
+              userTz   = [[ ${userTz} ]],
+              ctrl    = [[ ${ctrl} ]];
+        moment.tz.setDefault(systemTz);
 
-<script th:src="@{/assets/js/libs/jquery-3.2.1.min.js}"></script>
+        $('a[href="' + this.location.pathname + '"]').parents('li,ul').addClass('active');
+    /*]]>*/
+    </script>
 
-<script th:src="@{/assets/js/libs/jquery-ui.min.js}"></script>
-
-<!--/* IMPORTANT: APP CONFIG */-->
-<script th:src="@{/assets/js/app.config.js}"></script>
-
-<!--/* JS TOUCH : include this plugin for mobile drag / drop touch events */-->
-<script th:src="@{/assets/js/plugin/jquery-touch/jquery.ui.touch-punch.min.js}"></script>
-
-<!--/* BOOTSTRAP JS */-->
-<script th:src="@{/assets/js/bootstrap/bootstrap.min.js}"></script>
-
-<!--/* CUSTOM NOTIFICATION */-->
-<script th:src="@{/assets/js/notification/SmartNotification.min.js}"></script>
-
-<!--/* JARVIS WIDGETS */-->
-<script th:src="@{/assets/js/smartwidgets/jarvis.widget.min.js}"></script>
-
-<!--/* EASY PIE CHARTS */-->
-<script th:src="@{/assets/js/plugin/easy-pie-chart/jquery.easy-pie-chart.min.js}"></script>
-
-<!--/* SPARKLINES */-->
-<!--<script th:src="@{/assets/js/plugin/sparkline/jquery.sparkline.min.js}"></script>-->
-
-<!--/* JQUERY VALIDATE */-->
-<!--<script th:src="@{/assets/js/plugin/jquery-validate/jquery.validate.min.js}"></script>-->
-
-<!--/* JQUERY MASKED INPUT */-->
-<!--<script th:src="@{/assets/js/plugin/masked-input/jquery.maskedinput.min.js}"></script>-->
-
-<!--/* JQUERY SELECT2 INPUT */-->
-<!--<script th:src="@{/assets/js/plugin/select2/select2.min.js}"></script>-->
-
-<!--/* JQUERY UI + Bootstrap Slider */-->
-<!--<script th:src="@{/assets/js/plugin/bootstrap-slider/bootstrap-slider.min.js}"></script>-->
-
-<!--/* browser msie issue fix */-->
-<script th:src="@{/assets/js/plugin/msie-fix/jquery.mb.browser.min.js}"></script>
-
-<!--/* FastClick: For mobile devices */-->
-<script th:src="@{/assets/js/plugin/fastclick/fastclick.min.js}"></script>
-
-<!--[if IE 8]>
-
-<h1>Your browser is out of date, please update your browser by going to www.microsoft.com/download</h1>
-
-<![endif]-->
-
-<!--/* MAIN APP JS FILE */-->
-<script th:src="@{/assets/js/app.min.js}"></script>
-
-<!--/* MomentJS */-->
-<script th:src="@{/plugins/moment/moment.min.js}"></script>
-<script th:src="@{/plugins/moment/moment-timezone-with-data.min.js}"></script>
-
-<!--/* Bootstrap table */-->
-<script th:src="@{/plugins/bootstrap-table/bootstrap-table.min.js}"></script>
-<!--/* Bootstrap select */-->
-<script th:src="@{/plugins/bootstrap-select/js/bootstrap-select.min.js}"></script>
-<!--/* JQuery-validation */-->
-<script th:src="@{/plugins/jquery-validation/jquery.validate.min.js}"></script>
-<!--/* JQuery-mask */-->
-<script th:src="@{/plugins/jquery-mask/jquery.mask.min.js}"></script>
-<!--/* Datetimepicker*/-->
-<script th:src="@{/plugins/bootstrap-datetimepicker/bootstrap-datetimepicker.min.js}"></script>
-<!--/* Sweetalert */-->
-<script th:src="@{/plugins/sweetalert2/sweetalert2.min.js}"></script>
-<!--/* Cookie */-->
-<script th:src="@{/plugins/js.cookie.min.js}"></script>
-<!--/* Websocket */-->
-<script th:src="@{|/webjars/sockjs-client/sockjs.min.js|}"></script>
-<script th:src="@{|/webjars/stomp-websocket/stomp.min.js|}"></script>
-<!--/* Websocket */-->
-<script th:inline="javascript">
-/*<![CDATA[*/
-    let userRoles = {/*[# th:each="n : ${T(com.devplayg.coffee.definition.RoleType.Role).values()}"]*/"[(${n})]": "[(${n.description})]",/*[/]*/},
-        PagingMode = Object.freeze({/*[# th:each="n : ${T(com.devplayg.coffee.definition.PagingMode.Paging).values()}"]*/"[(${n})]": [(${n.value})],/*[/]*/});
-
-    const systemTz = [[ ${systemTz} ]],
-          userTz   = [[ ${userTz} ]],
-          ctrl    = [[ ${ctrl} ]];
-    moment.tz.setDefault(systemTz);
-
-    $(document).ready(function() {
-        pageSetUp();
-        // // activate tooltips
-        // $("[rel=tooltip]").tooltip();
-        //
-        // // activate popovers
-        // $("[rel=popover]").popover();
-        //
-        // // activate popovers with hover states
-        // $("[rel=popover-hover]").popover({ trigger: "hover" });
-
-        drawBreadCrumb();
-    })
-    $('a[href="' + this.location.pathname + '"]').parents('li,ul').addClass('active');
-/*]]>*/
-</script>
-<script th:src="@{/js/custom.js}"></script>
-<script th:src="@{/js/formatter.js}"></script>
-<script layout:fragment="script"></script>
+    <script th:src="@{/js/custom.js}"></script>
+    <script th:src="@{/js/formatter.js}"></script>
+    <script layout:fragment="script"></script>
 
 </body>
 
 </html>
+
