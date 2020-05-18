@@ -153,7 +153,6 @@ public class MemberController {
      */
     @PatchMapping("{id}/password")
     public ResponseEntity<?> patch(@ModelAttribute MemberPassword memberPassword, @PathVariable("id") long id, BindingResult bindingResult) {
-//        log.debug("pw: {}", input);
         memberService.updatePassword(id, memberPassword);
         return new ResponseEntity<>(memberPassword, HttpStatus.OK);
     }

@@ -52,14 +52,10 @@ public class SecurityConfig extends WebSecurityConfigurerAdapter {
                 .authorizeRequests()
 
                 // API for Administrators
-                .antMatchers("/audit/**", "/members/**", "/workschedule/**")
+                .antMatchers("/audit/**", "/members/**")
                 .hasAnyRole(RoleType.Role.ADMIN.getCode(), RoleType.Role.SHERIFF.getCode())
 
                 .antMatchers("/cameras/{\\d+}/policy", "/factoryevent/{\\d+}/toggleEventType")
-                .hasAnyRole(RoleType.Role.ADMIN.getCode())
-
-                // Request create the period report
-                .antMatchers(HttpMethod.POST, "/periodreport")
                 .hasAnyRole(RoleType.Role.ADMIN.getCode())
 
                 // White APIs

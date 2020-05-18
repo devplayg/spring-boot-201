@@ -20,55 +20,10 @@ public class AppConfig {
     private Boolean useIpBlocking;
     private List<String> pathPatternsNotToBeIntercepted;
     private String fileUploadDir;
-    private VmsServer vmsServer;
-//    private Statistics statistics;
 
-//    private FaceRecognition faceRecognition;
-
-    // VMS
-//    private String
-
-    // NVR
-//    private Server nvrServer;
-//    private Server nvrAgent;
-
-    // VAS
-//    private List<Server> vasServer;
-//    private Server vasAgent;
-
-    // VMS
-//    private Server vmsAgent;
 
     public AppConfig() {
-//        faceRecognition = new FaceRecognition();
         adminInfo = new AdminInfo();
-        vmsServer = new VmsServer();
-//        statistics = new Statistics();
-
-//        nvrServer = new Server();
-//        nvrAgent = new Server();
-
-//        vasServer = new ArrayList<>();
-//        vasAgent = new Server();
-
-//        vmsAgent = new Server();
-    }
-
-
-//    @ToString
-//    @Setter
-//    @Getter
-//    public class FaceRecognition {
-//        private String name;
-//        private String logImageDir;
-//        private String faceImageDir;
-//    }
-
-    @Getter
-    @Setter
-    @ToString
-    public static class VmsServer {
-        private String reportDir;
     }
 
     @Getter
@@ -78,13 +33,6 @@ public class AppConfig {
         private String name;
         private String email;
     }
-
-//    @Getter
-//    @Setter
-//    @ToString
-//    public class Statistics {
-//        private String timezone;
-//    }
 
     @Getter
     @Setter
@@ -99,6 +47,4 @@ public class AppConfig {
         private String apiKey;
         private String url;
     }
-
-
 }
