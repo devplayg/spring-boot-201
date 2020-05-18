@@ -1,9 +1,12 @@
+dist: bionic
 language: java
 install: true
 os: linux
 jdk: oraclejdk11
+notifications:
+    email: false
 script:
-    - ./gradlew clean build
+    - ./gradlew build
 before_cache:
     - rm -f  $HOME/.gradle/caches/modules-2/modules-2.lock
     - rm -fr $HOME/.gradle/caches/*/plugin-resolution/
