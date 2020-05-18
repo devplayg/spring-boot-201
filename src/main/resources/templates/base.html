@@ -14,12 +14,12 @@
     <link rel="stylesheet" type="text/css" media="screen" th:href="@{/plugins/flag-icon-css/css/flag-icon.min.css}">
     <link rel="stylesheet" type="text/css" media="screen" th:href="@{/font/font-awesome/css/font-awesome.min.css}">
     <link rel="stylesheet" type="text/css" media="screen" th:href="@{/css/custom.css}">
-    <title>Hello, world!</title>
+    <title></title>
 </head>
 <body>
     <div class="container-fluid bg-white">
         <nav class="navbar navbar-expand-lg navbar-dark bg-dark">
-            <a class="navbar-brand" href="#">Navbar</a>
+            <a class="navbar-brand" href="#">201</a>
             <button class="navbar-toggler" type="button" data-toggle="collapse" data-target="#navbarNav" aria-controls="navbarNav" aria-expanded="false" aria-label="Toggle navigation">
                 <span class="navbar-toggler-icon"></span>
             </button>
@@ -57,15 +57,14 @@
     <script th:src="@{/webjars/stomp-websocket/stomp.min.js}"></script>
     <script th:inline="javascript">
     /*<![CDATA[*/
+        const systemTz = [[ ${systemTz} ]],
+              userTz   = [[ ${userTz} ]],
+              ctrl     = [[ ${ctrl} ]];
         let userRoles = {/*[# th:each="n : ${T(com.devplayg.coffee.definition.RoleType.Role).values()}"]*/"[(${n})]": "[(${n.description})]",/*[/]*/},
             PagingMode = Object.freeze({/*[# th:each="n : ${T(com.devplayg.coffee.definition.PagingMode.Paging).values()}"]*/"[(${n})]": [(${n.value})],/*[/]*/});
 
-        const systemTz = [[ ${systemTz} ]],
-              userTz   = [[ ${userTz} ]],
-              ctrl    = [[ ${ctrl} ]];
+        // Set default moment timezone
         moment.tz.setDefault(systemTz);
-
-        $('a[href="' + this.location.pathname + '"]').parents('li,ul').addClass('active');
     /*]]>*/
     </script>
 

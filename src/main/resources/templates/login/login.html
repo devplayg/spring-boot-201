@@ -22,7 +22,7 @@
             Bad Credentials
         </p>
 
-        <form th:action="@{/app-login}" method="POST" target="_self"
+        <form id="form-login" th:action="@{/app-login}" method="POST">
             <div class="form-group">
                 <label th:text="#{member.username}"></label>
                 <input type="text" class="form-control" name="app_username" value="won">
@@ -42,6 +42,7 @@
     <script th:inline="javascript">
         let roles = {/*[# th:each="n : ${T(com.devplayg.coffee.definition.RoleType.Role).values()}"]*/"[(${n})]": "[(${n.description})]",/*[/]*/};
     </script>
+    <script th:src="@{/plugins/jquery-validation/jquery.validate.min.js}"></script>
     <script th:src="@{/modules/login/login.js}"></script>
     <script layout:fragment="script"></script>
 </body>

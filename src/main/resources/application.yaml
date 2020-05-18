@@ -36,7 +36,8 @@ server:
 #        context-path: /api
 
 logging:
-    file: web.log
+    file:
+        name: web.log
     level:
         root: info
         org:
@@ -45,9 +46,6 @@ logging:
                 type.descriptor.sql.BasicBinder: info
 
 app:
-    video-server:
-        address: https://127.0.0.1:86/api/
-        api-key: VBLWA8_tJEGnZNGy
     admin-info:
         name: Administrator
         email: devplayg@devplayg.com
