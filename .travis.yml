@@ -1,13 +1,9 @@
 language: java
-dist: bionic
+#dist: bionic
 jdk: oraclejdk11
 os: linux
 notifications:
     email: false
-cache:
-    directories:
-        - $HOME/.m2/repository
-        - $HOME/.gradle
 before_install:
     - chmod +x gradlew
 script:

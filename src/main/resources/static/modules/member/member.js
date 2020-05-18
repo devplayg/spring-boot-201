@@ -134,7 +134,7 @@ $(function () {
                 },
                 password: {
                     required: true,
-                    minlength: 9,
+                    minlength: 8,
                     maxlength: 16,
                 },
                 email: {

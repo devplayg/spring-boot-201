@@ -22,7 +22,7 @@
             Bad Credentials
         </p>
 
-        <form th:action="@{/app-login}" method="POST">
+        <form th:action="@{/app-login}" method="POST" target="_self"
             <div class="form-group">
                 <label th:text="#{member.username}"></label>
                 <input type="text" class="form-control" name="app_username" value="won">

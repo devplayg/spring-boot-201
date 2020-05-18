@@ -25,12 +25,10 @@ import java.util.Locale;
 @RequestMapping("login")
 public class LoginController {
 
-    public final AppConfig appConfig;
-    public final DeviceService deviceService;
+    private final AppConfig appConfig;
 
     public LoginController(AppConfig appConfig, DeviceService deviceService) {
         this.appConfig = appConfig;
-        this.deviceService = deviceService;
     }
 
     @GetMapping({"", "/"})
